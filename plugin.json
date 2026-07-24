@@ -27,7 +27,15 @@
     {
       "slug": "relo",
       "name": "relo",
-      "description": "reloj",
+      "description": "relojes",
+      "tags": [
+        "Clock generator"
+      ]
+    },
+     {
+      "slug": "rerelo",
+      "name": "rerelo",
+      "description": "más relojes",
       "tags": [
         "Clock generator"
       ]

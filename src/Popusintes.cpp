@@ -9,5 +9,6 @@ void init(rack::Plugin *p)
 	p->addModel(modelCompa);
 	p->addModel(modelPanel);
 	p->addModel(modelRelo);
+	p->addModel(modelRerelo);
 	p->addModel(modelSecu);
 }
