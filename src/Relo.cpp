@@ -3,6 +3,40 @@
 // definir tiempo de trigger
 #define TIEMPO_TRIGGER 1e-3f
 
+// definir ancho modulo en mm (5 hp)
+#define MODULO_ANCHO 25.4f
+
+// definir altura modulo en mm (3 u)
+#define MODULO_ALTURA 128.4f
+
+// definir coordenadas entradas
+#define PORCENTAJE_ENTRADA_RESINC_X 0.50f
+#define PORCENTAJE_ENTRADA_RESINC_Y 0.60f
+#define PORCENTAJE_ENTRADA_DESFASE_B_X 0.80f
+#define PORCENTAJE_ENTRADA_DESFASE_B_Y 0.60f
+
+// definir coordenadas parametros
+#define PORCENTAJE_PPM_X 0.50f
+#define PORCENTAJE_PPM_Y 0.35f
+#define PORCENTAJE_DESFASE_B_X 0.50f
+#define PORCENTAJE_DESFASE_B_Y 0.50f
+#define PORCENTAJE_DESFASE_CV_ATEN_X 0.80f
+#define PORCENTAJE_DESFASE_CV_ATEN_Y 0.50f
+#define PORCENTAJE_RESINC_X 0.50f
+#define PORCENTAJE_RESINC_X 0.55f
+
+// definir coordenadas salidas
+#define PORCENTAJE_SALIDA_A_X 0.30f
+#define PORCENTAJE_SALIDA_A_Y 0.80f
+#define PORCENTAJE_SALIDA_B_X 0.70f
+#define PORCENTAJE_SALIDA_B_Y 0.80f
+
+// definir coordenadas luces
+#define PORCENTAJE_LUCES_A_X 0.30f
+#define PORCENTAJE_LUCES_A_Y 0.70f
+#define PORCENTAJE_LUCES_B_X 0.70f
+#define PORCENTAJE_LUCES_B_Y 0.70f
+
 // modulo
 struct ReloModule : Module
 {
@@ -12,6 +46,8 @@ struct ReloModule : Module
         PARAM_PPM,
         // DESFASE de B en % de PARAM_PPM
         PARAM_DESFASE_B,
+        // atenuversor para la entrada CV de desfase
+        PARAM_DESFASE_CV_ATEN,
         // resincroniza A y B
         PARAM_RESINC,
         NUM_PARAMS,
@@ -20,6 +56,8 @@ struct ReloModule : Module
     enum InputIds
     {
         ENTRADA_RESINC,
+        // CV que se suma a PARAM_DESFASE_B (bipolar +-5V)
+        ENTRADA_DESFASE_B,
         NUM_INPUTS,
     };
 
@@ -56,8 +94,15 @@ struct ReloModule : Module
         // los strings son nombre del parametro y su unidad, ppm empieza con espacio
         configParam(PARAM_PPM, 30.0, 360.0, 120.0, "tempo", " ppm");
 
-        configParam(PARAM_DESFASE_B, -10.0, 10.0, 0.0, "desfase canal B", " %");
+        configParam(PARAM_DESFASE_B, -10.0, 10.0, 0.0, "desfase canal b", " %");
+        configParam(PARAM_DESFASE_CV_ATEN, -1.0, 1.0, 0.0, "cv desfase atenuversor");
         configParam(PARAM_RESINC, 0.0, 1.0, 0.0, "resincronizar");
+
+        configInput(ENTRADA_RESINC, "resincronizar");
+        configInput(ENTRADA_DESFASE_B, "cv desfase b");
+
+        configOutput(SALIDA_PULSO_A, "pulso a");
+        configOutput(SALIDA_PULSO_B, "pulso b");
 
         contadorA = 0.f;
         periodoA = 0.f;
@@ -70,7 +115,25 @@ struct ReloModule : Module
     {
         // guardar en variables float los valor de la perillas
         float ppmA = params[PARAM_PPM].getValue();
+
+        // desfase = perilla + cv atenuado
+        // cv bipolar entre -5V y +5V
+        // con atenuversor en 1.0 cubre el rango completo
+
         float desfase = params[PARAM_DESFASE_B].getValue();
+        desfase = desfase + inputs[ENTRADA_DESFASE_B].getVoltage() * params[PARAM_DESFASE_CV_ATEN].getValue() * 2.f;
+
+        // atajar desfase en rango de -10.0f a +10.f
+
+        if (desfase > 10.f)
+        {
+            desfase = 10.f;
+        }
+        else if (desfase < -10.f)
+        {
+            desfase = -10.f;
+        }
+
         float ppmB = ppmA * (1.f + desfase / 100.f);
 
         // periodo calculado en samples
@@ -86,6 +149,12 @@ struct ReloModule : Module
         {
             contadorA = 0.f;
             contadorB = 0.f;
+
+            // ademas de reiniciar los contadores
+            // emitimuos un puslo en A y B
+            // el resincronizado se escucha en ese instante
+            generadorPulsosA.trigger(TIEMPO_TRIGGER);
+            generadorPulsosB.trigger(TIEMPO_TRIGGER);
         }
 
         // canal A
@@ -137,21 +206,57 @@ struct ReloModuleWidget : ModuleWidget
         addChild(createWidget<ScrewSilver>(Vec(box.size.x - 2 * RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
 
         // params
-        addParam(createParamCentered<RoundLargeBlackKnob>(mm2px(Vec(25.4 * 0.5, 128.4 * 0.35)), module, ReloModule::PARAM_PPM));
-        addParam(createParamCentered<RoundSmallBlackKnob>(mm2px(Vec(25.4 * 0.5, 128.4 * 0.50)), module, ReloModule::PARAM_DESFASE_B));
-        addParam(createParamCentered<TL1105>(mm2px(Vec(25.4 * 0.5, 128.4 * 0.55)), module, ReloModule::PARAM_RESINC));
+        addParam(createParamCentered<RoundLargeBlackKnob>(mm2px(Vec(
+                                                              MODULO_ANCHO * PORCENTAJE_PPM_X,
+                                                              MODULO_ALTURA * PORCENTAJE_PPM_Y)),
+                                                          module, ReloModule::PARAM_PPM));
+
+        addParam(createParamCentered<RoundSmallBlackKnob>(mm2px(Vec(
+                                                              MODULO_ANCHO * PORCENTAJE_DESFASE_B_X,
+                                                              MODULO_ALTURA * PORCENTAJE_DESFASE_B_Y)),
+                                                          module, ReloModule::PARAM_DESFASE_B));
+
+        // atenuverter chico para la entrada CV de desfase
+        addParam(createParamCentered<Trimpot>(mm2px(Vec(
+                                                  MODULO_ANCHO * PORCENTAJE_DESFASE_CV_ATEN_X,
+                                                  MODULO_ALTURA * PORCENTAJE_DESFASE_CV_ATEN_Y)),
+                                              module, ReloModule::PARAM_DESFASE_CV_ATEN));
+
+        addParam(createParamCentered<TL1105>(mm2px(Vec(
+                                                 MODULO_ANCHO * PORCENTAJE_RESINC_X,
+                                                 MODULO_ALTURA * PORCENTAJE_RESINC_X)),
+                                             module, ReloModule::PARAM_RESINC));
 
         // entradas
-        addInput(createInputCentered<PJ301MPort>(mm2px(Vec(25.4 * 0.5, 128.4 * 0.60)), module, ReloModule::ENTRADA_RESINC));
+        addInput(createInputCentered<PJ301MPort>(mm2px(Vec(
+                                                     MODULO_ANCHO * PORCENTAJE_ENTRADA_RESINC_X,
+                                                     MODULO_ALTURA * PORCENTAJE_ENTRADA_RESINC_Y)),
+                                                 module, ReloModule::ENTRADA_RESINC));
+        addInput(createInputCentered<PJ301MPort>(mm2px(Vec(
+                                                     MODULO_ANCHO * PORCENTAJE_ENTRADA_DESFASE_B_X,
+                                                     MODULO_ALTURA * PORCENTAJE_ENTRADA_DESFASE_B_Y)),
+                                                 module, ReloModule::ENTRADA_DESFASE_B));
 
         //  salidas
-        addOutput(createOutputCentered<PJ301MPort>(mm2px(Vec(25.4 * 0.3, 128.4 * 0.80)), module, ReloModule::SALIDA_PULSO_A));
-        addOutput(createOutputCentered<PJ301MPort>(mm2px(Vec(25.4 * 0.7, 128.4 * 0.80)), module, ReloModule::SALIDA_PULSO_B));
+        addOutput(createOutputCentered<PJ301MPort>(mm2px(Vec(
+                                                       MODULO_ANCHO * PORCENTAJE_SALIDA_A_X,
+                                                       MODULO_ALTURA * PORCENTAJE_SALIDA_A_Y)),
+                                                   module, ReloModule::SALIDA_PULSO_A));
+        addOutput(createOutputCentered<PJ301MPort>(mm2px(Vec(
+                                                       MODULO_ANCHO * PORCENTAJE_SALIDA_B_X,
+                                                       MODULO_ALTURA * PORCENTAJE_SALIDA_B_Y)),
+                                                   module, ReloModule::SALIDA_PULSO_B));
 
         // luces
-        addChild(createLightCentered<LargeLight<GreenLight>>(mm2px(Vec(25.4 * 0.3, 128.4 * 0.70)), module, ReloModule::LUZ_PULSO_A));
+        addChild(createLightCentered<LargeLight<GreenLight>>(mm2px(Vec(
+                                                                 MODULO_ANCHO * PORCENTAJE_LUCES_A_X,
+                                                                 MODULO_ALTURA * PORCENTAJE_LUCES_A_Y)),
+                                                             module, ReloModule::LUZ_PULSO_A));
         // luces
-        addChild(createLightCentered<LargeLight<GreenLight>>(mm2px(Vec(25.4 * 0.7, 128.4 * 0.70)), module, ReloModule::LUZ_PULSO_B));
+        addChild(createLightCentered<LargeLight<GreenLight>>(mm2px(Vec(
+                                                                 MODULO_ANCHO * PORCENTAJE_LUCES_B_X,
+                                                                 MODULO_ALTURA * PORCENTAJE_LUCES_B_Y)),
+                                                             module, ReloModule::LUZ_PULSO_B));
     }
 };
 
