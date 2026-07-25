@@ -9,33 +9,50 @@
 // definir altura modulo en mm (3 u)
 #define MODULO_ALTURA 128.4f
 
-// definir coordenadas entradas
-#define PORCENTAJE_ENTRADA_RESINC_X 0.50f
-#define PORCENTAJE_ENTRADA_RESINC_Y 0.60f
-#define PORCENTAJE_ENTRADA_DESFASE_B_X 0.80f
-#define PORCENTAJE_ENTRADA_DESFASE_B_Y 0.60f
+// define porcentajes columnas
+#define PORCENTAJE_COLUMNA_IZQ 0.30f
+#define PORCENTAJE_COLUMNA_DER 0.70f
 
-// definir coordenadas parametros
-#define PORCENTAJE_PPM_X 0.50f
-#define PORCENTAJE_PPM_Y 0.35f
-#define PORCENTAJE_DESFASE_B_X 0.50f
-#define PORCENTAJE_DESFASE_B_Y 0.50f
-#define PORCENTAJE_DESFASE_CV_ATEN_X 0.80f
-#define PORCENTAJE_DESFASE_CV_ATEN_Y 0.50f
-#define PORCENTAJE_RESINC_X 0.50f
-#define PORCENTAJE_RESINC_X 0.55f
+// define porcentaje delta en eje y
+// entre boton y entrada
+#define DELTA_Y_BOTON_ENTRADA 0.08f
 
-// definir coordenadas salidas
-#define PORCENTAJE_SALIDA_A_X 0.30f
-#define PORCENTAJE_SALIDA_A_Y 0.80f
-#define PORCENTAJE_SALIDA_B_X 0.70f
-#define PORCENTAJE_SALIDA_B_Y 0.80f
+// define porcentaje delta en eye y
+// entre perilla y atenuversor y entrada
+#define DELTA_Y_PERILLA_ATENUVERSOR 0.08f
 
-// definir coordenadas luces
-#define PORCENTAJE_LUCES_A_X 0.30f
-#define PORCENTAJE_LUCES_A_Y 0.70f
-#define PORCENTAJE_LUCES_B_X 0.70f
-#define PORCENTAJE_LUCES_B_Y 0.70f
+// define porcentaje entre salida y su luz
+#define DELTA_Y_SALIDA_LUZ 0.05f
+
+// define coordenadas ppm
+#define PORCENTAJE_PPM_X (PORCENTAJE_COLUMNA_IZQ)
+#define PORCENTAJE_PPM_Y 0.15f
+
+// define coordenadas resinc
+#define PORCENTAJE_BOTON_RESINC_X (PORCENTAJE_COLUMNA_IZQ)
+#define PORCENTAJE_BOTON_RESINC_Y 0.35f
+#define PORCENTAJE_ENTRADA_RESINC_X (PORCENTAJE_COLUMNA_IZQ)
+#define PORCENTAJE_ENTRADA_RESINC_Y (PORCENTAJE_BOTON_RESINC_Y + DELTA_Y_BOTON_ENTRADA)
+
+// definir coordenadas desfase
+#define PORCENTAJE_DESFASE_B_X (PORCENTAJE_COLUMNA_DER)
+#define PORCENTAJE_DESFASE_B_Y 0.60f
+#define PORCENTAJE_DESFASE_CV_ATEN_X (PORCENTAJE_COLUMNA_DER)
+#define PORCENTAJE_DESFASE_CV_ATEN_Y (PORCENTAJE_DESFASE_B_Y + DELTA_Y_PERILLA_ATENUVERSOR)
+#define PORCENTAJE_ENTRADA_DESFASE_B_X (PORCENTAJE_COLUMNA_DER)
+#define PORCENTAJE_ENTRADA_DESFASE_B_Y (PORCENTAJE_DESFASE_B_Y + 2.f * DELTA_Y_PERILLA_ATENUVERSOR)
+
+// definir coordenadas salida y luz a
+#define PORCENTAJE_LUCES_A_X (PORCENTAJE_COLUMNA_IZQ)
+#define PORCENTAJE_LUCES_A_Y 0.85f
+#define PORCENTAJE_SALIDA_A_X (PORCENTAJE_COLUMNA_IZQ)
+#define PORCENTAJE_SALIDA_A_Y (PORCENTAJE_LUCES_A_Y + DELTA_Y_SALIDA_LUZ)
+
+// definir coordenadas salida y luz b
+#define PORCENTAJE_LUCES_B_X (PORCENTAJE_COLUMNA_DER)
+#define PORCENTAJE_LUCES_B_Y 0.85f
+#define PORCENTAJE_SALIDA_B_X (PORCENTAJE_COLUMNA_DER)
+#define PORCENTAJE_SALIDA_B_Y (PORCENTAJE_LUCES_B_Y + DELTA_Y_SALIDA_LUZ)
 
 // modulo
 struct ReloModule : Module
@@ -48,8 +65,8 @@ struct ReloModule : Module
         PARAM_DESFASE_B,
         // atenuversor para la entrada CV de desfase
         PARAM_DESFASE_CV_ATEN,
-        // resincroniza A y B
-        PARAM_RESINC,
+        // boton que resincroniza A y B
+        PARAM_BOTON_RESINC,
         NUM_PARAMS,
     };
 
@@ -96,7 +113,7 @@ struct ReloModule : Module
 
         configParam(PARAM_DESFASE_B, -10.0, 10.0, 0.0, "desfase canal b", " %");
         configParam(PARAM_DESFASE_CV_ATEN, -1.0, 1.0, 0.0, "cv desfase atenuversor");
-        configParam(PARAM_RESINC, 0.0, 1.0, 0.0, "resincronizar");
+        configParam(PARAM_BOTON_RESINC, 0.0, 1.0, 0.0, "resincronizar");
 
         configInput(ENTRADA_RESINC, "resincronizar");
         configInput(ENTRADA_DESFASE_B, "cv desfase b");
@@ -141,7 +158,7 @@ struct ReloModule : Module
         periodoB = 60.f * args.sampleRate / ppmB;
 
         // resincronizar boton del panel o externo
-        bool resetBoton = botonResinc.process(params[PARAM_RESINC].getValue());
+        bool resetBoton = botonResinc.process(params[PARAM_BOTON_RESINC].getValue());
         bool resetExterno = entradaResinc.process(inputs[ENTRADA_RESINC].getVoltage());
         bool reset = resetBoton || resetExterno;
 
@@ -200,16 +217,16 @@ struct ReloModuleWidget : ModuleWidget
         setPanel(APP->window->loadSvg(asset::plugin(pluginInstance, "res/ReloModule.svg")));
 
         // tornillos
-        addChild(createWidget<ScrewSilver>(Vec(RACK_GRID_WIDTH, 0)));
-        addChild(createWidget<ScrewSilver>(Vec(box.size.x - 2 * RACK_GRID_WIDTH, 0)));
-        addChild(createWidget<ScrewSilver>(Vec(RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
-        addChild(createWidget<ScrewSilver>(Vec(box.size.x - 2 * RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
+        addChild(createWidget<ScrewBlack>(Vec(RACK_GRID_WIDTH, 0)));
+        addChild(createWidget<ScrewBlack>(Vec(box.size.x - 2 * RACK_GRID_WIDTH, 0)));
+        addChild(createWidget<ScrewBlack>(Vec(RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
+        addChild(createWidget<ScrewBlack>(Vec(box.size.x - 2 * RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
 
         // params
-        addParam(createParamCentered<RoundLargeBlackKnob>(mm2px(Vec(
-                                                              MODULO_ANCHO * PORCENTAJE_PPM_X,
-                                                              MODULO_ALTURA * PORCENTAJE_PPM_Y)),
-                                                          module, ReloModule::PARAM_PPM));
+        addParam(createParamCentered<RoundBlackKnob>(mm2px(Vec(
+                                                         MODULO_ANCHO * PORCENTAJE_PPM_X,
+                                                         MODULO_ALTURA * PORCENTAJE_PPM_Y)),
+                                                     module, ReloModule::PARAM_PPM));
 
         addParam(createParamCentered<RoundSmallBlackKnob>(mm2px(Vec(
                                                               MODULO_ANCHO * PORCENTAJE_DESFASE_B_X,
@@ -223,9 +240,9 @@ struct ReloModuleWidget : ModuleWidget
                                               module, ReloModule::PARAM_DESFASE_CV_ATEN));
 
         addParam(createParamCentered<TL1105>(mm2px(Vec(
-                                                 MODULO_ANCHO * PORCENTAJE_RESINC_X,
-                                                 MODULO_ALTURA * PORCENTAJE_RESINC_X)),
-                                             module, ReloModule::PARAM_RESINC));
+                                                 MODULO_ANCHO * PORCENTAJE_BOTON_RESINC_X,
+                                                 MODULO_ALTURA * PORCENTAJE_BOTON_RESINC_Y)),
+                                             module, ReloModule::PARAM_BOTON_RESINC));
 
         // entradas
         addInput(createInputCentered<PJ301MPort>(mm2px(Vec(
@@ -248,15 +265,15 @@ struct ReloModuleWidget : ModuleWidget
                                                    module, ReloModule::SALIDA_PULSO_B));
 
         // luces
-        addChild(createLightCentered<LargeLight<GreenLight>>(mm2px(Vec(
-                                                                 MODULO_ANCHO * PORCENTAJE_LUCES_A_X,
-                                                                 MODULO_ALTURA * PORCENTAJE_LUCES_A_Y)),
-                                                             module, ReloModule::LUZ_PULSO_A));
+        addChild(createLightCentered<MediumLight<GreenLight>>(mm2px(Vec(
+                                                                  MODULO_ANCHO * PORCENTAJE_LUCES_A_X,
+                                                                  MODULO_ALTURA * PORCENTAJE_LUCES_A_Y)),
+                                                              module, ReloModule::LUZ_PULSO_A));
         // luces
-        addChild(createLightCentered<LargeLight<GreenLight>>(mm2px(Vec(
-                                                                 MODULO_ANCHO * PORCENTAJE_LUCES_B_X,
-                                                                 MODULO_ALTURA * PORCENTAJE_LUCES_B_Y)),
-                                                             module, ReloModule::LUZ_PULSO_B));
+        addChild(createLightCentered<MediumLight<GreenLight>>(mm2px(Vec(
+                                                                  MODULO_ANCHO * PORCENTAJE_LUCES_B_X,
+                                                                  MODULO_ALTURA * PORCENTAJE_LUCES_B_Y)),
+                                                              module, ReloModule::LUZ_PULSO_B));
     }
 };
 
