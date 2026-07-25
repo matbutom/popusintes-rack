@@ -11,9 +11,7 @@ Módulos programados en C++, usando el editor de texto Visual Studio Code.
 ## Compilar
 
 ```bash
-make dep
-make
-make dist
+make dep && make && make dist
 ```
 
 ## Gráficas
