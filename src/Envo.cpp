@@ -37,14 +37,14 @@ struct EnvoModule : Module
 
     enum LightsIds
     {
-        LUZ_ENVO_A
+        LUZ_ENVO_A,
         NUM_LIGHTS,
     };
 
     enum EstadoEnvo {
         ESTADO_REPOSO,
         ESTADO_SUBIDA,
-        ESTADO_BAJADA
+        ESTADO_BAJADA,
     };
 
     EstadoEnvo estado = ESTADO_REPOSO;
