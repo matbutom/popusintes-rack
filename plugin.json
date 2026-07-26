@@ -8,14 +8,6 @@
   "authorUrl": "https://piruetas.xyz",
   "sourceUrl": "https://github.com/piruetasxyz/popusintes-rack",
   "modules": [
-     {
-      "slug": "suma",
-      "name": "suma",
-      "description": "sumadora",
-      "tags": [
-        "Mixer"
-      ]
-    },
     {
       "slug": "compa",
       "name": "compa",
@@ -63,7 +55,14 @@
       "tags": [
         "Sequencer"
       ]
+    },
+     {
+      "slug": "suma",
+      "name": "suma",
+      "description": "sumadora",
+      "tags": [
+        "Mixer"
+      ]
     }
-
   ]
 }
