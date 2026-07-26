@@ -142,7 +142,7 @@ struct EnvoModuleWidget : ModuleWidget
 
 
         // luz
-        addChild(createLightCentered<SmallLight<GreenLight>>(mm2px(Vec(12.7, 90)), module, EnvoModule::LIGHT_ENVO));
+        addChild(createLightCentered<SmallLight<GreenLight>>(mm2px(Vec(12.7, 90)), module, EnvoModule::LUZ_ENVO_A));
 
     }
 };
