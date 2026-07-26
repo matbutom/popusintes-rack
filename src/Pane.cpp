@@ -1,7 +1,7 @@
 #include "Popusintes.hpp"
 
 // modulo
-struct PanelModule : Module
+struct PaneModule : Module
 {
     enum ParamIds
     {
@@ -23,7 +23,7 @@ struct PanelModule : Module
         NUM_LIGHTS,
     };
 
-    PanelModule()
+    PaneModule()
     {
 
         config(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS);
@@ -36,13 +36,13 @@ struct PanelModule : Module
 };
 
 // widget
-struct PanelModuleWidget : ModuleWidget
+struct PaneModuleWidget : ModuleWidget
 {
-    PanelModuleWidget(PanelModule *module)
+    PaneModuleWidget(PaneModule *module)
     {
 
         setModule(module);
-        setPanel(APP->window->loadSvg(asset::plugin(pluginInstance, "res/PanelModule.svg")));
+        setPanel(APP->window->loadSvg(asset::plugin(pluginInstance, "res/PaneModule.svg")));
 
         // tornillos
         addChild(createWidget<ScrewSilver>(Vec(RACK_GRID_WIDTH, 0)));
@@ -52,4 +52,4 @@ struct PanelModuleWidget : ModuleWidget
     }
 };
 
-Model *modelPanel = createModel<PanelModule, PanelModuleWidget>("panel");
+Model *modelPane = createModel<PaneModule, PaneModuleWidget>("pane");

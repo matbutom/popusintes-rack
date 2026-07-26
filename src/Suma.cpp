@@ -42,7 +42,7 @@ struct SumaModuleWidget : ModuleWidget
     {
 
         setModule(module);
-        setSuma(APP->window->loadSvg(asset::plugin(pluginInstance, "res/SumaModule.svg")));
+        setPanel(APP->window->loadSvg(asset::plugin(pluginInstance, "res/SumaModule.svg")));
 
         // tornillos
         addChild(createWidget<ScrewSilver>(Vec(RACK_GRID_WIDTH, 0)));
