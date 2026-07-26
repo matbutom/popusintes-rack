@@ -70,7 +70,7 @@ struct EnvoModule : Module
         bool detectado = detectorPulso.process(inputs[ENTRADA_PULSO_A].getVoltage(), 0.1f, 1.0f);
 
         if (detectado) {
-            estado = ESTADO_SUBIDA<
+            estado = ESTADO_SUBIDA;
         }
 
         float tiempoSubida = params[PARAM_SUBIDA].getValue();
