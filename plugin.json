@@ -8,12 +8,28 @@
   "authorUrl": "https://piruetas.xyz",
   "sourceUrl": "https://github.com/piruetasxyz/popusintes-rack",
   "modules": [
+     {
+      "slug": "suma",
+      "name": "suma",
+      "description": "sumadora",
+      "tags": [
+        "Mixer"
+      ]
+    },
     {
       "slug": "compa",
       "name": "compa",
-      "description": "comparador",
+      "description": "comparadora",
       "tags": [
         "Logic"
+      ]
+    },
+    {
+      "slug": "envo",
+      "name": "envo",
+      "description": "generadora de envolventes",
+      "tags": [
+        "Envelope generator"
       ]
     },
     {
@@ -43,7 +59,7 @@
     {
       "slug": "secu",
       "name": "secu",
-      "description": "secuenciador",
+      "description": "secuenciadora",
       "tags": [
         "Sequencer"
       ]
