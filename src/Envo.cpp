@@ -42,7 +42,7 @@ struct EnvoModuleWidget : ModuleWidget
     {
 
         setModule(module);
-        setEnvo(APP->window->loadSvg(asset::plugin(pluginInstance, "res/EnvoModule.svg")));
+        setPanel(APP->window->loadSvg(asset::plugin(pluginInstance, "res/EnvoModule.svg")));
 
         // tornillos
         addChild(createWidget<ScrewSilver>(Vec(RACK_GRID_WIDTH, 0)));
