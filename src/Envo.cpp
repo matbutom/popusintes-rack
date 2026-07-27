@@ -26,6 +26,7 @@ struct EnvoModule : Module
     enum InputIds
     {
         ENTRADA_PULSO_A,
+        ENTRADA_PULSO_A_FORZAR,
         NUM_INPUTS,
     };
 
@@ -45,11 +46,13 @@ struct EnvoModule : Module
         ESTADO_REPOSO,
         ESTADO_SUBIDA,
         ESTADO_BAJADA,
+        ESTADO_FORZAR
     };
 
     EstadoEnvo estado = ESTADO_REPOSO;
     float salida = 0.0f;
     dsp::SchmittTrigger detectorPulso;
+    dsp::SchmittTrigger detectorForzar;
 
     EnvoModule()
     {
@@ -62,6 +65,10 @@ struct EnvoModule : Module
         configParam(
             PARAM_BAJADA , TIEMPO_MIN, TIEMPO_MAX,
             0.1f, "bajada" " s");
+
+        configInput(ENTRADA_PULSO_A, "pulso");
+        configInput(ENTRADA_PULSO_A_FORZAR, "forzar");
+        configOutput(SALIDA_ENVO_A, "envolvente");
     }
 
     void process(const ProcessArgs &args) override
@@ -69,8 +76,17 @@ struct EnvoModule : Module
         // detectar subida de pulso (umbral de 1V)
         bool detectado = detectorPulso.process(inputs[ENTRADA_PULSO_A].getVoltage(), 0.1f, 1.0f);
 
-        if (detectado) {
+        // pulso normal solamente ocurre si esatado actual es reposo
+        if (detectado && estado == ESTADO_REPOSO) {
             estado = ESTADO_SUBIDA;
+        }
+
+        // detectar forzardo
+        bool forzadoDetectado = detectorForzar.process(
+            inputs[ENTRADA_PULSO_A_FORZAR].getVoltage(), 0.1f, 1.0f);
+
+        if (forzadoDetectado) {
+            estado = ESTADO_FORZAR;
         }
 
         float tiempoSubida = params[PARAM_SUBIDA].getValue();
@@ -98,6 +114,18 @@ struct EnvoModule : Module
                 if (salida <= 0.0f) {
                     salida = 0.0f;
                     estado = ESTADO_REPOSO;
+                }
+                break;
+            }
+
+            case ESTADO_FORZAR: {
+                // rampa rapida a 0V, luego subida
+                float decrementoRapido = (10.0f - TIEMPO_TRIGGER) * args.sampleTime;
+                salida = salida - decrementoRapido;
+
+                if (salida <= 0.0f) {
+                    salida = 0.0f;
+                    estado = ESTADO_SUBIDA;
                 }
                 break;
             }
@@ -133,8 +161,13 @@ struct EnvoModuleWidget : ModuleWidget
         addParam(createParamCentered<RoundBlackKnob>(mm2px(Vec(19.05, 30)), module, EnvoModule::PARAM_BAJADA));
 
 
-        // entrada
-        addInput(createInputCentered<PJ301MPort>(mm2px(Vec(12.7, 60)), module, EnvoModule::ENTRADA_PULSO_A));
+        // entradas
+        addInput(createInputCentered<PJ301MPort>(
+            mm2px(Vec(6.35, 60)), module,
+            EnvoModule::ENTRADA_PULSO_A));
+        addInput(createInputCentered<PJ301MPort>(
+            mm2px(Vec(19.05, 60)), module,
+            EnvoModule::ENTRADA_PULSO_A_FORZAR));
 
 
         // salida
