@@ -1,8 +1,8 @@
 #include "Popusintes.hpp"
+#include "Dimensiones.hpp"
+#include "Posicionador.hpp"
+#include "Tiempos.hpp"
 #include "Tornillos.hpp"
-
-// definir tiempo de trigger
-#define TIEMPO_TRIGGER 1e-3f
 
 // definir ancho modulo en mm (10 hp, el doble que relo para las 4 salidas)
 #define MODULO_ANCHO 50.8f
@@ -259,20 +259,16 @@ struct RereloModule : Module
             // ademas de reiniciar los contadores
             // emitimos un pulso en los cuatro canales
             // el resincronizado se escucha en ese instante
-            generadorPulsosA.trigger(TIEMPO_TRIGGER);
-            generadorPulsosB.trigger(TIEMPO_TRIGGER);
-            generadorPulsosC.trigger(TIEMPO_TRIGGER);
-            generadorPulsosD.trigger(TIEMPO_TRIGGER);
+            generadorPulsosA.trigger(tiempos::PULSO_MS);
+            generadorPulsosB.trigger(tiempos::PULSO_MS);
+            generadorPulsosC.trigger(tiempos::PULSO_MS);
+            generadorPulsosD.trigger(tiempos::PULSO_MS);
         }
 
         // canal a, es la referencia, nunca se desfasa
         if (contadorA > periodoA)
         {
-            // TIEMPO_TRIGGER esta definida arriba
-            // todavia no me gusta el nombre trigger
-            // gate le puedo decir compuerta
-            // pero trigger aun no se
-            generadorPulsosA.trigger(TIEMPO_TRIGGER);
+            generadorPulsosA.trigger(tiempos::PULSO_MS);
             contadorA = contadorA - periodoA;
         }
 
@@ -281,7 +277,7 @@ struct RereloModule : Module
         // canal b
         if (contadorB > periodoB)
         {
-            generadorPulsosB.trigger(TIEMPO_TRIGGER);
+            generadorPulsosB.trigger(tiempos::PULSO_MS);
             contadorB = contadorB - periodoB;
         }
 
@@ -290,7 +286,7 @@ struct RereloModule : Module
         // canal c
         if (contadorC > periodoC)
         {
-            generadorPulsosC.trigger(TIEMPO_TRIGGER);
+            generadorPulsosC.trigger(tiempos::PULSO_MS);
             contadorC = contadorC - periodoC;
         }
 
@@ -299,7 +295,7 @@ struct RereloModule : Module
         // canal d
         if (contadorD > periodoD)
         {
-            generadorPulsosD.trigger(TIEMPO_TRIGGER);
+            generadorPulsosD.trigger(tiempos::PULSO_MS);
             contadorD = contadorD - periodoD;
         }
 
