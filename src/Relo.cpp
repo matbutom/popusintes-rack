@@ -1,4 +1,5 @@
 #include "Popusintes.hpp"
+#include "Tornillos.hpp"
 
 // definir tiempo de trigger
 #define TIEMPO_TRIGGER 1e-3f
@@ -217,10 +218,7 @@ struct ReloModuleWidget : ModuleWidget
         setPanel(APP->window->loadSvg(asset::plugin(pluginInstance, "res/ReloModule.svg")));
 
         // tornillos
-        addChild(createWidget<ScrewBlack>(Vec(RACK_GRID_WIDTH, 0)));
-        addChild(createWidget<ScrewBlack>(Vec(box.size.x - 2 * RACK_GRID_WIDTH, 0)));
-        addChild(createWidget<ScrewBlack>(Vec(RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
-        addChild(createWidget<ScrewBlack>(Vec(box.size.x - 2 * RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
+        agregarTornillos(this);
 
         // params
         addParam(createParamCentered<RoundBlackKnob>(mm2px(Vec(
