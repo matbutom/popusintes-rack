@@ -1,4 +1,5 @@
 #include "Popusintes.hpp"
+#include "Tornillos.hpp"
 
 // definir tiempo de trigger
 #define TIEMPO_TRIGGER 1e-3f
@@ -151,10 +152,7 @@ struct EnvoModuleWidget : ModuleWidget
         setPanel(APP->window->loadSvg(asset::plugin(pluginInstance, "res/EnvoModule.svg")));
 
         // tornillos
-        addChild(createWidget<ScrewSilver>(Vec(RACK_GRID_WIDTH, 0)));
-        addChild(createWidget<ScrewSilver>(Vec(box.size.x - 2 * RACK_GRID_WIDTH, 0)));
-        addChild(createWidget<ScrewSilver>(Vec(RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
-        addChild(createWidget<ScrewSilver>(Vec(box.size.x - 2 * RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
+        agregarTornillos(this);
 
         // parametros
         addParam(createParamCentered<RoundBlackKnob>(mm2px(Vec(6.35, 30)), module, EnvoModule::PARAM_SUBIDA));
