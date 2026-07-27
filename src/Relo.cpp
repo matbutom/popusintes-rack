@@ -1,8 +1,8 @@
 #include "Popusintes.hpp"
+#include "Dimensiones.hpp"
+#include "Posicionador.hpp"
+#include "Tiempos.hpp"
 #include "Tornillos.hpp"
-
-// definir tiempo de trigger
-#define TIEMPO_TRIGGER 1e-3f
 
 // definir ancho modulo en mm (5 hp)
 #define MODULO_ANCHO 25.4f
@@ -171,18 +171,14 @@ struct ReloModule : Module
             // ademas de reiniciar los contadores
             // emitimuos un puslo en A y B
             // el resincronizado se escucha en ese instante
-            generadorPulsosA.trigger(TIEMPO_TRIGGER);
-            generadorPulsosB.trigger(TIEMPO_TRIGGER);
+            generadorPulsosA.trigger(tiempos::PULSO_MS);
+            generadorPulsosB.trigger(tiempos::PULSO_MS);
         }
 
         // canal A
         if (contadorA > periodoA)
         {
-            // TIEMPO_TRIGGER esta definida arriba
-            // todavia no me gusta el nombre trigger
-            // gate le puedo decir compuerta
-            // pero trigger aun no se
-            generadorPulsosA.trigger(TIEMPO_TRIGGER);
+            generadorPulsosA.trigger(tiempos::PULSO_MS);
             contadorA = contadorA - periodoA;
         }
 
@@ -191,7 +187,7 @@ struct ReloModule : Module
         // canal B
         if (contadorB > periodoB)
         {
-            generadorPulsosB.trigger(TIEMPO_TRIGGER);
+            generadorPulsosB.trigger(tiempos::PULSO_MS);
             contadorB = contadorB - periodoB;
         }
 
@@ -220,58 +216,53 @@ struct ReloModuleWidget : ModuleWidget
         // tornillos
         agregarTornillos(this);
 
-        // params
-        addParam(createParamCentered<RoundBlackKnob>(mm2px(Vec(
-                                                         MODULO_ANCHO * PORCENTAJE_PPM_X,
-                                                         MODULO_ALTURA * PORCENTAJE_PPM_Y)),
-                                                     module, ReloModule::PARAM_PPM));
+        Posicionador posicionador(dimensiones::MODULO_ANCHO_05_HP, dimensiones::MODULO_ALTURA_3_U);
 
-        addParam(createParamCentered<RoundSmallBlackKnob>(mm2px(Vec(
-                                                              MODULO_ANCHO * PORCENTAJE_DESFASE_B_X,
-                                                              MODULO_ALTURA * PORCENTAJE_DESFASE_B_Y)),
-                                                          module, ReloModule::PARAM_DESFASE_B));
+        // params
+        addParam(createParamCentered<RoundBlackKnob>(
+            posicionador.posicion(PORCENTAJE_PPM_X, PORCENTAJE_PPM_Y),
+            module, ReloModule::PARAM_PPM));
+
+        addParam(createParamCentered<RoundSmallBlackKnob>(
+            posicionador.posicion(PORCENTAJE_DESFASE_B_X, PORCENTAJE_DESFASE_B_Y),
+            module, ReloModule::PARAM_DESFASE_B));
 
         // atenuverter chico para la entrada CV de desfase
-        addParam(createParamCentered<Trimpot>(mm2px(Vec(
-                                                  MODULO_ANCHO * PORCENTAJE_DESFASE_CV_ATEN_X,
-                                                  MODULO_ALTURA * PORCENTAJE_DESFASE_CV_ATEN_Y)),
-                                              module, ReloModule::PARAM_DESFASE_CV_ATEN));
+        addParam(createParamCentered<Trimpot>(
+            posicionador.posicion(PORCENTAJE_DESFASE_CV_ATEN_X, PORCENTAJE_DESFASE_CV_ATEN_Y),
+            module, ReloModule::PARAM_DESFASE_CV_ATEN));
 
-        addParam(createParamCentered<TL1105>(mm2px(Vec(
-                                                 MODULO_ANCHO * PORCENTAJE_BOTON_RESINC_X,
-                                                 MODULO_ALTURA * PORCENTAJE_BOTON_RESINC_Y)),
-                                             module, ReloModule::PARAM_BOTON_RESINC));
+        // boton resinc
+        addParam(createParamCentered<TL1105>(
+            posicionador.posicion(PORCENTAJE_BOTON_RESINC_X, PORCENTAJE_BOTON_RESINC_Y),
+            module, ReloModule::PARAM_BOTON_RESINC));
 
         // entradas
-        addInput(createInputCentered<PJ301MPort>(mm2px(Vec(
-                                                     MODULO_ANCHO * PORCENTAJE_ENTRADA_RESINC_X,
-                                                     MODULO_ALTURA * PORCENTAJE_ENTRADA_RESINC_Y)),
-                                                 module, ReloModule::ENTRADA_RESINC));
-        addInput(createInputCentered<PJ301MPort>(mm2px(Vec(
-                                                     MODULO_ANCHO * PORCENTAJE_ENTRADA_DESFASE_B_X,
-                                                     MODULO_ALTURA * PORCENTAJE_ENTRADA_DESFASE_B_Y)),
-                                                 module, ReloModule::ENTRADA_DESFASE_B));
+        addInput(createInputCentered<PJ301MPort>(
+            posicionador.posicion(PORCENTAJE_ENTRADA_RESINC_X, PORCENTAJE_ENTRADA_RESINC_Y),
+            module, ReloModule::ENTRADA_RESINC));
+
+        addInput(createInputCentered<PJ301MPort>(
+            posicionador.posicion(PORCENTAJE_ENTRADA_DESFASE_B_X, PORCENTAJE_ENTRADA_DESFASE_B_Y),
+            module, ReloModule::ENTRADA_DESFASE_B));
 
         //  salidas
-        addOutput(createOutputCentered<PJ301MPort>(mm2px(Vec(
-                                                       MODULO_ANCHO * PORCENTAJE_SALIDA_A_X,
-                                                       MODULO_ALTURA * PORCENTAJE_SALIDA_A_Y)),
-                                                   module, ReloModule::SALIDA_PULSO_A));
-        addOutput(createOutputCentered<PJ301MPort>(mm2px(Vec(
-                                                       MODULO_ANCHO * PORCENTAJE_SALIDA_B_X,
-                                                       MODULO_ALTURA * PORCENTAJE_SALIDA_B_Y)),
-                                                   module, ReloModule::SALIDA_PULSO_B));
+        addOutput(createOutputCentered<PJ301MPort>(
+            posicionador.posicion(PORCENTAJE_SALIDA_A_X, PORCENTAJE_SALIDA_A_Y),
+            module, ReloModule::SALIDA_PULSO_A));
+
+        addOutput(createOutputCentered<PJ301MPort>(
+            posicionador.posicion(PORCENTAJE_SALIDA_B_X, PORCENTAJE_SALIDA_B_Y),
+            module, ReloModule::SALIDA_PULSO_B));
 
         // luces
-        addChild(createLightCentered<MediumLight<GreenLight>>(mm2px(Vec(
-                                                                  MODULO_ANCHO * PORCENTAJE_LUCES_A_X,
-                                                                  MODULO_ALTURA * PORCENTAJE_LUCES_A_Y)),
-                                                              module, ReloModule::LUZ_PULSO_A));
-        // luces
-        addChild(createLightCentered<MediumLight<GreenLight>>(mm2px(Vec(
-                                                                  MODULO_ANCHO * PORCENTAJE_LUCES_B_X,
-                                                                  MODULO_ALTURA * PORCENTAJE_LUCES_B_Y)),
-                                                              module, ReloModule::LUZ_PULSO_B));
+        addChild(createLightCentered<MediumLight<GreenLight>>(
+            posicionador.posicion(PORCENTAJE_LUCES_A_X, PORCENTAJE_LUCES_A_Y),
+            module, ReloModule::LUZ_PULSO_A));
+
+        addChild(createLightCentered<MediumLight<GreenLight>>(
+            posicionador.posicion(PORCENTAJE_LUCES_B_X, PORCENTAJE_LUCES_B_Y),
+            module, ReloModule::LUZ_PULSO_B));
     }
 };
 

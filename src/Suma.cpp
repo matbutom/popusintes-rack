@@ -1,4 +1,6 @@
 #include "Popusintes.hpp"
+#include "Dimensiones.hpp"
+#include "Tiempos.hpp"
 #include "Tornillos.hpp"
 
 // modulo

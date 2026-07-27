@@ -1,8 +1,8 @@
 #include "Popusintes.hpp"
+#include "Dimensiones.hpp"
+#include "Posicionador.hpp"
+#include "Tiempos.hpp"
 #include "Tornillos.hpp"
-
-// definir tiempo de trigger
-#define TIEMPO_TRIGGER 1e-3f
 
 // tiempos minimo y maximo (segundos)
 #define TIEMPO_MIN 0.001f
@@ -43,7 +43,8 @@ struct EnvoModule : Module
         NUM_LIGHTS,
     };
 
-    enum EstadoEnvo {
+    enum EstadoEnvo
+    {
         ESTADO_REPOSO,
         ESTADO_SUBIDA,
         ESTADO_BAJADA,
@@ -64,8 +65,9 @@ struct EnvoModule : Module
             PARAM_SUBIDA, TIEMPO_MIN, TIEMPO_MAX,
             0.1f, "subida", " s");
         configParam(
-            PARAM_BAJADA , TIEMPO_MIN, TIEMPO_MAX,
-            0.1f, "bajada" " s");
+            PARAM_BAJADA, TIEMPO_MIN, TIEMPO_MAX,
+            0.1f, "bajada"
+                  " s");
 
         configInput(ENTRADA_PULSO_A, "pulso");
         configInput(ENTRADA_PULSO_A_FORZAR, "forzar");
@@ -78,7 +80,8 @@ struct EnvoModule : Module
         bool detectado = detectorPulso.process(inputs[ENTRADA_PULSO_A].getVoltage(), 0.1f, 1.0f);
 
         // pulso normal solamente ocurre si esatado actual es reposo
-        if (detectado && estado == ESTADO_REPOSO) {
+        if (detectado && estado == ESTADO_REPOSO)
+        {
             estado = ESTADO_SUBIDA;
         }
 
@@ -86,54 +89,62 @@ struct EnvoModule : Module
         bool forzadoDetectado = detectorForzar.process(
             inputs[ENTRADA_PULSO_A_FORZAR].getVoltage(), 0.1f, 1.0f);
 
-        if (forzadoDetectado) {
+        if (forzadoDetectado)
+        {
             estado = ESTADO_FORZAR;
         }
 
         float tiempoSubida = params[PARAM_SUBIDA].getValue();
         float tiempoBajada = params[PARAM_BAJADA].getValue();
 
-        switch(estado) {
-            case ESTADO_SUBIDA: {
-                // incremento para llegar a 10V en tiempoSubida
-                float incremento = (10.0f / tiempoSubida) * args.sampleTime;
-                salida = salida + incremento;
+        switch (estado)
+        {
+        case ESTADO_SUBIDA:
+        {
+            // incremento para llegar a 10V en tiempoSubida
+            float incremento = (10.0f / tiempoSubida) * args.sampleTime;
+            salida = salida + incremento;
 
-                // detectar si ya subimos, para empezar la bajada
-                if (salida >= 10.0f) {
-                    salida = 10.0f;
-                    estado = ESTADO_BAJADA;
-                }
-                break;
+            // detectar si ya subimos, para empezar la bajada
+            if (salida >= 10.0f)
+            {
+                salida = 10.0f;
+                estado = ESTADO_BAJADA;
             }
+            break;
+        }
 
-            case ESTADO_BAJADA: {
-                //dencremento para llegar a 0V en tiempoBajada
-                float decremento = (10.0f / tiempoBajada) * args.sampleTime;
-                salida = salida - decremento;
+        case ESTADO_BAJADA:
+        {
+            // dencremento para llegar a 0V en tiempoBajada
+            float decremento = (10.0f / tiempoBajada) * args.sampleTime;
+            salida = salida - decremento;
 
-                if (salida <= 0.0f) {
-                    salida = 0.0f;
-                    estado = ESTADO_REPOSO;
-                }
-                break;
+            if (salida <= 0.0f)
+            {
+                salida = 0.0f;
+                estado = ESTADO_REPOSO;
             }
+            break;
+        }
 
-            case ESTADO_FORZAR: {
-                // rampa rapida a 0V, luego subida
-                float decrementoRapido = (10.0f - TIEMPO_TRIGGER) * args.sampleTime;
-                salida = salida - decrementoRapido;
+        case ESTADO_FORZAR:
+        {
+            // rampa rapida a 0V, luego subida
+            float decrementoRapido = (10.0f - tiempos::PULSO_MS) * args.sampleTime;
+            salida = salida - decrementoRapido;
 
-                if (salida <= 0.0f) {
-                    salida = 0.0f;
-                    estado = ESTADO_SUBIDA;
-                }
-                break;
+            if (salida <= 0.0f)
+            {
+                salida = 0.0f;
+                estado = ESTADO_SUBIDA;
             }
+            break;
+        }
 
-            case ESTADO_REPOSO:
-            default:
-                break;
+        case ESTADO_REPOSO:
+        default:
+            break;
         }
 
         // emitir voltaje de salida
@@ -158,7 +169,6 @@ struct EnvoModuleWidget : ModuleWidget
         addParam(createParamCentered<RoundBlackKnob>(mm2px(Vec(6.35, 30)), module, EnvoModule::PARAM_SUBIDA));
         addParam(createParamCentered<RoundBlackKnob>(mm2px(Vec(19.05, 30)), module, EnvoModule::PARAM_BAJADA));
 
-
         // entradas
         addInput(createInputCentered<PJ301MPort>(
             mm2px(Vec(6.35, 60)), module,
@@ -167,14 +177,11 @@ struct EnvoModuleWidget : ModuleWidget
             mm2px(Vec(19.05, 60)), module,
             EnvoModule::ENTRADA_PULSO_A_FORZAR));
 
-
         // salida
         addOutput(createOutputCentered<PJ301MPort>(mm2px(Vec(12.7, 100)), module, EnvoModule::SALIDA_ENVO_A));
 
-
         // luz
         addChild(createLightCentered<SmallLight<GreenLight>>(mm2px(Vec(12.7, 90)), module, EnvoModule::LUZ_ENVO_A));
-
     }
 };
 
