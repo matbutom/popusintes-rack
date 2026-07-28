@@ -4,41 +4,53 @@ Popusintes es una línea de sintetizadores creada por piruetas.
 
 Este repositorio aloja versiones en Eurorack virtual para ser usadas en el software VCV Rack.
 
+## Criterios de diseño e inspiraciones
+
+- Cada módulo desarrollado es un clásico de la síntesis modular.
+- Cada módulo tiene 2 canales, sin concursos ni sortesos.
+- Están en español con lenguaje no militar.
+- Las simetrías y las sincronizaciones son evitadas.
+- Hay luces.
+
 ## Módulos
 
 ### compa
 
+Comparadores
+
 ### envo
+
+Generador de envolventes.
 
 ### pane
 
-un panel en blanco.
+Panel en blanco.
 
 ### relo
 
-reloj
+Relojes
 
 ### rerelo
 
-muchos relojes
+Más relojes
 
 ### secu
 
-secuenciador
+Secuenciadores
 
 ### suma
 
-mezclador
+Mezcladores
 
 ## Estructura del repositorio
 
-- res/
-- src/
-- .gitignore
-- LICENSE
-- Makefile
-- plugin.json
-- README.md
+- [res/](./res/)
+- [src/](./src/)
+- [.gitignore](./.gitignore)
+- [LICENSE](./LICENSE)
+- [Makefile](./Makefile)
+- [plugin.json](./plugin.json)
+- [README.md](./README.md): este archivo.
 
 ## Desarrollo
 
