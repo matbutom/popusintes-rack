@@ -32,6 +32,14 @@
         "Blank"
       ]
     },
+        {
+      "slug": "recta",
+      "name": "recta",
+      "description": "osciladores de ondas rectangulares",
+      "tags": [
+        "Oscillator"
+      ]
+    },
     {
       "slug": "relo",
       "name": "relo",
