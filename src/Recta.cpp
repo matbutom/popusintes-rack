@@ -99,7 +99,7 @@ struct RectaModule : Module
 
     // fase acumulada del canal
 
-    float procesarCanal(float &fase, float args_sampleTime, float paramFrecuencia, float entradaVoct, float paramPWM, float entradaPwm)
+    float procesarCanal(float &fase, float args_sampleTime, float paramFrecuencia, float entradaVoct, float paramPwm, float entradaPwm)
     {
         float altura = paramFrecuencia;
         altura = altura + entradaVoct;
