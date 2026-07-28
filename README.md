@@ -1,8 +1,44 @@
 # popusintes-rack
 
-Popusintes es una línea de sintetizadores desarrollada por piruetas.
+Popusintes es una línea de sintetizadores creada por piruetas.
 
-Este repositorio aloja sus versiones rack, para ser usadas en el software VCV Rack.
+Este repositorio aloja versiones en Eurorack virtual para ser usadas en el software VCV Rack.
+
+## Módulos
+
+### compa
+
+### envo
+
+### pane
+
+un panel en blanco.
+
+### relo
+
+reloj
+
+### rerelo
+
+muchos relojes
+
+### secu
+
+secuenciador
+
+### suma
+
+mezclador
+
+## Estructura del repositorio
+
+- res/
+- src/
+- .gitignore
+- LICENSE
+- Makefile
+- plugin.json
+- README.md
 
 ## Desarrollo
 
