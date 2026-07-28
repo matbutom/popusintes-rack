@@ -102,7 +102,7 @@ struct RectaModule : Module
     float procesarCanal(float &fase, float args_sampleTime, float paramFrecuencia, float entradaVoct, float paramPWM, float entradaPwm)
     {
         float altura = paramFrecuencia;
-        frecuencia = frecuencia + entradaVoct;
+        altura = altura + entradaVoct;
 
         float frecuencia = dsp::FREQ_C4 * std::pow(2.0f, altura);
 
