@@ -26,6 +26,10 @@ Generador de envolventes.
 
 Panel en blanco.
 
+### Recta
+
+Osciladores de ondas rectangulares
+
 ### relo
 
 Relojes
