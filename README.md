@@ -6,8 +6,8 @@ Este repositorio aloja versiones en Eurorack virtual para ser usadas en el softw
 
 ## Criterios de diseño e inspiraciones
 
-- Cada módulo desarrollado es un clásico de la síntesis modular.
-- Cada módulo tiene 2 canales, sin concursos ni sortesos.
+- Los módulos están inspirados en filosofía, teoría y práctica de la síntesis sonora modular.
+- Cada módulo tiene 2 canales de salida, sin concursos ni sorteos.
 - Están en español con lenguaje no militar.
 - Las simetrías y las sincronizaciones son evitadas.
 - Hay luces.
