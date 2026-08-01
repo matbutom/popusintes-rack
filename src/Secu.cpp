@@ -1,8 +1,8 @@
 #include "Popusintes.hpp"
-#include "Dimensiones.hpp"
-#include "Posicionador.hpp"
-#include "Tiempos.hpp"
-#include "Tornillos.hpp"
+#include "comun/Dimensiones.hpp"
+#include "comun/Posicionador.hpp"
+#include "comun/Tiempos.hpp"
+#include "comun/Tornillos.hpp"
 
 // secuenciador con entrada de reloj
 // sensible a la subida de la señal

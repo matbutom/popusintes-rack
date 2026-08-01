@@ -1,10 +1,10 @@
 #include "Popusintes.hpp"
-#include "CanalRelo.hpp"
-#include "Dimensiones.hpp"
-#include "Espaciado.hpp"
-#include "Posicionador.hpp"
-#include "Tiempos.hpp"
-#include "Tornillos.hpp"
+#include "comun/CanalRelo.hpp"
+#include "comun/Dimensiones.hpp"
+#include "comun/Espaciado.hpp"
+#include "comun/Posicionador.hpp"
+#include "comun/Tiempos.hpp"
+#include "comun/Tornillos.hpp"
 
 // define porcentajes columnas
 #define PORCENTAJE_COLUMNA_IZQ 0.30f
