@@ -161,25 +161,6 @@ struct RereloModulo : Module
         configOutput(SALIDA_PULSO_D, "pulso d");
     }
 
-    // calcula el ppm de un canal a partir del ppm base y sus controles de desfase
-    // agrupado en una funcion para no repetir la misma cuenta tres veces
-    float calcularPpmCanal(float ppmBase, float desfasePerilla, float desfaseCvAten, float desfaseCvVoltaje)
-    {
-        float desfase = desfasePerilla + desfaseCvVoltaje * desfaseCvAten * 2.f;
-
-        // atajar desfase en rango de -10.0f a +10.f
-        if (desfase > 10.f)
-        {
-            desfase = 10.f;
-        }
-        else if (desfase < -10.f)
-        {
-            desfase = -10.f;
-        }
-
-        return ppmBase * (1.f + desfase / 100.f);
-    }
-
     void process(const ProcessArgs &args) override
     {
         // guardar en variable float el valor de la perilla de tempo base
@@ -187,15 +168,15 @@ struct RereloModulo : Module
 
         // desfase de cada canal = perilla + cv atenuado
         // cv bipolar entre -5V y +5V, con atenuversor en 1.0 cubre el rango completo
-        float ppmB = calcularPpmCanal(ppmA, params[PARAM_DESFASE_B].getValue(),
+        float ppmB = calcularPpmDesfasado(ppmA, params[PARAM_DESFASE_B].getValue(),
                                       params[PARAM_DESFASE_CV_ATEN_B].getValue(),
                                       inputs[ENTRADA_DESFASE_B].getVoltage());
 
-        float ppmC = calcularPpmCanal(ppmA, params[PARAM_DESFASE_C].getValue(),
+        float ppmC = calcularPpmDesfasado(ppmA, params[PARAM_DESFASE_C].getValue(),
                                       params[PARAM_DESFASE_CV_ATEN_C].getValue(),
                                       inputs[ENTRADA_DESFASE_C].getVoltage());
 
-        float ppmD = calcularPpmCanal(ppmA, params[PARAM_DESFASE_D].getValue(),
+        float ppmD = calcularPpmDesfasado(ppmA, params[PARAM_DESFASE_D].getValue(),
                                       params[PARAM_DESFASE_CV_ATEN_D].getValue(),
                                       inputs[ENTRADA_DESFASE_D].getVoltage());
 

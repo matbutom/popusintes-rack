@@ -1,6 +1,27 @@
 #pragma once
 #include "plugin.hpp"
 
+// calcula el ppm de un canal desfasado a partir del ppm base y sus controles de desfase
+// desfase = perilla + cv atenuado
+// cv bipolar +-5V, con atenuversor en 1.0 cubre el rango completo
+// se ataja el desfase resultante en el rango de -10.0f a +10.f
+// usada en relo y rerelo
+inline float calcularPpmDesfasado(float ppmBase, float desfasePerilla, float desfaseCvAten, float desfaseCvVoltaje)
+{
+    float desfase = desfasePerilla + desfaseCvVoltaje * desfaseCvAten * 2.f;
+
+    if (desfase > 10.f)
+    {
+        desfase = 10.f;
+    }
+    else if (desfase < -10.f)
+    {
+        desfase = -10.f;
+    }
+
+    return ppmBase * (1.f + desfase / 100.f);
+}
+
 // un canal de relo
 // relo tiene 2 de estos canales
 // rerelo tiene 4 de estos canales
