@@ -4,12 +4,6 @@
 #include "Tiempos.hpp"
 #include "Tornillos.hpp"
 
-// definir ancho modulo en mm (5 hp)
-#define MODULO_ANCHO 25.4f
-
-// definir altura modulo en mm (3 u)
-#define MODULO_ALTURA 128.4f
-
 // define porcentajes columnas
 #define PORCENTAJE_COLUMNA_IZQ 0.30f
 #define PORCENTAJE_COLUMNA_DER 0.70f
@@ -216,7 +210,7 @@ struct ReloModuleWidget : ModuleWidget
         // tornillos
         agregarTornillos(this);
 
-        Posicionador posicionador(dimensiones::MODULO_ANCHO_05_HP, dimensiones::MODULO_ALTURA_3_U);
+        Posicionador posicionador(dimensiones::MODULO_ANCHO_04_HP, dimensiones::MODULO_ALTURA_3_U);
 
         // params
         addParam(createParamCentered<RoundBlackKnob>(
