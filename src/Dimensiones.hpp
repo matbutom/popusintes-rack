@@ -3,7 +3,6 @@
 namespace dimensiones
 
 {
-
     // dimensiones de modulos (en mm)
     constexpr float MODULO_ANCHO_01_HP = 5.08f;
     constexpr float MODULO_ANCHO_02_HP = 10.16f;
@@ -16,4 +15,8 @@ namespace dimensiones
     constexpr float MODULO_ANCHO_09_HP = 45.72f;
     constexpr float MODULO_ANCHO_10_HP = 50.80f;
     constexpr float MODULO_ALTURA_3_U = 128.4f;
+
+    constexpr float RELO_ANCHO = MODULO_ANCHO_04_HP;
+    constexpr float RELO_ALTURA = MODULO_ALTURA_3_U;
+
 }

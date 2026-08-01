@@ -32,7 +32,8 @@ struct CanalRelo
 
     // avanza el canal un sample
     // calcula el periodo a partir del ppm, genera un pulso si corresponde,
-    // y devuelve el voltaje de salida (0 a 10V) correspondiente a este sample
+    // y devuelve el valor del pulso (0 a 1) correspondiente a este sample
+    // el llamador decide como usarlo (voltaje de salida, brillo de luz)
     float procesar(float sampleTiempo, float sampleTasa, float ppm, float duracionPulso)
     {
         periodo = 60.f * sampleTasa / ppm;
@@ -45,6 +46,6 @@ struct CanalRelo
 
         contador = contador + 1;
 
-        return 10.f * generadorPulsos.process(sampleTiempo);
+        return generadorPulsos.process(sampleTiempo);
     }
 };

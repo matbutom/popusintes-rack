@@ -1,31 +1,16 @@
 #include "Popusintes.hpp"
+#include "CanalRelo.hpp"
 #include "Dimensiones.hpp"
+#include "Espaciado.hpp"
 #include "Posicionador.hpp"
 #include "Tiempos.hpp"
 #include "Tornillos.hpp"
-
-// definir ancho modulo en mm (10 hp, el doble que relo para las 4 salidas)
-#define MODULO_ANCHO 50.8f
-
-// definir altura modulo en mm (3 u)
-#define MODULO_ALTURA 128.4f
 
 // define porcentajes de las cuatro columnas, una por canal
 #define PORCENTAJE_COLUMNA_A 0.125f
 #define PORCENTAJE_COLUMNA_B 0.375f
 #define PORCENTAJE_COLUMNA_C 0.625f
 #define PORCENTAJE_COLUMNA_D 0.875f
-
-// define porcentaje delta en eje y
-// entre boton y entrada
-#define DELTA_Y_BOTON_ENTRADA 0.08f
-
-// define porcentaje delta en eje y
-// entre perilla, atenuversor y entrada
-#define DELTA_Y_PERILLA_ATENUVERSOR 0.08f
-
-// define porcentaje entre salida y su luz
-#define DELTA_Y_SALIDA_LUZ 0.05f
 
 // define coordenadas ppm, control compartido por los cuatro canales
 // se mantiene en columna a, arriba de todo
@@ -38,39 +23,39 @@
 #define PORCENTAJE_BOTON_RESINC_X (PORCENTAJE_COLUMNA_A)
 #define PORCENTAJE_BOTON_RESINC_Y 0.30f
 #define PORCENTAJE_ENTRADA_RESINC_X (PORCENTAJE_COLUMNA_A)
-#define PORCENTAJE_ENTRADA_RESINC_Y (PORCENTAJE_BOTON_RESINC_Y + DELTA_Y_BOTON_ENTRADA)
+#define PORCENTAJE_ENTRADA_RESINC_Y (PORCENTAJE_BOTON_RESINC_Y + espaciado::DELTA_Y_BOTON_ENTRADA)
 
 // definir coordenadas desfase canal b
 // arranca mas arriba que c y d, a proposito, para el efecto escalera
 #define PORCENTAJE_DESFASE_B_X (PORCENTAJE_COLUMNA_B)
 #define PORCENTAJE_DESFASE_B_Y 0.56f
 #define PORCENTAJE_DESFASE_CV_ATEN_B_X (PORCENTAJE_COLUMNA_B)
-#define PORCENTAJE_DESFASE_CV_ATEN_B_Y (PORCENTAJE_DESFASE_B_Y + DELTA_Y_PERILLA_ATENUVERSOR)
+#define PORCENTAJE_DESFASE_CV_ATEN_B_Y (PORCENTAJE_DESFASE_B_Y + espaciado::DELTA_Y_PERILLA_ATENUVERSOR)
 #define PORCENTAJE_ENTRADA_DESFASE_B_X (PORCENTAJE_COLUMNA_B)
-#define PORCENTAJE_ENTRADA_DESFASE_B_Y (PORCENTAJE_DESFASE_B_Y + 2.f * DELTA_Y_PERILLA_ATENUVERSOR)
+#define PORCENTAJE_ENTRADA_DESFASE_B_Y (PORCENTAJE_DESFASE_B_Y + 2.f * espaciado::DELTA_Y_PERILLA_ATENUVERSOR)
 
 // definir coordenadas desfase canal c
 // arranca mas abajo que b, siguiendo la diagonal
 #define PORCENTAJE_DESFASE_C_X (PORCENTAJE_COLUMNA_C)
 #define PORCENTAJE_DESFASE_C_Y 0.42f
 #define PORCENTAJE_DESFASE_CV_ATEN_C_X (PORCENTAJE_COLUMNA_C)
-#define PORCENTAJE_DESFASE_CV_ATEN_C_Y (PORCENTAJE_DESFASE_C_Y + DELTA_Y_PERILLA_ATENUVERSOR)
+#define PORCENTAJE_DESFASE_CV_ATEN_C_Y (PORCENTAJE_DESFASE_C_Y + espaciado::DELTA_Y_PERILLA_ATENUVERSOR)
 #define PORCENTAJE_ENTRADA_DESFASE_C_X (PORCENTAJE_COLUMNA_C)
-#define PORCENTAJE_ENTRADA_DESFASE_C_Y (PORCENTAJE_DESFASE_C_Y + 2.f * DELTA_Y_PERILLA_ATENUVERSOR)
+#define PORCENTAJE_ENTRADA_DESFASE_C_Y (PORCENTAJE_DESFASE_C_Y + 2.f * espaciado::DELTA_Y_PERILLA_ATENUVERSOR)
 
 // definir coordenadas desfase canal d
 // la mas abajo de las tres, cierra la diagonal
 #define PORCENTAJE_DESFASE_D_X (PORCENTAJE_COLUMNA_D)
 #define PORCENTAJE_DESFASE_D_Y 0.28f
 #define PORCENTAJE_DESFASE_CV_ATEN_D_X (PORCENTAJE_COLUMNA_D)
-#define PORCENTAJE_DESFASE_CV_ATEN_D_Y (PORCENTAJE_DESFASE_D_Y + DELTA_Y_PERILLA_ATENUVERSOR)
+#define PORCENTAJE_DESFASE_CV_ATEN_D_Y (PORCENTAJE_DESFASE_D_Y + espaciado::DELTA_Y_PERILLA_ATENUVERSOR)
 #define PORCENTAJE_ENTRADA_DESFASE_D_X (PORCENTAJE_COLUMNA_D)
-#define PORCENTAJE_ENTRADA_DESFASE_D_Y (PORCENTAJE_DESFASE_D_Y + 2.f * DELTA_Y_PERILLA_ATENUVERSOR)
+#define PORCENTAJE_ENTRADA_DESFASE_D_Y (PORCENTAJE_DESFASE_D_Y + 2.f * espaciado::DELTA_Y_PERILLA_ATENUVERSOR)
 
 // definir coordenadas salida y luz, una fila abajo para los cuatro canales
 // sin cambios: se mantienen fijas como pediste
 #define PORCENTAJE_LUCES_Y 0.85f
-#define PORCENTAJE_SALIDA_Y (PORCENTAJE_LUCES_Y + DELTA_Y_SALIDA_LUZ)
+#define PORCENTAJE_SALIDA_Y (PORCENTAJE_LUCES_Y + espaciado::DELTA_Y_SALIDA_LUZ)
 
 #define PORCENTAJE_LUCES_A_X (PORCENTAJE_COLUMNA_A)
 #define PORCENTAJE_SALIDA_A_X (PORCENTAJE_COLUMNA_A)
@@ -142,20 +127,14 @@ struct RereloModule : Module
         NUM_LIGHTS,
     };
 
-    // clase auxiliar provista por rack, una instancia por canal
-    dsp::PulseGenerator generadorPulsosA;
-    dsp::PulseGenerator generadorPulsosB;
-    dsp::PulseGenerator generadorPulsosC;
-    dsp::PulseGenerator generadorPulsosD;
+    // un CanalRelo por canal: agrupa generador de pulsos, contador y periodo
+    CanalRelo canalA;
+    CanalRelo canalB;
+    CanalRelo canalC;
+    CanalRelo canalD;
 
     dsp::SchmittTrigger botonResinc;
     dsp::SchmittTrigger entradaResinc;
-
-    // variables de apoyo, una por canal
-    float contadorA, periodoA;
-    float contadorB, periodoB;
-    float contadorC, periodoC;
-    float contadorD, periodoD;
 
     RereloModule()
     {
@@ -186,18 +165,6 @@ struct RereloModule : Module
         configOutput(SALIDA_PULSO_B, "pulso b");
         configOutput(SALIDA_PULSO_C, "pulso c");
         configOutput(SALIDA_PULSO_D, "pulso d");
-
-        contadorA = 0.f;
-        periodoA = 0.f;
-
-        contadorB = 0.f;
-        periodoB = 0.f;
-
-        contadorC = 0.f;
-        periodoC = 0.f;
-
-        contadorD = 0.f;
-        periodoD = 0.f;
     }
 
     // calcula el ppm de un canal a partir del ppm base y sus controles de desfase
@@ -238,12 +205,6 @@ struct RereloModule : Module
                                       params[PARAM_DESFASE_CV_ATEN_D].getValue(),
                                       inputs[ENTRADA_DESFASE_D].getVoltage());
 
-        // periodo calculado en samples, uno por canal
-        periodoA = 60.f * args.sampleRate / ppmA;
-        periodoB = 60.f * args.sampleRate / ppmB;
-        periodoC = 60.f * args.sampleRate / ppmC;
-        periodoD = 60.f * args.sampleRate / ppmD;
-
         // resincronizar boton del panel o externo
         bool resetBoton = botonResinc.process(params[PARAM_BOTON_RESINC].getValue());
         bool resetExterno = entradaResinc.process(inputs[ENTRADA_RESINC].getVoltage());
@@ -251,60 +212,25 @@ struct RereloModule : Module
 
         if (reset)
         {
-            contadorA = 0.f;
-            contadorB = 0.f;
-            contadorC = 0.f;
-            contadorD = 0.f;
+            canalA.reiniciar();
+            canalB.reiniciar();
+            canalC.reiniciar();
+            canalD.reiniciar();
 
             // ademas de reiniciar los contadores
             // emitimos un pulso en los cuatro canales
             // el resincronizado se escucha en ese instante
-            generadorPulsosA.trigger(tiempos::PULSO_MS);
-            generadorPulsosB.trigger(tiempos::PULSO_MS);
-            generadorPulsosC.trigger(tiempos::PULSO_MS);
-            generadorPulsosD.trigger(tiempos::PULSO_MS);
+            canalA.generarPulso(tiempos::PULSO_MS);
+            canalB.generarPulso(tiempos::PULSO_MS);
+            canalC.generarPulso(tiempos::PULSO_MS);
+            canalD.generarPulso(tiempos::PULSO_MS);
         }
 
         // canal a, es la referencia, nunca se desfasa
-        if (contadorA > periodoA)
-        {
-            generadorPulsosA.trigger(tiempos::PULSO_MS);
-            contadorA = contadorA - periodoA;
-        }
-
-        contadorA = contadorA + 1;
-
-        // canal b
-        if (contadorB > periodoB)
-        {
-            generadorPulsosB.trigger(tiempos::PULSO_MS);
-            contadorB = contadorB - periodoB;
-        }
-
-        contadorB = contadorB + 1;
-
-        // canal c
-        if (contadorC > periodoC)
-        {
-            generadorPulsosC.trigger(tiempos::PULSO_MS);
-            contadorC = contadorC - periodoC;
-        }
-
-        contadorC = contadorC + 1;
-
-        // canal d
-        if (contadorD > periodoD)
-        {
-            generadorPulsosD.trigger(tiempos::PULSO_MS);
-            contadorD = contadorD - periodoD;
-        }
-
-        contadorD = contadorD + 1;
-
-        float salidaA = generadorPulsosA.process(args.sampleTime);
-        float salidaB = generadorPulsosB.process(args.sampleTime);
-        float salidaC = generadorPulsosC.process(args.sampleTime);
-        float salidaD = generadorPulsosD.process(args.sampleTime);
+        float salidaA = canalA.procesar(args.sampleTime, args.sampleRate, ppmA, tiempos::PULSO_MS);
+        float salidaB = canalB.procesar(args.sampleTime, args.sampleRate, ppmB, tiempos::PULSO_MS);
+        float salidaC = canalC.procesar(args.sampleTime, args.sampleRate, ppmC, tiempos::PULSO_MS);
+        float salidaD = canalD.procesar(args.sampleTime, args.sampleRate, ppmD, tiempos::PULSO_MS);
 
         outputs[SALIDA_PULSO_A].setVoltage(10.f * salidaA);
         lights[LUZ_PULSO_A].setSmoothBrightness(salidaA, 5e-6f);
@@ -332,110 +258,92 @@ struct RereloModuleWidget : ModuleWidget
         // tornillos
         agregarTornillos(this);
 
+        Posicionador posicionador(dimensiones::MODULO_ANCHO_10_HP, dimensiones::MODULO_ALTURA_3_U);
+
         // params
 
         // tempo base, compartido por los cuatro canales
-        addParam(createParamCentered<RoundBlackKnob>(mm2px(Vec(
-                                                         MODULO_ANCHO * PORCENTAJE_PPM_X,
-                                                         MODULO_ALTURA * PORCENTAJE_PPM_Y)),
-                                                     module, RereloModule::PARAM_PPM));
+        addParam(createParamCentered<RoundBlackKnob>(
+            posicionador.posicion(PORCENTAJE_PPM_X, PORCENTAJE_PPM_Y),
+            module, RereloModule::PARAM_PPM));
 
         // boton y entrada de resincronizado, tambien compartidos
-        addParam(createParamCentered<TL1105>(mm2px(Vec(
-                                                 MODULO_ANCHO * PORCENTAJE_BOTON_RESINC_X,
-                                                 MODULO_ALTURA * PORCENTAJE_BOTON_RESINC_Y)),
-                                             module, RereloModule::PARAM_BOTON_RESINC));
+        addParam(createParamCentered<TL1105>(
+            posicionador.posicion(PORCENTAJE_BOTON_RESINC_X, PORCENTAJE_BOTON_RESINC_Y),
+            module, RereloModule::PARAM_BOTON_RESINC));
 
-        addInput(createInputCentered<PJ301MPort>(mm2px(Vec(
-                                                     MODULO_ANCHO * PORCENTAJE_ENTRADA_RESINC_X,
-                                                     MODULO_ALTURA * PORCENTAJE_ENTRADA_RESINC_Y)),
-                                                 module, RereloModule::ENTRADA_RESINC));
+        addInput(createInputCentered<PJ301MPort>(
+            posicionador.posicion(PORCENTAJE_ENTRADA_RESINC_X, PORCENTAJE_ENTRADA_RESINC_Y),
+            module, RereloModule::ENTRADA_RESINC));
 
         // canal b: perilla de desfase, atenuversor y entrada cv
-        addParam(createParamCentered<RoundSmallBlackKnob>(mm2px(Vec(
-                                                              MODULO_ANCHO * PORCENTAJE_DESFASE_B_X,
-                                                              MODULO_ALTURA * PORCENTAJE_DESFASE_B_Y)),
-                                                          module, RereloModule::PARAM_DESFASE_B));
+        addParam(createParamCentered<RoundSmallBlackKnob>(
+            posicionador.posicion(PORCENTAJE_DESFASE_B_X, PORCENTAJE_DESFASE_B_Y),
+            module, RereloModule::PARAM_DESFASE_B));
 
-        addParam(createParamCentered<Trimpot>(mm2px(Vec(
-                                                  MODULO_ANCHO * PORCENTAJE_DESFASE_CV_ATEN_B_X,
-                                                  MODULO_ALTURA * PORCENTAJE_DESFASE_CV_ATEN_B_Y)),
-                                              module, RereloModule::PARAM_DESFASE_CV_ATEN_B));
+        addParam(createParamCentered<Trimpot>(
+            posicionador.posicion(PORCENTAJE_DESFASE_CV_ATEN_B_X, PORCENTAJE_DESFASE_CV_ATEN_B_Y),
+            module, RereloModule::PARAM_DESFASE_CV_ATEN_B));
 
-        addInput(createInputCentered<PJ301MPort>(mm2px(Vec(
-                                                     MODULO_ANCHO * PORCENTAJE_ENTRADA_DESFASE_B_X,
-                                                     MODULO_ALTURA * PORCENTAJE_ENTRADA_DESFASE_B_Y)),
-                                                 module, RereloModule::ENTRADA_DESFASE_B));
+        addInput(createInputCentered<PJ301MPort>(
+            posicionador.posicion(PORCENTAJE_ENTRADA_DESFASE_B_X, PORCENTAJE_ENTRADA_DESFASE_B_Y),
+            module, RereloModule::ENTRADA_DESFASE_B));
 
         // canal c: perilla de desfase, atenuversor y entrada cv
-        addParam(createParamCentered<RoundSmallBlackKnob>(mm2px(Vec(
-                                                              MODULO_ANCHO * PORCENTAJE_DESFASE_C_X,
-                                                              MODULO_ALTURA * PORCENTAJE_DESFASE_C_Y)),
-                                                          module, RereloModule::PARAM_DESFASE_C));
+        addParam(createParamCentered<RoundSmallBlackKnob>(
+            posicionador.posicion(PORCENTAJE_DESFASE_C_X, PORCENTAJE_DESFASE_C_Y),
+            module, RereloModule::PARAM_DESFASE_C));
 
-        addParam(createParamCentered<Trimpot>(mm2px(Vec(
-                                                  MODULO_ANCHO * PORCENTAJE_DESFASE_CV_ATEN_C_X,
-                                                  MODULO_ALTURA * PORCENTAJE_DESFASE_CV_ATEN_C_Y)),
-                                              module, RereloModule::PARAM_DESFASE_CV_ATEN_C));
+        addParam(createParamCentered<Trimpot>(
+            posicionador.posicion(PORCENTAJE_DESFASE_CV_ATEN_C_X, PORCENTAJE_DESFASE_CV_ATEN_C_Y),
+            module, RereloModule::PARAM_DESFASE_CV_ATEN_C));
 
-        addInput(createInputCentered<PJ301MPort>(mm2px(Vec(
-                                                     MODULO_ANCHO * PORCENTAJE_ENTRADA_DESFASE_C_X,
-                                                     MODULO_ALTURA * PORCENTAJE_ENTRADA_DESFASE_C_Y)),
-                                                 module, RereloModule::ENTRADA_DESFASE_C));
+        addInput(createInputCentered<PJ301MPort>(
+            posicionador.posicion(PORCENTAJE_ENTRADA_DESFASE_C_X, PORCENTAJE_ENTRADA_DESFASE_C_Y),
+            module, RereloModule::ENTRADA_DESFASE_C));
 
         // canal d: perilla de desfase, atenuversor y entrada cv
-        addParam(createParamCentered<RoundSmallBlackKnob>(mm2px(Vec(
-                                                              MODULO_ANCHO * PORCENTAJE_DESFASE_D_X,
-                                                              MODULO_ALTURA * PORCENTAJE_DESFASE_D_Y)),
-                                                          module, RereloModule::PARAM_DESFASE_D));
+        addParam(createParamCentered<RoundSmallBlackKnob>(
+            posicionador.posicion(PORCENTAJE_DESFASE_D_X, PORCENTAJE_DESFASE_D_Y),
+            module, RereloModule::PARAM_DESFASE_D));
 
-        addParam(createParamCentered<Trimpot>(mm2px(Vec(
-                                                  MODULO_ANCHO * PORCENTAJE_DESFASE_CV_ATEN_D_X,
-                                                  MODULO_ALTURA * PORCENTAJE_DESFASE_CV_ATEN_D_Y)),
-                                              module, RereloModule::PARAM_DESFASE_CV_ATEN_D));
+        addParam(createParamCentered<Trimpot>(
+            posicionador.posicion(PORCENTAJE_DESFASE_CV_ATEN_D_X, PORCENTAJE_DESFASE_CV_ATEN_D_Y),
+            module, RereloModule::PARAM_DESFASE_CV_ATEN_D));
 
-        addInput(createInputCentered<PJ301MPort>(mm2px(Vec(
-                                                     MODULO_ANCHO * PORCENTAJE_ENTRADA_DESFASE_D_X,
-                                                     MODULO_ALTURA * PORCENTAJE_ENTRADA_DESFASE_D_Y)),
-                                                 module, RereloModule::ENTRADA_DESFASE_D));
+        addInput(createInputCentered<PJ301MPort>(
+            posicionador.posicion(PORCENTAJE_ENTRADA_DESFASE_D_X, PORCENTAJE_ENTRADA_DESFASE_D_Y),
+            module, RereloModule::ENTRADA_DESFASE_D));
 
         // salidas y luces, una columna por canal
 
-        addOutput(createOutputCentered<PJ301MPort>(mm2px(Vec(
-                                                       MODULO_ANCHO * PORCENTAJE_SALIDA_A_X,
-                                                       MODULO_ALTURA * PORCENTAJE_SALIDA_Y)),
-                                                   module, RereloModule::SALIDA_PULSO_A));
-        addChild(createLightCentered<MediumLight<GreenLight>>(mm2px(Vec(
-                                                                  MODULO_ANCHO * PORCENTAJE_LUCES_A_X,
-                                                                  MODULO_ALTURA * PORCENTAJE_LUCES_Y)),
-                                                              module, RereloModule::LUZ_PULSO_A));
+        addOutput(createOutputCentered<PJ301MPort>(
+            posicionador.posicion(PORCENTAJE_SALIDA_A_X, PORCENTAJE_SALIDA_Y),
+            module, RereloModule::SALIDA_PULSO_A));
+        addChild(createLightCentered<MediumLight<GreenLight>>(
+            posicionador.posicion(PORCENTAJE_LUCES_A_X, PORCENTAJE_LUCES_Y),
+            module, RereloModule::LUZ_PULSO_A));
 
-        addOutput(createOutputCentered<PJ301MPort>(mm2px(Vec(
-                                                       MODULO_ANCHO * PORCENTAJE_SALIDA_B_X,
-                                                       MODULO_ALTURA * PORCENTAJE_SALIDA_Y)),
-                                                   module, RereloModule::SALIDA_PULSO_B));
-        addChild(createLightCentered<MediumLight<GreenLight>>(mm2px(Vec(
-                                                                  MODULO_ANCHO * PORCENTAJE_LUCES_B_X,
-                                                                  MODULO_ALTURA * PORCENTAJE_LUCES_Y)),
-                                                              module, RereloModule::LUZ_PULSO_B));
+        addOutput(createOutputCentered<PJ301MPort>(
+            posicionador.posicion(PORCENTAJE_SALIDA_B_X, PORCENTAJE_SALIDA_Y),
+            module, RereloModule::SALIDA_PULSO_B));
+        addChild(createLightCentered<MediumLight<GreenLight>>(
+            posicionador.posicion(PORCENTAJE_LUCES_B_X, PORCENTAJE_LUCES_Y),
+            module, RereloModule::LUZ_PULSO_B));
 
-        addOutput(createOutputCentered<PJ301MPort>(mm2px(Vec(
-                                                       MODULO_ANCHO * PORCENTAJE_SALIDA_C_X,
-                                                       MODULO_ALTURA * PORCENTAJE_SALIDA_Y)),
-                                                   module, RereloModule::SALIDA_PULSO_C));
-        addChild(createLightCentered<MediumLight<GreenLight>>(mm2px(Vec(
-                                                                  MODULO_ANCHO * PORCENTAJE_LUCES_C_X,
-                                                                  MODULO_ALTURA * PORCENTAJE_LUCES_Y)),
-                                                              module, RereloModule::LUZ_PULSO_C));
+        addOutput(createOutputCentered<PJ301MPort>(
+            posicionador.posicion(PORCENTAJE_SALIDA_C_X, PORCENTAJE_SALIDA_Y),
+            module, RereloModule::SALIDA_PULSO_C));
+        addChild(createLightCentered<MediumLight<GreenLight>>(
+            posicionador.posicion(PORCENTAJE_LUCES_C_X, PORCENTAJE_LUCES_Y),
+            module, RereloModule::LUZ_PULSO_C));
 
-        addOutput(createOutputCentered<PJ301MPort>(mm2px(Vec(
-                                                       MODULO_ANCHO * PORCENTAJE_SALIDA_D_X,
-                                                       MODULO_ALTURA * PORCENTAJE_SALIDA_Y)),
-                                                   module, RereloModule::SALIDA_PULSO_D));
-        addChild(createLightCentered<MediumLight<GreenLight>>(mm2px(Vec(
-                                                                  MODULO_ANCHO * PORCENTAJE_LUCES_D_X,
-                                                                  MODULO_ALTURA * PORCENTAJE_LUCES_Y)),
-                                                              module, RereloModule::LUZ_PULSO_D));
+        addOutput(createOutputCentered<PJ301MPort>(
+            posicionador.posicion(PORCENTAJE_SALIDA_D_X, PORCENTAJE_SALIDA_Y),
+            module, RereloModule::SALIDA_PULSO_D));
+        addChild(createLightCentered<MediumLight<GreenLight>>(
+            posicionador.posicion(PORCENTAJE_LUCES_D_X, PORCENTAJE_LUCES_Y),
+            module, RereloModule::LUZ_PULSO_D));
     }
 };
 
