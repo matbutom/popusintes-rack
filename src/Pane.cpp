@@ -1,6 +1,4 @@
 #include "Popusintes.hpp"
-#include "comun/Dimensiones.hpp"
-#include "comun/Tornillos.hpp"
 
 // modulo
 struct PaneModule : Module

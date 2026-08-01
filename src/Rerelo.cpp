@@ -1,10 +1,4 @@
 #include "Popusintes.hpp"
-#include "comun/CanalRelo.hpp"
-#include "comun/Dimensiones.hpp"
-#include "comun/Espaciado.hpp"
-#include "comun/Posicionador.hpp"
-#include "comun/Tiempos.hpp"
-#include "comun/Tornillos.hpp"
 
 // define porcentajes de las cuatro columnas, una por canal
 #define PORCENTAJE_COLUMNA_A 0.125f

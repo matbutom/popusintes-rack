@@ -1,8 +1,4 @@
 #include "Popusintes.hpp"
-#include "comun/Dimensiones.hpp"
-#include "comun/Posicionador.hpp"
-#include "comun/Tiempos.hpp"
-#include "comun/Tornillos.hpp"
 
 // modulo
 struct CompaModule : Module
