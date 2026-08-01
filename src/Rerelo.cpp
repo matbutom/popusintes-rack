@@ -64,7 +64,7 @@
 #define PORCENTAJE_SALIDA_D_X (PORCENTAJE_COLUMNA_D)
 
 // modulo
-struct RereloModule : Module
+struct RereloModulo : Module
 {
     enum ParamIds
     {
@@ -130,7 +130,7 @@ struct RereloModule : Module
     dsp::SchmittTrigger botonResinc;
     dsp::SchmittTrigger entradaResinc;
 
-    RereloModule()
+    RereloModulo()
     {
 
         config(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS);
@@ -241,13 +241,13 @@ struct RereloModule : Module
 };
 
 // widget
-struct RereloModuleWidget : ModuleWidget
+struct RereloModuloWidget : ModuleWidget
 {
-    RereloModuleWidget(RereloModule *module)
+    RereloModuloWidget(RereloModulo *modulo)
     {
 
-        setModule(module);
-        setPanel(APP->window->loadSvg(asset::plugin(pluginInstance, "res/RereloModule.svg")));
+        setModule(modulo);
+        setPanel(APP->window->loadSvg(asset::plugin(pluginInstance, "res/RereloModulo.svg")));
 
         // tornillos
         agregarTornillos(this);
@@ -259,86 +259,86 @@ struct RereloModuleWidget : ModuleWidget
         // tempo base, compartido por los cuatro canales
         addParam(createParamCentered<RoundBlackKnob>(
             posicionador.posicion(PORCENTAJE_PPM_X, PORCENTAJE_PPM_Y),
-            module, RereloModule::PARAM_PPM));
+            modulo, RereloModulo::PARAM_PPM));
 
         // boton y entrada de resincronizado, tambien compartidos
         addParam(createParamCentered<TL1105>(
             posicionador.posicion(PORCENTAJE_BOTON_RESINC_X, PORCENTAJE_BOTON_RESINC_Y),
-            module, RereloModule::PARAM_BOTON_RESINC));
+            modulo, RereloModulo::PARAM_BOTON_RESINC));
 
         addInput(createInputCentered<PJ301MPort>(
             posicionador.posicion(PORCENTAJE_ENTRADA_RESINC_X, PORCENTAJE_ENTRADA_RESINC_Y),
-            module, RereloModule::ENTRADA_RESINC));
+            modulo, RereloModulo::ENTRADA_RESINC));
 
         // canal b: perilla de desfase, atenuversor y entrada cv
         addParam(createParamCentered<RoundSmallBlackKnob>(
             posicionador.posicion(PORCENTAJE_DESFASE_B_X, PORCENTAJE_DESFASE_B_Y),
-            module, RereloModule::PARAM_DESFASE_B));
+            modulo, RereloModulo::PARAM_DESFASE_B));
 
         addParam(createParamCentered<Trimpot>(
             posicionador.posicion(PORCENTAJE_DESFASE_CV_ATEN_B_X, PORCENTAJE_DESFASE_CV_ATEN_B_Y),
-            module, RereloModule::PARAM_DESFASE_CV_ATEN_B));
+            modulo, RereloModulo::PARAM_DESFASE_CV_ATEN_B));
 
         addInput(createInputCentered<PJ301MPort>(
             posicionador.posicion(PORCENTAJE_ENTRADA_DESFASE_B_X, PORCENTAJE_ENTRADA_DESFASE_B_Y),
-            module, RereloModule::ENTRADA_DESFASE_B));
+            modulo, RereloModulo::ENTRADA_DESFASE_B));
 
         // canal c: perilla de desfase, atenuversor y entrada cv
         addParam(createParamCentered<RoundSmallBlackKnob>(
             posicionador.posicion(PORCENTAJE_DESFASE_C_X, PORCENTAJE_DESFASE_C_Y),
-            module, RereloModule::PARAM_DESFASE_C));
+            modulo, RereloModulo::PARAM_DESFASE_C));
 
         addParam(createParamCentered<Trimpot>(
             posicionador.posicion(PORCENTAJE_DESFASE_CV_ATEN_C_X, PORCENTAJE_DESFASE_CV_ATEN_C_Y),
-            module, RereloModule::PARAM_DESFASE_CV_ATEN_C));
+            modulo, RereloModulo::PARAM_DESFASE_CV_ATEN_C));
 
         addInput(createInputCentered<PJ301MPort>(
             posicionador.posicion(PORCENTAJE_ENTRADA_DESFASE_C_X, PORCENTAJE_ENTRADA_DESFASE_C_Y),
-            module, RereloModule::ENTRADA_DESFASE_C));
+            modulo, RereloModulo::ENTRADA_DESFASE_C));
 
         // canal d: perilla de desfase, atenuversor y entrada cv
         addParam(createParamCentered<RoundSmallBlackKnob>(
             posicionador.posicion(PORCENTAJE_DESFASE_D_X, PORCENTAJE_DESFASE_D_Y),
-            module, RereloModule::PARAM_DESFASE_D));
+            modulo, RereloModulo::PARAM_DESFASE_D));
 
         addParam(createParamCentered<Trimpot>(
             posicionador.posicion(PORCENTAJE_DESFASE_CV_ATEN_D_X, PORCENTAJE_DESFASE_CV_ATEN_D_Y),
-            module, RereloModule::PARAM_DESFASE_CV_ATEN_D));
+            modulo, RereloModulo::PARAM_DESFASE_CV_ATEN_D));
 
         addInput(createInputCentered<PJ301MPort>(
             posicionador.posicion(PORCENTAJE_ENTRADA_DESFASE_D_X, PORCENTAJE_ENTRADA_DESFASE_D_Y),
-            module, RereloModule::ENTRADA_DESFASE_D));
+            modulo, RereloModulo::ENTRADA_DESFASE_D));
 
         // salidas y luces, una columna por canal
 
         addOutput(createOutputCentered<PJ301MPort>(
             posicionador.posicion(PORCENTAJE_SALIDA_A_X, PORCENTAJE_SALIDA_Y),
-            module, RereloModule::SALIDA_PULSO_A));
+            modulo, RereloModulo::SALIDA_PULSO_A));
         addChild(createLightCentered<MediumLight<GreenLight>>(
             posicionador.posicion(PORCENTAJE_LUCES_A_X, PORCENTAJE_LUCES_Y),
-            module, RereloModule::LUZ_PULSO_A));
+            modulo, RereloModulo::LUZ_PULSO_A));
 
         addOutput(createOutputCentered<PJ301MPort>(
             posicionador.posicion(PORCENTAJE_SALIDA_B_X, PORCENTAJE_SALIDA_Y),
-            module, RereloModule::SALIDA_PULSO_B));
+            modulo, RereloModulo::SALIDA_PULSO_B));
         addChild(createLightCentered<MediumLight<GreenLight>>(
             posicionador.posicion(PORCENTAJE_LUCES_B_X, PORCENTAJE_LUCES_Y),
-            module, RereloModule::LUZ_PULSO_B));
+            modulo, RereloModulo::LUZ_PULSO_B));
 
         addOutput(createOutputCentered<PJ301MPort>(
             posicionador.posicion(PORCENTAJE_SALIDA_C_X, PORCENTAJE_SALIDA_Y),
-            module, RereloModule::SALIDA_PULSO_C));
+            modulo, RereloModulo::SALIDA_PULSO_C));
         addChild(createLightCentered<MediumLight<GreenLight>>(
             posicionador.posicion(PORCENTAJE_LUCES_C_X, PORCENTAJE_LUCES_Y),
-            module, RereloModule::LUZ_PULSO_C));
+            modulo, RereloModulo::LUZ_PULSO_C));
 
         addOutput(createOutputCentered<PJ301MPort>(
             posicionador.posicion(PORCENTAJE_SALIDA_D_X, PORCENTAJE_SALIDA_Y),
-            module, RereloModule::SALIDA_PULSO_D));
+            modulo, RereloModulo::SALIDA_PULSO_D));
         addChild(createLightCentered<MediumLight<GreenLight>>(
             posicionador.posicion(PORCENTAJE_LUCES_D_X, PORCENTAJE_LUCES_Y),
-            module, RereloModule::LUZ_PULSO_D));
+            modulo, RereloModulo::LUZ_PULSO_D));
     }
 };
 
-Model *modelRerelo = createModel<RereloModule, RereloModuleWidget>("rerelo");
+Model *modeloRerelo = createModel<RereloModulo, RereloModuloWidget>("rerelo");

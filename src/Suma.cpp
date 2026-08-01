@@ -1,7 +1,7 @@
 #include "Popusintes.hpp"
 
 // modulo
-struct SumaModule : Module
+struct SumaModulo : Module
 {
     enum ParamIds
     {
@@ -23,7 +23,7 @@ struct SumaModule : Module
         NUM_LIGHTS,
     };
 
-    SumaModule()
+    SumaModulo()
     {
 
         config(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS);
@@ -36,17 +36,17 @@ struct SumaModule : Module
 };
 
 // widget
-struct SumaModuleWidget : ModuleWidget
+struct SumaModuloWidget : ModuleWidget
 {
-    SumaModuleWidget(SumaModule *module)
+    SumaModuloWidget(SumaModulo *modulo)
     {
 
-        setModule(module);
-        setPanel(APP->window->loadSvg(asset::plugin(pluginInstance, "res/SumaModule.svg")));
+        setModule(modulo);
+        setPanel(APP->window->loadSvg(asset::plugin(pluginInstance, "res/SumaModulo.svg")));
 
         // tornillos
         agregarTornillos(this);
     }
 };
 
-Model *modelSuma = createModel<SumaModule, SumaModuleWidget>("suma");
+Model *modeloSuma = createModel<SumaModulo, SumaModuloWidget>("suma");

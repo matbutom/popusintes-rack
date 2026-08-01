@@ -35,7 +35,7 @@
 #define PORCENTAJE_SALIDA_B_Y (PORCENTAJE_LUCES_B_Y + espaciado::DELTA_Y_SALIDA_LUZ)
 
 // modulo
-struct ReloModule : Module
+struct ReloModulo : Module
 {
     enum ParamIds
     {
@@ -78,7 +78,7 @@ struct ReloModule : Module
     dsp::SchmittTrigger botonResinc;
     dsp::SchmittTrigger entradaResinc;
 
-    ReloModule()
+    ReloModulo()
     {
 
         config(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS);
@@ -152,13 +152,13 @@ struct ReloModule : Module
 };
 
 // widget
-struct ReloModuleWidget : ModuleWidget
+struct ReloModuloWidget : ModuleWidget
 {
-    ReloModuleWidget(ReloModule *module)
+    ReloModuloWidget(ReloModulo *modulo)
     {
 
-        setModule(module);
-        setPanel(APP->window->loadSvg(asset::plugin(pluginInstance, "res/ReloModule.svg")));
+        setModule(modulo);
+        setPanel(APP->window->loadSvg(asset::plugin(pluginInstance, "res/ReloModulo.svg")));
 
         // tornillos
         agregarTornillos(this);
@@ -168,49 +168,49 @@ struct ReloModuleWidget : ModuleWidget
         // params
         addParam(createParamCentered<RoundBlackKnob>(
             posicionador.posicion(PORCENTAJE_PPM_X, PORCENTAJE_PPM_Y),
-            module, ReloModule::PARAM_PPM));
+            modulo, ReloModulo::PARAM_PPM));
 
         addParam(createParamCentered<RoundSmallBlackKnob>(
             posicionador.posicion(PORCENTAJE_DESFASE_B_X, PORCENTAJE_DESFASE_B_Y),
-            module, ReloModule::PARAM_DESFASE_B));
+            modulo, ReloModulo::PARAM_DESFASE_B));
 
         // atenuverter chico para la entrada CV de desfase
         addParam(createParamCentered<Trimpot>(
             posicionador.posicion(PORCENTAJE_DESFASE_CV_ATEN_X, PORCENTAJE_DESFASE_CV_ATEN_Y),
-            module, ReloModule::PARAM_DESFASE_CV_ATEN));
+            modulo, ReloModulo::PARAM_DESFASE_CV_ATEN));
 
         // boton resinc
         addParam(createParamCentered<TL1105>(
             posicionador.posicion(PORCENTAJE_BOTON_RESINC_X, PORCENTAJE_BOTON_RESINC_Y),
-            module, ReloModule::PARAM_BOTON_RESINC));
+            modulo, ReloModulo::PARAM_BOTON_RESINC));
 
         // entradas
         addInput(createInputCentered<PJ301MPort>(
             posicionador.posicion(PORCENTAJE_ENTRADA_RESINC_X, PORCENTAJE_ENTRADA_RESINC_Y),
-            module, ReloModule::ENTRADA_RESINC));
+            modulo, ReloModulo::ENTRADA_RESINC));
 
         addInput(createInputCentered<PJ301MPort>(
             posicionador.posicion(PORCENTAJE_ENTRADA_DESFASE_B_X, PORCENTAJE_ENTRADA_DESFASE_B_Y),
-            module, ReloModule::ENTRADA_DESFASE_B));
+            modulo, ReloModulo::ENTRADA_DESFASE_B));
 
         //  salidas
         addOutput(createOutputCentered<PJ301MPort>(
             posicionador.posicion(PORCENTAJE_SALIDA_A_X, PORCENTAJE_SALIDA_A_Y),
-            module, ReloModule::SALIDA_PULSO_A));
+            modulo, ReloModulo::SALIDA_PULSO_A));
 
         addOutput(createOutputCentered<PJ301MPort>(
             posicionador.posicion(PORCENTAJE_SALIDA_B_X, PORCENTAJE_SALIDA_B_Y),
-            module, ReloModule::SALIDA_PULSO_B));
+            modulo, ReloModulo::SALIDA_PULSO_B));
 
         // luces
         addChild(createLightCentered<MediumLight<GreenLight>>(
             posicionador.posicion(PORCENTAJE_LUCES_A_X, PORCENTAJE_LUCES_A_Y),
-            module, ReloModule::LUZ_PULSO_A));
+            modulo, ReloModulo::LUZ_PULSO_A));
 
         addChild(createLightCentered<MediumLight<GreenLight>>(
             posicionador.posicion(PORCENTAJE_LUCES_B_X, PORCENTAJE_LUCES_B_Y),
-            module, ReloModule::LUZ_PULSO_B));
+            modulo, ReloModulo::LUZ_PULSO_B));
     }
 };
 
-Model *modelRelo = createModel<ReloModule, ReloModuleWidget>("relo");
+Model *modeloRelo = createModel<ReloModulo, ReloModuloWidget>("relo");

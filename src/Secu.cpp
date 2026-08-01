@@ -10,7 +10,7 @@
 
 // decidir que hacer si se desconecta el reloj
 
-struct SecuModule : Module
+struct SecuModulo : Module
 {
     enum ParamIds
     {
@@ -56,13 +56,13 @@ struct SecuModule : Module
     // variable para almacenar paso actual
     int pasoActual = 0;
 
-    SecuModule()
+    SecuModulo()
     {
 
         config(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS);
 
         // configurar pasos
-        for (int i = 0; i < SecuModule::NUM_PARAMS; i++)
+        for (int i = 0; i < SecuModulo::NUM_PARAMS; i++)
         {
             configParam(PARAM_PASO_0 + i, 0.0, 5.0, 1.0);
         }
@@ -92,51 +92,51 @@ struct SecuModule : Module
 };
 
 // widget
-struct SecuModuleWidget : ModuleWidget
+struct SecuModuloWidget : ModuleWidget
 {
-    SecuModuleWidget(SecuModule *module)
+    SecuModuloWidget(SecuModulo *modulo)
     {
 
-        setModule(module);
-        setPanel(APP->window->loadSvg(asset::plugin(pluginInstance, "res/SecuModule.svg")));
+        setModule(modulo);
+        setPanel(APP->window->loadSvg(asset::plugin(pluginInstance, "res/SecuModulo.svg")));
 
         // tornillos
         agregarTornillos(this);
 
         // entradas
-        addInput(createInputCentered<PJ301MPort>(mm2px(Vec(50.8 * 0.50, 128.4 * 0.40)), module, SecuModule::ENTRADA_A));
+        addInput(createInputCentered<PJ301MPort>(mm2px(Vec(50.8 * 0.50, 128.4 * 0.40)), modulo, SecuModulo::ENTRADA_A));
 
         // params
-        for (int i = 0; i < SecuModule::NUM_PARAMS; i++)
+        for (int i = 0; i < SecuModulo::NUM_PARAMS; i++)
         {
             // las primeras 4 van a una altura
             if (i < 4)
             {
-                addParam(createParamCentered<RoundBlackKnob>(mm2px(Vec(50.8 * (0.20 + 0.2 * (i % 4)), 128.4 * 0.50)), module, SecuModule::PARAM_PASO_0 + i));
+                addParam(createParamCentered<RoundBlackKnob>(mm2px(Vec(50.8 * (0.20 + 0.2 * (i % 4)), 128.4 * 0.50)), modulo, SecuModulo::PARAM_PASO_0 + i));
             }
             // las siguientes 4 van a otra altura
             else
             {
-                addParam(createParamCentered<RoundBlackKnob>(mm2px(Vec(50.8 * (0.20 + 0.2 * (i % 4)), 128.4 * 0.60)), module, SecuModule::PARAM_PASO_0 + i));
+                addParam(createParamCentered<RoundBlackKnob>(mm2px(Vec(50.8 * (0.20 + 0.2 * (i % 4)), 128.4 * 0.60)), modulo, SecuModulo::PARAM_PASO_0 + i));
             }
         }
 
         //  salidas
-        addOutput(createOutputCentered<PJ301MPort>(mm2px(Vec(50.8 * 0.50, 128.4 * 0.80)), module, SecuModule::SALIDA_SECUENCIADOR));
+        addOutput(createOutputCentered<PJ301MPort>(mm2px(Vec(50.8 * 0.50, 128.4 * 0.80)), modulo, SecuModulo::SALIDA_SECUENCIADOR));
 
         // luces
-        for (int i = 0; i < SecuModule::NUM_LIGHTS; i++)
+        for (int i = 0; i < SecuModulo::NUM_LIGHTS; i++)
         {
             if (i < 4)
             {
-                addChild(createLightCentered<MediumLight<GreenLight>>(mm2px(Vec(50.8 * (0.20 + 0.2 * (i % 4)), 128.4 * 0.70)), module, SecuModule::LUZ_PASO_0 + i));
+                addChild(createLightCentered<MediumLight<GreenLight>>(mm2px(Vec(50.8 * (0.20 + 0.2 * (i % 4)), 128.4 * 0.70)), modulo, SecuModulo::LUZ_PASO_0 + i));
             }
             else
             {
-                addChild(createLightCentered<MediumLight<GreenLight>>(mm2px(Vec(50.8 * (0.20 + 0.2 * (i % 4)), 128.4 * 0.75)), module, SecuModule::LUZ_PASO_0 + i));
+                addChild(createLightCentered<MediumLight<GreenLight>>(mm2px(Vec(50.8 * (0.20 + 0.2 * (i % 4)), 128.4 * 0.75)), modulo, SecuModulo::LUZ_PASO_0 + i));
             }
         }
     }
 };
 
-Model *modelSecu = createModel<SecuModule, SecuModuleWidget>("secu");
+Model *modeloSecu = createModel<SecuModulo, SecuModuloWidget>("secu");

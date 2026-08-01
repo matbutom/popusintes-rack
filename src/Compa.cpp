@@ -1,7 +1,7 @@
 #include "Popusintes.hpp"
 
 // modulo
-struct CompaModule : Module
+struct CompaModulo : Module
 {
     enum ParamIds
     {
@@ -31,7 +31,7 @@ struct CompaModule : Module
         NUM_LIGHTS,
     };
 
-    CompaModule()
+    CompaModulo()
     {
         config(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS);
     }
@@ -69,32 +69,32 @@ struct CompaModule : Module
 };
 
 // widget
-struct CompaModuleWidget : ModuleWidget
+struct CompaModuloWidget : ModuleWidget
 {
-    CompaModuleWidget(CompaModule *module)
+    CompaModuloWidget(CompaModulo *modulo)
     {
-        setModule(module);
-        setPanel(APP->window->loadSvg(asset::plugin(pluginInstance, "res/CompaModule.svg")));
+        setModule(modulo);
+        setPanel(APP->window->loadSvg(asset::plugin(pluginInstance, "res/CompaModulo.svg")));
 
         // tornillos
         agregarTornillos(this);
 
         // entradas canal A
-        addInput(createInputCentered<PJ301MPort>(mm2px(Vec(25.4 * 0.20, 128.4 * 0.30)), module, CompaModule::ENTRADA_A_1));
-        addInput(createInputCentered<PJ301MPort>(mm2px(Vec(25.4 * 0.80, 128.4 * 0.30)), module, CompaModule::ENTRADA_A_2));
+        addInput(createInputCentered<PJ301MPort>(mm2px(Vec(25.4 * 0.20, 128.4 * 0.30)), modulo, CompaModulo::ENTRADA_A_1));
+        addInput(createInputCentered<PJ301MPort>(mm2px(Vec(25.4 * 0.80, 128.4 * 0.30)), modulo, CompaModulo::ENTRADA_A_2));
 
         // entradas canal B
-        addInput(createInputCentered<PJ301MPort>(mm2px(Vec(25.4 * 0.20, 128.4 * 0.60)), module, CompaModule::ENTRADA_B_1));
-        addInput(createInputCentered<PJ301MPort>(mm2px(Vec(25.4 * 0.80, 128.4 * 0.60)), module, CompaModule::ENTRADA_B_2));
+        addInput(createInputCentered<PJ301MPort>(mm2px(Vec(25.4 * 0.20, 128.4 * 0.60)), modulo, CompaModulo::ENTRADA_B_1));
+        addInput(createInputCentered<PJ301MPort>(mm2px(Vec(25.4 * 0.80, 128.4 * 0.60)), modulo, CompaModulo::ENTRADA_B_2));
 
         // salidas
-        addOutput(createOutputCentered<PJ301MPort>(mm2px(Vec(25.4 * 0.20, 128.4 * 0.90)), module, CompaModule::SALIDA_COMPA_A));
-        addOutput(createOutputCentered<PJ301MPort>(mm2px(Vec(25.4 * 0.80, 128.4 * 0.90)), module, CompaModule::SALIDA_COMPA_B));
+        addOutput(createOutputCentered<PJ301MPort>(mm2px(Vec(25.4 * 0.20, 128.4 * 0.90)), modulo, CompaModulo::SALIDA_COMPA_A));
+        addOutput(createOutputCentered<PJ301MPort>(mm2px(Vec(25.4 * 0.80, 128.4 * 0.90)), modulo, CompaModulo::SALIDA_COMPA_B));
 
         // luces
-        addChild(createLightCentered<LargeLight<GreenLight>>(mm2px(Vec(25.4 * 0.20, 128.4 * 0.80)), module, CompaModule::LUZ_SALIDA_A));
-        addChild(createLightCentered<LargeLight<GreenLight>>(mm2px(Vec(25.4 * 0.80, 128.4 * 0.80)), module, CompaModule::LUZ_SALIDA_B));
+        addChild(createLightCentered<LargeLight<GreenLight>>(mm2px(Vec(25.4 * 0.20, 128.4 * 0.80)), modulo, CompaModulo::LUZ_SALIDA_A));
+        addChild(createLightCentered<LargeLight<GreenLight>>(mm2px(Vec(25.4 * 0.80, 128.4 * 0.80)), modulo, CompaModulo::LUZ_SALIDA_B));
     }
 };
 
-Model *modelCompa = createModel<CompaModule, CompaModuleWidget>("compa");
+Model *modeloCompa = createModel<CompaModulo, CompaModuloWidget>("compa");
