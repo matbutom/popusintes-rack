@@ -103,25 +103,10 @@ struct ReloModulo : Module
         // guardar en variables float los valor de la perillas
         float ppmA = params[PARAM_PPM].getValue();
 
-        // desfase = perilla + cv atenuado
-        // cv bipolar entre -5V y +5V
-        // con atenuversor en 1.0 cubre el rango completo
-
-        float desfase = params[PARAM_DESFASE_B].getValue();
-        desfase = desfase + inputs[ENTRADA_DESFASE_B].getVoltage() * params[PARAM_DESFASE_CV_ATEN].getValue() * 2.f;
-
-        // atajar desfase en rango de -10.0f a +10.f
-
-        if (desfase > 10.f)
-        {
-            desfase = 10.f;
-        }
-        else if (desfase < -10.f)
-        {
-            desfase = -10.f;
-        }
-
-        float ppmB = ppmA * (1.f + desfase / 100.f);
+        // desfase = perilla + cv atenuado, ya atajado en +-10.f (ver calcularPpmDesfasado)
+        float ppmB = calcularPpmDesfasado(ppmA, params[PARAM_DESFASE_B].getValue(),
+                                          params[PARAM_DESFASE_CV_ATEN].getValue(),
+                                          inputs[ENTRADA_DESFASE_B].getVoltage());
 
         // resincronizar boton del panel o externo
         bool resetBoton = botonResinc.process(params[PARAM_BOTON_RESINC].getValue());
