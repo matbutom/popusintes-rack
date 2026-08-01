@@ -181,7 +181,7 @@ struct RectaModuleWidget : ModuleWidget
         // tornillos
         agregarTornillos(this);
 
-        Posicionador posicionador(dimensiones::MODULO_ANCHO_05_HP, dimensiones::MODULO_ALTURA_3_U);
+        Posicionador posicionador(dimensiones::MODULO_ANCHO_06_HP, dimensiones::MODULO_ALTURA_3_U);
 
         // canal a frecuencia
         addParam(createParamCentered<RoundBlackKnob>(
