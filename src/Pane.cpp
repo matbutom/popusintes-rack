@@ -1,9 +1,7 @@
 #include "Popusintes.hpp"
-#include "comun/Dimensiones.hpp"
-#include "comun/Tornillos.hpp"
 
 // modulo
-struct PaneModule : Module
+struct PaneModulo : Module
 {
     enum ParamIds
     {
@@ -25,7 +23,7 @@ struct PaneModule : Module
         NUM_LIGHTS,
     };
 
-    PaneModule()
+    PaneModulo()
     {
 
         config(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS);
@@ -38,17 +36,17 @@ struct PaneModule : Module
 };
 
 // widget
-struct PaneModuleWidget : ModuleWidget
+struct PaneModuloWidget : ModuleWidget
 {
-    PaneModuleWidget(PaneModule *module)
+    PaneModuloWidget(PaneModulo *modulo)
     {
 
-        setModule(module);
-        setPanel(APP->window->loadSvg(asset::plugin(pluginInstance, "res/PaneModule.svg")));
+        setModule(modulo);
+        setPanel(APP->window->loadSvg(asset::plugin(pluginInstance, "res/PaneModulo.svg")));
 
         // tornillos
         agregarTornillos(this);
     }
 };
 
-Model *modelPane = createModel<PaneModule, PaneModuleWidget>("pane");
+Model *modeloPane = createModel<PaneModulo, PaneModuloWidget>("pane");

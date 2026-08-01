@@ -1,14 +1,26 @@
+#pragma once
 #include "rack.hpp"
 
+// primero se incluye namespace rack
+// para poder usarlo en las includes
 using namespace rack;
 
+#include "comun/CanalRelo.hpp"
+#include "comun/Dimensiones.hpp"
+#include "comun/Espaciado.hpp"
+#include "comun/Posicionador.hpp"
+#include "comun/Tiempos.hpp"
+#include "comun/Tornillos.hpp"
+
+// plugin
 extern Plugin *pluginInstance;
 
-extern Model *modelCompa;
-extern Model *modelEnvo;
-extern Model *modelPane;
-extern Model *modelRecta;
-extern Model *modelRelo;
-extern Model *modelRerelo;
-extern Model *modelSecu;
-extern Model *modelSuma;
+// modulos
+extern Model *modeloCompa;
+extern Model *modeloEnvo;
+extern Model *modeloPane;
+extern Model *modeloRecta;
+extern Model *modeloRelo;
+extern Model *modeloRerelo;
+extern Model *modeloSecu;
+extern Model *modeloSuma;

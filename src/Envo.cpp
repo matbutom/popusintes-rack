@@ -1,9 +1,7 @@
 #include "Popusintes.hpp"
-#include "comun/Tiempos.hpp"
-#include "comun/Tornillos.hpp"
 
 // modulo
-struct EnvoModule : Module
+struct EnvoModulo : Module
 {
     enum ParamIds
     {
@@ -44,7 +42,7 @@ struct EnvoModule : Module
     dsp::SchmittTrigger detectorPulso;
     dsp::SchmittTrigger detectorForzar;
 
-    EnvoModule()
+    EnvoModulo()
     {
 
         config(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS);
@@ -142,35 +140,35 @@ struct EnvoModule : Module
 };
 
 // widget
-struct EnvoModuleWidget : ModuleWidget
+struct EnvoModuloWidget : ModuleWidget
 {
-    EnvoModuleWidget(EnvoModule *module)
+    EnvoModuloWidget(EnvoModulo *modulo)
     {
 
-        setModule(module);
-        setPanel(APP->window->loadSvg(asset::plugin(pluginInstance, "res/EnvoModule.svg")));
+        setModule(modulo);
+        setPanel(APP->window->loadSvg(asset::plugin(pluginInstance, "res/EnvoModulo.svg")));
 
         // tornillos
         agregarTornillos(this);
 
         // parametros
-        addParam(createParamCentered<RoundBlackKnob>(mm2px(Vec(6.35, 30)), module, EnvoModule::PARAM_SUBIDA));
-        addParam(createParamCentered<RoundBlackKnob>(mm2px(Vec(19.05, 30)), module, EnvoModule::PARAM_BAJADA));
+        addParam(createParamCentered<RoundBlackKnob>(mm2px(Vec(6.35, 30)), modulo, EnvoModulo::PARAM_SUBIDA));
+        addParam(createParamCentered<RoundBlackKnob>(mm2px(Vec(19.05, 30)), modulo, EnvoModulo::PARAM_BAJADA));
 
         // entradas
         addInput(createInputCentered<PJ301MPort>(
-            mm2px(Vec(6.35, 60)), module,
-            EnvoModule::ENTRADA_PULSO_A));
+            mm2px(Vec(6.35, 60)), modulo,
+            EnvoModulo::ENTRADA_PULSO_A));
         addInput(createInputCentered<PJ301MPort>(
-            mm2px(Vec(19.05, 60)), module,
-            EnvoModule::ENTRADA_PULSO_A_FORZAR));
+            mm2px(Vec(19.05, 60)), modulo,
+            EnvoModulo::ENTRADA_PULSO_A_FORZAR));
 
         // salida
-        addOutput(createOutputCentered<PJ301MPort>(mm2px(Vec(12.7, 100)), module, EnvoModule::SALIDA_ENVO_A));
+        addOutput(createOutputCentered<PJ301MPort>(mm2px(Vec(12.7, 100)), modulo, EnvoModulo::SALIDA_ENVO_A));
 
         // luz
-        addChild(createLightCentered<SmallLight<GreenLight>>(mm2px(Vec(12.7, 90)), module, EnvoModule::LUZ_ENVO_A));
+        addChild(createLightCentered<SmallLight<GreenLight>>(mm2px(Vec(12.7, 90)), modulo, EnvoModulo::LUZ_ENVO_A));
     }
 };
 
-Model *modelEnvo = createModel<EnvoModule, EnvoModuleWidget>("envo");
+Model *modeloEnvo = createModel<EnvoModulo, EnvoModuloWidget>("envo");

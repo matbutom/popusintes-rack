@@ -1,8 +1,4 @@
 #include "Popusintes.hpp"
-#include "comun/Dimensiones.hpp"
-#include "comun/Posicionador.hpp"
-#include "comun/Tiempos.hpp"
-#include "comun/Tornillos.hpp"
 
 // vco de onda rectangular
 // dos canales independientes a y b
@@ -37,7 +33,7 @@
 #define PWM_MAX 0.99f
 
 // modulo
-struct RectaModule : Module
+struct RectaModulo : Module
 {
     enum ParamIds
     {
@@ -75,7 +71,7 @@ struct RectaModule : Module
     float faseA = 0.0f;
     float faseB = 0.0f;
 
-    RectaModule()
+    RectaModulo()
     {
         config(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS);
 
@@ -171,12 +167,12 @@ struct RectaModule : Module
 };
 
 // widget
-struct RectaModuleWidget : ModuleWidget
+struct RectaModuloWidget : ModuleWidget
 {
-    RectaModuleWidget(RectaModule *module)
+    RectaModuloWidget(RectaModulo *modulo)
     {
-        setModule(module);
-        setPanel(APP->window->loadSvg(asset::plugin(pluginInstance, "res/RectaModule.svg")));
+        setModule(modulo);
+        setPanel(APP->window->loadSvg(asset::plugin(pluginInstance, "res/RectaModulo.svg")));
 
         // tornillos
         agregarTornillos(this);
@@ -186,57 +182,57 @@ struct RectaModuleWidget : ModuleWidget
         // canal a frecuencia
         addParam(createParamCentered<RoundBlackKnob>(
             posicionador.posicion(PORCENTAJE_COLUMNA_A, PORCENTAJE_FRECUENCIA_Y),
-            module, RectaModule::PARAM_FRECUENCIA_A));
+            modulo, RectaModulo::PARAM_FRECUENCIA_A));
 
         addInput(createInputCentered<PJ301MPort>(
             posicionador.posicion(PORCENTAJE_COLUMNA_A, PORCENTAJE_ENTRADA_VOCT_Y),
-            module, RectaModule::ENTRADA_VOCT_A));
+            modulo, RectaModulo::ENTRADA_VOCT_A));
 
         // canal a pwm
         addParam(createParamCentered<RoundBlackKnob>(
             posicionador.posicion(PORCENTAJE_COLUMNA_A, PORCENTAJE_PWM_Y),
-            module, RectaModule::PARAM_PWM_A));
+            modulo, RectaModulo::PARAM_PWM_A));
 
         addInput(createInputCentered<PJ301MPort>(
             posicionador.posicion(PORCENTAJE_COLUMNA_A, PORCENTAJE_ENTRADA_PWM_Y),
-            module, RectaModule::ENTRADA_PWM_A));
+            modulo, RectaModulo::ENTRADA_PWM_A));
 
         // canal b frecuencia
         addParam(createParamCentered<RoundBlackKnob>(
             posicionador.posicion(PORCENTAJE_COLUMNA_B, PORCENTAJE_FRECUENCIA_Y),
-            module, RectaModule::PARAM_FRECUENCIA_B));
+            modulo, RectaModulo::PARAM_FRECUENCIA_B));
 
         addInput(createInputCentered<PJ301MPort>(
             posicionador.posicion(PORCENTAJE_COLUMNA_B, PORCENTAJE_ENTRADA_VOCT_Y),
-            module, RectaModule::ENTRADA_VOCT_B));
+            modulo, RectaModulo::ENTRADA_VOCT_B));
 
         // canal b pwm
         addParam(createParamCentered<RoundBlackKnob>(
             posicionador.posicion(PORCENTAJE_COLUMNA_B, PORCENTAJE_PWM_Y),
-            module, RectaModule::PARAM_PWM_B));
+            modulo, RectaModulo::PARAM_PWM_B));
 
         addInput(createInputCentered<PJ301MPort>(
             posicionador.posicion(PORCENTAJE_COLUMNA_B, PORCENTAJE_ENTRADA_PWM_Y),
-            module, RectaModule::ENTRADA_PWM_B));
+            modulo, RectaModulo::ENTRADA_PWM_B));
 
         // salidas
         addOutput(createOutputCentered<PJ301MPort>(
             posicionador.posicion(PORCENTAJE_COLUMNA_A, PORCENTAJE_SALIDA_Y),
-            module, RectaModule::SALIDA_RECTA_A));
+            modulo, RectaModulo::SALIDA_RECTA_A));
 
         addOutput(createOutputCentered<PJ301MPort>(
             posicionador.posicion(PORCENTAJE_COLUMNA_B, PORCENTAJE_SALIDA_Y),
-            module, RectaModule::SALIDA_RECTA_B));
+            modulo, RectaModulo::SALIDA_RECTA_B));
 
         // luces
         addChild(createLightCentered<LargeLight<GreenLight>>(
             posicionador.posicion(PORCENTAJE_COLUMNA_A, PORCENTAJE_LUZ_Y),
-            module, RectaModule::LUZ_SALIDA_A));
+            modulo, RectaModulo::LUZ_SALIDA_A));
 
         addChild(createLightCentered<LargeLight<GreenLight>>(
             posicionador.posicion(PORCENTAJE_COLUMNA_B, PORCENTAJE_LUZ_Y),
-            module, RectaModule::LUZ_SALIDA_B));
+            modulo, RectaModulo::LUZ_SALIDA_B));
     }
 };
 
-Model *modelRecta = createModel<RectaModule, RectaModuleWidget>("recta");
+Model *modeloRecta = createModel<RectaModulo, RectaModuloWidget>("recta");
