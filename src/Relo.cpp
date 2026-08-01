@@ -1,5 +1,7 @@
 #include "Popusintes.hpp"
+#include "CanalRelo.hpp"
 #include "Dimensiones.hpp"
+#include "Espaciado.hpp"
 #include "Posicionador.hpp"
 #include "Tiempos.hpp"
 #include "Tornillos.hpp"
@@ -7,17 +9,6 @@
 // define porcentajes columnas
 #define PORCENTAJE_COLUMNA_IZQ 0.30f
 #define PORCENTAJE_COLUMNA_DER 0.70f
-
-// define porcentaje delta en eje y
-// entre boton y entrada
-#define DELTA_Y_BOTON_ENTRADA 0.08f
-
-// define porcentaje delta en eye y
-// entre perilla y atenuversor y entrada
-#define DELTA_Y_PERILLA_ATENUVERSOR 0.08f
-
-// define porcentaje entre salida y su luz
-#define DELTA_Y_SALIDA_LUZ 0.05f
 
 // define coordenadas ppm
 #define PORCENTAJE_PPM_X (PORCENTAJE_COLUMNA_IZQ)
@@ -27,27 +18,27 @@
 #define PORCENTAJE_BOTON_RESINC_X (PORCENTAJE_COLUMNA_IZQ)
 #define PORCENTAJE_BOTON_RESINC_Y 0.35f
 #define PORCENTAJE_ENTRADA_RESINC_X (PORCENTAJE_COLUMNA_IZQ)
-#define PORCENTAJE_ENTRADA_RESINC_Y (PORCENTAJE_BOTON_RESINC_Y + DELTA_Y_BOTON_ENTRADA)
+#define PORCENTAJE_ENTRADA_RESINC_Y (PORCENTAJE_BOTON_RESINC_Y + espaciado::DELTA_Y_BOTON_ENTRADA)
 
 // definir coordenadas desfase
 #define PORCENTAJE_DESFASE_B_X (PORCENTAJE_COLUMNA_DER)
 #define PORCENTAJE_DESFASE_B_Y 0.60f
 #define PORCENTAJE_DESFASE_CV_ATEN_X (PORCENTAJE_COLUMNA_DER)
-#define PORCENTAJE_DESFASE_CV_ATEN_Y (PORCENTAJE_DESFASE_B_Y + DELTA_Y_PERILLA_ATENUVERSOR)
+#define PORCENTAJE_DESFASE_CV_ATEN_Y (PORCENTAJE_DESFASE_B_Y + espaciado::DELTA_Y_PERILLA_ATENUVERSOR)
 #define PORCENTAJE_ENTRADA_DESFASE_B_X (PORCENTAJE_COLUMNA_DER)
-#define PORCENTAJE_ENTRADA_DESFASE_B_Y (PORCENTAJE_DESFASE_B_Y + 2.f * DELTA_Y_PERILLA_ATENUVERSOR)
+#define PORCENTAJE_ENTRADA_DESFASE_B_Y (PORCENTAJE_DESFASE_B_Y + 2.f * espaciado::DELTA_Y_PERILLA_ATENUVERSOR)
 
 // definir coordenadas salida y luz a
 #define PORCENTAJE_LUCES_A_X (PORCENTAJE_COLUMNA_IZQ)
 #define PORCENTAJE_LUCES_A_Y 0.85f
 #define PORCENTAJE_SALIDA_A_X (PORCENTAJE_COLUMNA_IZQ)
-#define PORCENTAJE_SALIDA_A_Y (PORCENTAJE_LUCES_A_Y + DELTA_Y_SALIDA_LUZ)
+#define PORCENTAJE_SALIDA_A_Y (PORCENTAJE_LUCES_A_Y + espaciado::DELTA_Y_SALIDA_LUZ)
 
 // definir coordenadas salida y luz b
 #define PORCENTAJE_LUCES_B_X (PORCENTAJE_COLUMNA_DER)
 #define PORCENTAJE_LUCES_B_Y 0.85f
 #define PORCENTAJE_SALIDA_B_X (PORCENTAJE_COLUMNA_DER)
-#define PORCENTAJE_SALIDA_B_Y (PORCENTAJE_LUCES_B_Y + DELTA_Y_SALIDA_LUZ)
+#define PORCENTAJE_SALIDA_B_Y (PORCENTAJE_LUCES_B_Y + espaciado::DELTA_Y_SALIDA_LUZ)
 
 // modulo
 struct ReloModule : Module
@@ -87,15 +78,11 @@ struct ReloModule : Module
         NUM_LIGHTS,
     };
 
-    // clase auxiliar provista por rack
-    dsp::PulseGenerator generadorPulsosA;
-    dsp::PulseGenerator generadorPulsosB;
+    // un CanalRelo por canal: agrupa generador de pulsos, contador y periodo
+    CanalRelo canalA;
+    CanalRelo canalB;
     dsp::SchmittTrigger botonResinc;
     dsp::SchmittTrigger entradaResinc;
-
-    // variables de apoyo
-    float contadorA, periodoA;
-    float contadorB, periodoB;
 
     ReloModule()
     {
@@ -115,12 +102,6 @@ struct ReloModule : Module
 
         configOutput(SALIDA_PULSO_A, "pulso a");
         configOutput(SALIDA_PULSO_B, "pulso b");
-
-        contadorA = 0.f;
-        periodoA = 0.f;
-
-        contadorB = 0.f;
-        periodoB = 0.f;
     }
 
     void process(const ProcessArgs &args) override
@@ -148,10 +129,6 @@ struct ReloModule : Module
 
         float ppmB = ppmA * (1.f + desfase / 100.f);
 
-        // periodo calculado en samples
-        periodoA = 60.f * args.sampleRate / ppmA;
-        periodoB = 60.f * args.sampleRate / ppmB;
-
         // resincronizar boton del panel o externo
         bool resetBoton = botonResinc.process(params[PARAM_BOTON_RESINC].getValue());
         bool resetExterno = entradaResinc.process(inputs[ENTRADA_RESINC].getVoltage());
@@ -159,36 +136,18 @@ struct ReloModule : Module
 
         if (reset)
         {
-            contadorA = 0.f;
-            contadorB = 0.f;
+            canalA.reiniciar();
+            canalB.reiniciar();
 
             // ademas de reiniciar los contadores
             // emitimuos un puslo en A y B
             // el resincronizado se escucha en ese instante
-            generadorPulsosA.trigger(tiempos::PULSO_MS);
-            generadorPulsosB.trigger(tiempos::PULSO_MS);
+            canalA.generarPulso(tiempos::PULSO_MS);
+            canalB.generarPulso(tiempos::PULSO_MS);
         }
 
-        // canal A
-        if (contadorA > periodoA)
-        {
-            generadorPulsosA.trigger(tiempos::PULSO_MS);
-            contadorA = contadorA - periodoA;
-        }
-
-        contadorA = contadorA + 1;
-
-        // canal B
-        if (contadorB > periodoB)
-        {
-            generadorPulsosB.trigger(tiempos::PULSO_MS);
-            contadorB = contadorB - periodoB;
-        }
-
-        contadorB = contadorB + 1;
-
-        float salidaA = generadorPulsosA.process(args.sampleTime);
-        float salidaB = generadorPulsosB.process(args.sampleTime);
+        float salidaA = canalA.procesar(args.sampleTime, args.sampleRate, ppmA, tiempos::PULSO_MS);
+        float salidaB = canalB.procesar(args.sampleTime, args.sampleRate, ppmB, tiempos::PULSO_MS);
 
         outputs[SALIDA_PULSO_A].setVoltage(10.f * salidaA);
         lights[LUZ_PULSO_A].setSmoothBrightness(salidaA, 5e-6f);
@@ -210,7 +169,7 @@ struct ReloModuleWidget : ModuleWidget
         // tornillos
         agregarTornillos(this);
 
-        Posicionador posicionador(dimensiones::MODULO_ANCHO_04_HP, dimensiones::MODULO_ALTURA_3_U);
+        Posicionador posicionador(dimensiones::RELO_ANCHO, dimensiones::RELO_ALTURA);
 
         // params
         addParam(createParamCentered<RoundBlackKnob>(

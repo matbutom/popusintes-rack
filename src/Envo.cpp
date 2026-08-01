@@ -1,18 +1,6 @@
 #include "Popusintes.hpp"
-#include "Dimensiones.hpp"
-#include "Posicionador.hpp"
 #include "Tiempos.hpp"
 #include "Tornillos.hpp"
-
-// tiempos minimo y maximo (segundos)
-#define TIEMPO_MIN 0.001f
-#define TIEMPO_MAX 5.0f
-
-// definir ancho modulo en mm (5 hp)
-#define MODULO_ANCHO 25.4f
-
-// definir altura modulo en mm (3 u)
-#define MODULO_ALTURA 128.4f
 
 // modulo
 struct EnvoModule : Module
@@ -62,10 +50,10 @@ struct EnvoModule : Module
         config(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS);
 
         configParam(
-            PARAM_SUBIDA, TIEMPO_MIN, TIEMPO_MAX,
+            PARAM_SUBIDA, tiempos::TIEMPO_MIN, tiempos::TIEMPO_MAX,
             0.1f, "subida", " s");
         configParam(
-            PARAM_BAJADA, TIEMPO_MIN, TIEMPO_MAX,
+            PARAM_BAJADA, tiempos::TIEMPO_MIN, tiempos::TIEMPO_MAX,
             0.1f, "bajada"
                   " s");
 
