@@ -1,7 +1,7 @@
 #include "Popusintes.hpp"
-#include "Dimensiones.hpp"
-#include "Tiempos.hpp"
-#include "Tornillos.hpp"
+#include "comun/Dimensiones.hpp"
+#include "comun/Tiempos.hpp"
+#include "comun/Tornillos.hpp"
 
 // modulo
 struct SumaModule : Module
