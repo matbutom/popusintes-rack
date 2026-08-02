@@ -98,7 +98,7 @@ namespace layout
 
     // canal a: columna izquierda, arranca mas arriba
     constexpr float PORCENTAJE_SUBIDA_A_X = PORCENTAJE_COLUMNA_IZQ;
-    constexpr float PORCENTAJE_SUBIDA_A_Y = 0.15f;
+    constexpr float PORCENTAJE_SUBIDA_A_Y = 0.35f;
     constexpr float PORCENTAJE_BAJADA_A_X = PORCENTAJE_COLUMNA_IZQ;
     constexpr float PORCENTAJE_BAJADA_A_Y = PORCENTAJE_SUBIDA_A_Y + espaciado::DELTA_Y_PERILLA_ATENUVERSOR;
     constexpr float PORCENTAJE_ENTRADA_PULSO_A_X = PORCENTAJE_COLUMNA_IZQ;
@@ -108,7 +108,7 @@ namespace layout
 
     // canal b: columna derecha, arranca mas abajo, para el efecto escalera
     constexpr float PORCENTAJE_SUBIDA_B_X = PORCENTAJE_COLUMNA_DER;
-    constexpr float PORCENTAJE_SUBIDA_B_Y = 0.35f;
+    constexpr float PORCENTAJE_SUBIDA_B_Y = 0.55f;
     constexpr float PORCENTAJE_BAJADA_B_X = PORCENTAJE_COLUMNA_DER;
     constexpr float PORCENTAJE_BAJADA_B_Y = PORCENTAJE_SUBIDA_B_Y + espaciado::DELTA_Y_PERILLA_ATENUVERSOR;
     constexpr float PORCENTAJE_ENTRADA_PULSO_B_X = PORCENTAJE_COLUMNA_DER;
