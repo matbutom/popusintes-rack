@@ -161,17 +161,17 @@ namespace layout
     constexpr float PORCENTAJE_ENTRADA_VOCT_A_X = PORCENTAJE_COLUMNA_IZQ;
     constexpr float PORCENTAJE_ENTRADA_VOCT_A_Y = PORCENTAJE_FRECUENCIA_A_Y + espaciado::DELTA_Y_BOTON_ENTRADA;
     constexpr float PORCENTAJE_PWM_A_X = PORCENTAJE_COLUMNA_IZQ;
-    constexpr float PORCENTAJE_PWM_A_Y = 0.40f;
+    constexpr float PORCENTAJE_PWM_A_Y = 0.35f;
     constexpr float PORCENTAJE_ENTRADA_PWM_A_X = PORCENTAJE_COLUMNA_IZQ;
     constexpr float PORCENTAJE_ENTRADA_PWM_A_Y = PORCENTAJE_PWM_A_Y + espaciado::DELTA_Y_BOTON_ENTRADA;
 
     // canal b: columna derecha, arranca mas abajo, para el efecto escalera
     constexpr float PORCENTAJE_FRECUENCIA_B_X = PORCENTAJE_COLUMNA_DER;
-    constexpr float PORCENTAJE_FRECUENCIA_B_Y = 0.35f;
+    constexpr float PORCENTAJE_FRECUENCIA_B_Y = 0.55f;
     constexpr float PORCENTAJE_ENTRADA_VOCT_B_X = PORCENTAJE_COLUMNA_DER;
     constexpr float PORCENTAJE_ENTRADA_VOCT_B_Y = PORCENTAJE_FRECUENCIA_B_Y + espaciado::DELTA_Y_BOTON_ENTRADA;
     constexpr float PORCENTAJE_PWM_B_X = PORCENTAJE_COLUMNA_DER;
-    constexpr float PORCENTAJE_PWM_B_Y = 0.60f;
+    constexpr float PORCENTAJE_PWM_B_Y = 0.75f;
     constexpr float PORCENTAJE_ENTRADA_PWM_B_X = PORCENTAJE_COLUMNA_DER;
     constexpr float PORCENTAJE_ENTRADA_PWM_B_Y = PORCENTAJE_PWM_B_Y + espaciado::DELTA_Y_BOTON_ENTRADA;
 
