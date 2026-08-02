@@ -126,16 +126,16 @@ namespace layout
     constexpr float PORCENTAJE_ENTRADA_DESFASE_B_Y = PORCENTAJE_DESFASE_B_Y + 2.f * espaciado::DELTA_Y_PERILLA_ATENUVERSOR;
 
     // coordenadas salida y luz a
-    constexpr float PORCENTAJE_LUCES_A_X = PORCENTAJE_COLUMNA_IZQ;
-    constexpr float PORCENTAJE_LUCES_A_Y = 0.85f;
     constexpr float PORCENTAJE_SALIDA_A_X = PORCENTAJE_COLUMNA_IZQ;
-    constexpr float PORCENTAJE_SALIDA_A_Y = PORCENTAJE_LUCES_A_Y + espaciado::DELTA_Y_SALIDA_LUZ;
+    constexpr float PORCENTAJE_SALIDA_A_Y = 0.85f;
+    constexpr float PORCENTAJE_LUCES_A_X = PORCENTAJE_COLUMNA_IZQ;
+    constexpr float PORCENTAJE_LUCES_A_Y = PORCENTAJE_SALIDA_A_Y - espaciado::DELTA_Y_SALIDA_LUZ;
 
     // coordenadas salida y luz b
-    constexpr float PORCENTAJE_LUCES_B_X = PORCENTAJE_COLUMNA_DER;
-    constexpr float PORCENTAJE_LUCES_B_Y = 0.85f;
     constexpr float PORCENTAJE_SALIDA_B_X = PORCENTAJE_COLUMNA_DER;
-    constexpr float PORCENTAJE_SALIDA_B_Y = PORCENTAJE_LUCES_B_Y + espaciado::DELTA_Y_SALIDA_LUZ;
+    constexpr float PORCENTAJE_SALIDA_B_Y = 0.85f;
+    constexpr float PORCENTAJE_LUCES_B_X = PORCENTAJE_COLUMNA_DER;
+    constexpr float PORCENTAJE_LUCES_B_Y = PORCENTAJE_SALIDA_B_Y - espaciado::DELTA_Y_SALIDA_LUZ;
 }
 
 // widget

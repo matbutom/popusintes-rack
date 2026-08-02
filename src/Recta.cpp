@@ -152,20 +152,32 @@ struct RectaModulo : Module
 
 namespace layout
 {
-    constexpr float PORCENTAJE_COLUMNA_A = columnas::DOS_1;
-    constexpr float PORCENTAJE_COLUMNA_B = columnas::DOS_2;
+    constexpr float PORCENTAJE_COLUMNA_IZQ = columnas::DOS_1;
+    constexpr float PORCENTAJE_COLUMNA_DER = columnas::DOS_2;
 
-    constexpr float DELTA_Y_PERILLA_ENTRADA = 0.10f;
-    constexpr float DELTA_Y_SALIDA_LUZ = 0.05f;
+    // canal a: columna izquierda, arranca mas arriba
+    constexpr float PORCENTAJE_FRECUENCIA_A_X = PORCENTAJE_COLUMNA_IZQ;
+    constexpr float PORCENTAJE_FRECUENCIA_A_Y = 0.15f;
+    constexpr float PORCENTAJE_ENTRADA_VOCT_A_X = PORCENTAJE_COLUMNA_IZQ;
+    constexpr float PORCENTAJE_ENTRADA_VOCT_A_Y = PORCENTAJE_FRECUENCIA_A_Y + espaciado::DELTA_Y_BOTON_ENTRADA;
+    constexpr float PORCENTAJE_PWM_A_X = PORCENTAJE_COLUMNA_IZQ;
+    constexpr float PORCENTAJE_PWM_A_Y = 0.40f;
+    constexpr float PORCENTAJE_ENTRADA_PWM_A_X = PORCENTAJE_COLUMNA_IZQ;
+    constexpr float PORCENTAJE_ENTRADA_PWM_A_Y = PORCENTAJE_PWM_A_Y + espaciado::DELTA_Y_BOTON_ENTRADA;
 
-    constexpr float PORCENTAJE_FRECUENCIA_Y = 0.12f;
-    constexpr float PORCENTAJE_ENTRADA_VOCT_Y = PORCENTAJE_FRECUENCIA_Y + DELTA_Y_PERILLA_ENTRADA;
+    // canal b: columna derecha, arranca mas abajo, para el efecto escalera
+    constexpr float PORCENTAJE_FRECUENCIA_B_X = PORCENTAJE_COLUMNA_DER;
+    constexpr float PORCENTAJE_FRECUENCIA_B_Y = 0.35f;
+    constexpr float PORCENTAJE_ENTRADA_VOCT_B_X = PORCENTAJE_COLUMNA_DER;
+    constexpr float PORCENTAJE_ENTRADA_VOCT_B_Y = PORCENTAJE_FRECUENCIA_B_Y + espaciado::DELTA_Y_BOTON_ENTRADA;
+    constexpr float PORCENTAJE_PWM_B_X = PORCENTAJE_COLUMNA_DER;
+    constexpr float PORCENTAJE_PWM_B_Y = 0.60f;
+    constexpr float PORCENTAJE_ENTRADA_PWM_B_X = PORCENTAJE_COLUMNA_DER;
+    constexpr float PORCENTAJE_ENTRADA_PWM_B_Y = PORCENTAJE_PWM_B_Y + espaciado::DELTA_Y_BOTON_ENTRADA;
 
-    constexpr float PORCENTAJE_PWM_Y = 0.40f;
-    constexpr float PORCENTAJE_ENTRADA_PWM_Y = PORCENTAJE_PWM_Y + DELTA_Y_PERILLA_ENTRADA;
-
-    constexpr float PORCENTAJE_LUZ_Y = 0.80f;
-    constexpr float PORCENTAJE_SALIDA_Y = PORCENTAJE_LUZ_Y + DELTA_Y_SALIDA_LUZ;
+    // salida y luz, misma altura para los dos canales
+    constexpr float PORCENTAJE_SALIDA_Y = 0.85f;
+    constexpr float PORCENTAJE_LUZ_Y = PORCENTAJE_SALIDA_Y - espaciado::DELTA_Y_SALIDA_LUZ;
 }
 
 // widget
@@ -179,60 +191,57 @@ struct RectaModuloWidget : ModuleWidget
         // tornillos
         agregarTornillos(this);
 
-        Posicionador posicionador(dimensiones::MODULO_ANCHO_06_HP, dimensiones::MODULO_ALTURA_3_U);
+        Posicionador posicionador(dimensiones::RECTA_ANCHO, dimensiones::RECTA_ALTURA);
 
-        // canal a frecuencia
+        // canal a: perillas, entradas
         addParam(createParamCentered<RoundBlackKnob>(
-            posicionador.posicion(layout::PORCENTAJE_COLUMNA_A, layout::PORCENTAJE_FRECUENCIA_Y),
+            posicionador.posicion(layout::PORCENTAJE_FRECUENCIA_A_X, layout::PORCENTAJE_FRECUENCIA_A_Y),
             modulo, RectaModulo::PARAM_FRECUENCIA_A));
 
         addInput(createInputCentered<PJ301MPort>(
-            posicionador.posicion(layout::PORCENTAJE_COLUMNA_A, layout::PORCENTAJE_ENTRADA_VOCT_Y),
+            posicionador.posicion(layout::PORCENTAJE_ENTRADA_VOCT_A_X, layout::PORCENTAJE_ENTRADA_VOCT_A_Y),
             modulo, RectaModulo::ENTRADA_VOCT_A));
 
-        // canal a pwm
         addParam(createParamCentered<RoundBlackKnob>(
-            posicionador.posicion(layout::PORCENTAJE_COLUMNA_A, layout::PORCENTAJE_PWM_Y),
+            posicionador.posicion(layout::PORCENTAJE_PWM_A_X, layout::PORCENTAJE_PWM_A_Y),
             modulo, RectaModulo::PARAM_PWM_A));
 
         addInput(createInputCentered<PJ301MPort>(
-            posicionador.posicion(layout::PORCENTAJE_COLUMNA_A, layout::PORCENTAJE_ENTRADA_PWM_Y),
+            posicionador.posicion(layout::PORCENTAJE_ENTRADA_PWM_A_X, layout::PORCENTAJE_ENTRADA_PWM_A_Y),
             modulo, RectaModulo::ENTRADA_PWM_A));
 
-        // canal b frecuencia
+        // canal b: perillas, entradas
         addParam(createParamCentered<RoundBlackKnob>(
-            posicionador.posicion(layout::PORCENTAJE_COLUMNA_B, layout::PORCENTAJE_FRECUENCIA_Y),
+            posicionador.posicion(layout::PORCENTAJE_FRECUENCIA_B_X, layout::PORCENTAJE_FRECUENCIA_B_Y),
             modulo, RectaModulo::PARAM_FRECUENCIA_B));
 
         addInput(createInputCentered<PJ301MPort>(
-            posicionador.posicion(layout::PORCENTAJE_COLUMNA_B, layout::PORCENTAJE_ENTRADA_VOCT_Y),
+            posicionador.posicion(layout::PORCENTAJE_ENTRADA_VOCT_B_X, layout::PORCENTAJE_ENTRADA_VOCT_B_Y),
             modulo, RectaModulo::ENTRADA_VOCT_B));
 
-        // canal b pwm
         addParam(createParamCentered<RoundBlackKnob>(
-            posicionador.posicion(layout::PORCENTAJE_COLUMNA_B, layout::PORCENTAJE_PWM_Y),
+            posicionador.posicion(layout::PORCENTAJE_PWM_B_X, layout::PORCENTAJE_PWM_B_Y),
             modulo, RectaModulo::PARAM_PWM_B));
 
         addInput(createInputCentered<PJ301MPort>(
-            posicionador.posicion(layout::PORCENTAJE_COLUMNA_B, layout::PORCENTAJE_ENTRADA_PWM_Y),
+            posicionador.posicion(layout::PORCENTAJE_ENTRADA_PWM_B_X, layout::PORCENTAJE_ENTRADA_PWM_B_Y),
             modulo, RectaModulo::ENTRADA_PWM_B));
 
-        // salidas
+        // salidas y luces, misma altura para los dos canales
         addOutput(createOutputCentered<PJ301MPort>(
-            posicionador.posicion(layout::PORCENTAJE_COLUMNA_A, layout::PORCENTAJE_SALIDA_Y),
+            posicionador.posicion(layout::PORCENTAJE_COLUMNA_IZQ, layout::PORCENTAJE_SALIDA_Y),
             modulo, RectaModulo::SALIDA_RECTA_A));
 
         addOutput(createOutputCentered<PJ301MPort>(
-            posicionador.posicion(layout::PORCENTAJE_COLUMNA_B, layout::PORCENTAJE_SALIDA_Y),
+            posicionador.posicion(layout::PORCENTAJE_COLUMNA_DER, layout::PORCENTAJE_SALIDA_Y),
             modulo, RectaModulo::SALIDA_RECTA_B));
 
-        // luces
         addChild(createLightCentered<LargeLight<GreenLight>>(
-            posicionador.posicion(layout::PORCENTAJE_COLUMNA_A, layout::PORCENTAJE_LUZ_Y),
+            posicionador.posicion(layout::PORCENTAJE_COLUMNA_IZQ, layout::PORCENTAJE_LUZ_Y),
             modulo, RectaModulo::LUZ_SALIDA_A));
 
         addChild(createLightCentered<LargeLight<GreenLight>>(
-            posicionador.posicion(layout::PORCENTAJE_COLUMNA_B, layout::PORCENTAJE_LUZ_Y),
+            posicionador.posicion(layout::PORCENTAJE_COLUMNA_DER, layout::PORCENTAJE_LUZ_Y),
             modulo, RectaModulo::LUZ_SALIDA_B));
     }
 };

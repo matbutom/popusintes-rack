@@ -207,8 +207,8 @@ namespace layout
     constexpr float PORCENTAJE_ENTRADA_DESFASE_D_Y = PORCENTAJE_DESFASE_D_Y + 2.f * espaciado::DELTA_Y_PERILLA_ATENUVERSOR;
 
     // coordenadas salida y luz, una fila abajo para los cuatro canales
-    constexpr float PORCENTAJE_LUCES_Y = 0.85f;
-    constexpr float PORCENTAJE_SALIDA_Y = PORCENTAJE_LUCES_Y + espaciado::DELTA_Y_SALIDA_LUZ;
+    constexpr float PORCENTAJE_SALIDA_Y = 0.85f;
+    constexpr float PORCENTAJE_LUCES_Y = PORCENTAJE_SALIDA_Y - espaciado::DELTA_Y_SALIDA_LUZ;
 
     constexpr float PORCENTAJE_LUCES_A_X = PORCENTAJE_COLUMNA_A;
     constexpr float PORCENTAJE_SALIDA_A_X = PORCENTAJE_COLUMNA_A;

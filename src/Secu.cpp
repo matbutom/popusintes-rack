@@ -122,7 +122,7 @@ struct SecuModuloWidget : ModuleWidget
         }
 
         //  salidas
-        addOutput(createOutputCentered<PJ301MPort>(mm2px(Vec(50.8 * 0.50, 128.4 * 0.80)), modulo, SecuModulo::SALIDA_SECUENCIADOR));
+        addOutput(createOutputCentered<PJ301MPort>(mm2px(Vec(50.8 * 0.50, 128.4 * 0.85)), modulo, SecuModulo::SALIDA_SECUENCIADOR));
 
         // luces
         for (int i = 0; i < SecuModulo::NUM_LIGHTS; i++)
