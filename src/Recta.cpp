@@ -176,7 +176,7 @@ namespace layout
     constexpr float PORCENTAJE_ENTRADA_PWM_B_Y = PORCENTAJE_PWM_B_Y + espaciado::DELTA_Y_BOTON_ENTRADA;
 
     // salida y luz, misma altura para los dos canales
-    constexpr float PORCENTAJE_SALIDA_Y = 0.85f;
+    constexpr float PORCENTAJE_SALIDA_Y = 0.90f;
     constexpr float PORCENTAJE_LUZ_Y = PORCENTAJE_SALIDA_Y - espaciado::DELTA_Y_SALIDA_LUZ;
 }
 

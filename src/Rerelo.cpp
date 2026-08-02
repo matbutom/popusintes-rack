@@ -106,16 +106,16 @@ struct RereloModulo : Module
         // desfase de cada canal = perilla + cv atenuado
         // cv bipolar entre -5V y +5V, con atenuversor en 1.0 cubre el rango completo
         float ppmB = calcularPpmDesfasado(ppmA, params[PARAM_DESFASE_B].getValue(),
-                                      params[PARAM_DESFASE_CV_ATEN_B].getValue(),
-                                      inputs[ENTRADA_DESFASE_B].getVoltage());
+                                          params[PARAM_DESFASE_CV_ATEN_B].getValue(),
+                                          inputs[ENTRADA_DESFASE_B].getVoltage());
 
         float ppmC = calcularPpmDesfasado(ppmA, params[PARAM_DESFASE_C].getValue(),
-                                      params[PARAM_DESFASE_CV_ATEN_C].getValue(),
-                                      inputs[ENTRADA_DESFASE_C].getVoltage());
+                                          params[PARAM_DESFASE_CV_ATEN_C].getValue(),
+                                          inputs[ENTRADA_DESFASE_C].getVoltage());
 
         float ppmD = calcularPpmDesfasado(ppmA, params[PARAM_DESFASE_D].getValue(),
-                                      params[PARAM_DESFASE_CV_ATEN_D].getValue(),
-                                      inputs[ENTRADA_DESFASE_D].getVoltage());
+                                          params[PARAM_DESFASE_CV_ATEN_D].getValue(),
+                                          inputs[ENTRADA_DESFASE_D].getVoltage());
 
         // resincronizar boton del panel o externo
         bool resetBoton = botonResinc.process(params[PARAM_BOTON_RESINC].getValue());
@@ -207,7 +207,7 @@ namespace layout
     constexpr float PORCENTAJE_ENTRADA_DESFASE_D_Y = PORCENTAJE_DESFASE_D_Y + 2.f * espaciado::DELTA_Y_PERILLA_ATENUVERSOR;
 
     // coordenadas salida y luz, una fila abajo para los cuatro canales
-    constexpr float PORCENTAJE_SALIDA_Y = 0.85f;
+    constexpr float PORCENTAJE_SALIDA_Y = 0.90f;
     constexpr float PORCENTAJE_LUCES_Y = PORCENTAJE_SALIDA_Y - espaciado::DELTA_Y_SALIDA_LUZ;
 
     constexpr float PORCENTAJE_LUCES_A_X = PORCENTAJE_COLUMNA_A;
