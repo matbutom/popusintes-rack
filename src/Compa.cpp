@@ -34,11 +34,19 @@ struct CompaModulo : Module
     CompaModulo()
     {
         config(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS);
+
+        configInput(ENTRADA_A_1, "a1");
+        configInput(ENTRADA_A_2, "a2");
+        configInput(ENTRADA_B_1, "b1");
+        configInput(ENTRADA_B_2, "b2");
+
+        configOutput(SALIDA_COMPA_A, "compa a1>a2");
+        configOutput(SALIDA_COMPA_B, "compa b1>b2");
     }
 
     void process(const ProcessArgs &args) override
     {
-        // canal A
+        // canal a
         if (inputs[ENTRADA_A_1].isConnected() && inputs[ENTRADA_A_2].isConnected())
         {
             float salidaA = inputs[ENTRADA_A_1].getVoltage() > inputs[ENTRADA_A_2].getVoltage();
@@ -52,7 +60,7 @@ struct CompaModulo : Module
             lights[LUZ_SALIDA_A].setBrightness(0.f);
         }
 
-        // ---- canal B ----
+        // canal b
         if (inputs[ENTRADA_B_1].isConnected() && inputs[ENTRADA_B_2].isConnected())
         {
             float salidaB = inputs[ENTRADA_B_1].getVoltage() > inputs[ENTRADA_B_2].getVoltage();
@@ -68,6 +76,36 @@ struct CompaModulo : Module
     }
 };
 
+namespace layout
+{
+    constexpr float PORCENTAJE_COLUMNA_IZQ = columnas::DOS_1;
+    constexpr float PORCENTAJE_COLUMNA_DER = columnas::DOS_2;
+
+    // coordenadas entradas canal a
+    constexpr float PORCENTAJE_ENTRADA_A_1_X = PORCENTAJE_COLUMNA_IZQ;
+    constexpr float PORCENTAJE_ENTRADA_A_1_Y = 0.20f;
+    constexpr float PORCENTAJE_ENTRADA_A_2_X = PORCENTAJE_COLUMNA_IZQ;
+    constexpr float PORCENTAJE_ENTRADA_A_2_Y = PORCENTAJE_ENTRADA_A_1_Y + espaciado::DELTA_Y_ENTRADA_ENTRADA;
+
+    // coordenadas entradas canal b
+    constexpr float PORCENTAJE_ENTRADA_B_1_X = PORCENTAJE_COLUMNA_DER;
+    constexpr float PORCENTAJE_ENTRADA_B_1_Y = 0.20f;
+    constexpr float PORCENTAJE_ENTRADA_B_2_X = PORCENTAJE_COLUMNA_DER;
+    constexpr float PORCENTAJE_ENTRADA_B_2_Y = PORCENTAJE_ENTRADA_B_1_Y + espaciado::DELTA_Y_ENTRADA_ENTRADA;
+
+    // coordenadas salida y luz a
+    constexpr float PORCENTAJE_LUCES_A_X = PORCENTAJE_COLUMNA_IZQ;
+    constexpr float PORCENTAJE_LUCES_A_Y = 0.85f;
+    constexpr float PORCENTAJE_SALIDA_A_X = PORCENTAJE_COLUMNA_IZQ;
+    constexpr float PORCENTAJE_SALIDA_A_Y = PORCENTAJE_LUCES_A_Y + espaciado::DELTA_Y_SALIDA_LUZ;
+
+    // coordenadas salida y luz b
+    constexpr float PORCENTAJE_LUCES_B_X = PORCENTAJE_COLUMNA_DER;
+    constexpr float PORCENTAJE_LUCES_B_Y = 0.85f;
+    constexpr float PORCENTAJE_SALIDA_B_X = PORCENTAJE_COLUMNA_DER;
+    constexpr float PORCENTAJE_SALIDA_B_Y = PORCENTAJE_LUCES_B_Y + espaciado::DELTA_Y_SALIDA_LUZ;
+}
+
 // widget
 struct CompaModuloWidget : ModuleWidget
 {
@@ -79,21 +117,43 @@ struct CompaModuloWidget : ModuleWidget
         // tornillos
         agregarTornillos(this);
 
-        // entradas canal A
-        addInput(createInputCentered<PJ301MPort>(mm2px(Vec(25.4 * 0.20, 128.4 * 0.30)), modulo, CompaModulo::ENTRADA_A_1));
-        addInput(createInputCentered<PJ301MPort>(mm2px(Vec(25.4 * 0.80, 128.4 * 0.30)), modulo, CompaModulo::ENTRADA_A_2));
+        Posicionador posicionador(dimensiones::COMPA_ANCHO, dimensiones::COMPA_ALTURA);
 
-        // entradas canal B
-        addInput(createInputCentered<PJ301MPort>(mm2px(Vec(25.4 * 0.20, 128.4 * 0.60)), modulo, CompaModulo::ENTRADA_B_1));
-        addInput(createInputCentered<PJ301MPort>(mm2px(Vec(25.4 * 0.80, 128.4 * 0.60)), modulo, CompaModulo::ENTRADA_B_2));
+        // entradas canal a
+        addInput(createInputCentered<PJ301MPort>(
+            posicionador.posicion(layout::PORCENTAJE_ENTRADA_A_1_X, layout::PORCENTAJE_ENTRADA_A_1_Y),
+            modulo, CompaModulo::ENTRADA_A_1));
+
+        addInput(createInputCentered<PJ301MPort>(
+            posicionador.posicion(layout::PORCENTAJE_ENTRADA_A_2_X, layout::PORCENTAJE_ENTRADA_A_2_Y),
+            modulo, CompaModulo::ENTRADA_A_2));
+
+        // entradas canal b
+        addInput(createInputCentered<PJ301MPort>(
+            posicionador.posicion(layout::PORCENTAJE_ENTRADA_B_1_X, layout::PORCENTAJE_ENTRADA_B_1_Y),
+            modulo, CompaModulo::ENTRADA_B_1));
+
+        addInput(createInputCentered<PJ301MPort>(
+            posicionador.posicion(layout::PORCENTAJE_ENTRADA_B_2_X, layout::PORCENTAJE_ENTRADA_B_2_Y),
+            modulo, CompaModulo::ENTRADA_B_2));
 
         // salidas
-        addOutput(createOutputCentered<PJ301MPort>(mm2px(Vec(25.4 * 0.20, 128.4 * 0.90)), modulo, CompaModulo::SALIDA_COMPA_A));
-        addOutput(createOutputCentered<PJ301MPort>(mm2px(Vec(25.4 * 0.80, 128.4 * 0.90)), modulo, CompaModulo::SALIDA_COMPA_B));
+        addOutput(createOutputCentered<PJ301MPort>(
+            posicionador.posicion(layout::PORCENTAJE_SALIDA_A_X, layout::PORCENTAJE_SALIDA_A_Y),
+            modulo, CompaModulo::SALIDA_COMPA_A));
+
+        addOutput(createOutputCentered<PJ301MPort>(
+            posicionador.posicion(layout::PORCENTAJE_SALIDA_B_X, layout::PORCENTAJE_SALIDA_B_Y),
+            modulo, CompaModulo::SALIDA_COMPA_B));
 
         // luces
-        addChild(createLightCentered<LargeLight<GreenLight>>(mm2px(Vec(25.4 * 0.20, 128.4 * 0.80)), modulo, CompaModulo::LUZ_SALIDA_A));
-        addChild(createLightCentered<LargeLight<GreenLight>>(mm2px(Vec(25.4 * 0.80, 128.4 * 0.80)), modulo, CompaModulo::LUZ_SALIDA_B));
+        addChild(createLightCentered<LargeLight<GreenLight>>(
+            posicionador.posicion(layout::PORCENTAJE_LUCES_A_X, layout::PORCENTAJE_LUCES_A_Y),
+            modulo, CompaModulo::LUZ_SALIDA_A));
+
+        addChild(createLightCentered<LargeLight<GreenLight>>(
+            posicionador.posicion(layout::PORCENTAJE_LUCES_B_X, layout::PORCENTAJE_LUCES_B_Y),
+            modulo, CompaModulo::LUZ_SALIDA_B));
     }
 };
 
