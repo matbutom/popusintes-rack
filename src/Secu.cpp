@@ -115,8 +115,8 @@ namespace layout
     constexpr float PORCENTAJE_PASO_A_3_Y = PORCENTAJE_PASO_A_2_Y + espaciado::DELTA_Y_PERILLA_ATENUVERSOR;
 
     // canal b: columna derecha, arranca mas abajo, para el efecto escalera
-    constexpr float PORCENTAJE_ENTRADA_TRIGGER_B_Y = 0.50f;
-    constexpr float PORCENTAJE_PASO_B_0_Y = 0.60f;
+    constexpr float PORCENTAJE_ENTRADA_TRIGGER_B_Y = 0.40f;
+    constexpr float PORCENTAJE_PASO_B_0_Y = 0.50f;
     constexpr float PORCENTAJE_PASO_B_1_Y = PORCENTAJE_PASO_B_0_Y + espaciado::DELTA_Y_PERILLA_ATENUVERSOR;
     constexpr float PORCENTAJE_PASO_B_2_Y = PORCENTAJE_PASO_B_1_Y + espaciado::DELTA_Y_PERILLA_ATENUVERSOR;
     constexpr float PORCENTAJE_PASO_B_3_Y = PORCENTAJE_PASO_B_2_Y + espaciado::DELTA_Y_PERILLA_ATENUVERSOR;
@@ -145,19 +145,19 @@ struct SecuModuloWidget : ModuleWidget
             posicionador.posicion(layout::PORCENTAJE_COLUMNA_IZQ, layout::PORCENTAJE_ENTRADA_TRIGGER_A_Y),
             modulo, SecuModulo::ENTRADA_TRIGGER_A));
 
-        addParam(createParamCentered<Trimpot>(
+        addParam(createParamCentered<RoundSmallBlackKnob>(
             posicionador.posicion(layout::PORCENTAJE_COLUMNA_IZQ, layout::PORCENTAJE_PASO_A_0_Y),
             modulo, SecuModulo::PARAM_PASO_A_0));
 
-        addParam(createParamCentered<Trimpot>(
+        addParam(createParamCentered<RoundSmallBlackKnob>(
             posicionador.posicion(layout::PORCENTAJE_COLUMNA_IZQ, layout::PORCENTAJE_PASO_A_1_Y),
             modulo, SecuModulo::PARAM_PASO_A_1));
 
-        addParam(createParamCentered<Trimpot>(
+        addParam(createParamCentered<RoundSmallBlackKnob>(
             posicionador.posicion(layout::PORCENTAJE_COLUMNA_IZQ, layout::PORCENTAJE_PASO_A_2_Y),
             modulo, SecuModulo::PARAM_PASO_A_2));
 
-        addParam(createParamCentered<Trimpot>(
+        addParam(createParamCentered<RoundSmallBlackKnob>(
             posicionador.posicion(layout::PORCENTAJE_COLUMNA_IZQ, layout::PORCENTAJE_PASO_A_3_Y),
             modulo, SecuModulo::PARAM_PASO_A_3));
 
@@ -166,19 +166,19 @@ struct SecuModuloWidget : ModuleWidget
             posicionador.posicion(layout::PORCENTAJE_COLUMNA_DER, layout::PORCENTAJE_ENTRADA_TRIGGER_B_Y),
             modulo, SecuModulo::ENTRADA_TRIGGER_B));
 
-        addParam(createParamCentered<Trimpot>(
+        addParam(createParamCentered<RoundSmallBlackKnob>(
             posicionador.posicion(layout::PORCENTAJE_COLUMNA_DER, layout::PORCENTAJE_PASO_B_0_Y),
             modulo, SecuModulo::PARAM_PASO_B_0));
 
-        addParam(createParamCentered<Trimpot>(
+        addParam(createParamCentered<RoundSmallBlackKnob>(
             posicionador.posicion(layout::PORCENTAJE_COLUMNA_DER, layout::PORCENTAJE_PASO_B_1_Y),
             modulo, SecuModulo::PARAM_PASO_B_1));
 
-        addParam(createParamCentered<Trimpot>(
+        addParam(createParamCentered<RoundSmallBlackKnob>(
             posicionador.posicion(layout::PORCENTAJE_COLUMNA_DER, layout::PORCENTAJE_PASO_B_2_Y),
             modulo, SecuModulo::PARAM_PASO_B_2));
 
-        addParam(createParamCentered<Trimpot>(
+        addParam(createParamCentered<RoundSmallBlackKnob>(
             posicionador.posicion(layout::PORCENTAJE_COLUMNA_DER, layout::PORCENTAJE_PASO_B_3_Y),
             modulo, SecuModulo::PARAM_PASO_B_3));
 
