@@ -145,19 +145,19 @@ struct SecuModuloWidget : ModuleWidget
             posicionador.posicion(layout::PORCENTAJE_COLUMNA_IZQ, layout::PORCENTAJE_ENTRADA_TRIGGER_A_Y),
             modulo, SecuModulo::ENTRADA_TRIGGER_A));
 
-        addParam(createParamCentered<RoundSmallBlackKnob>(
+        addParam(createParamCentered<Trimpot>(
             posicionador.posicion(layout::PORCENTAJE_COLUMNA_IZQ, layout::PORCENTAJE_PASO_A_0_Y),
             modulo, SecuModulo::PARAM_PASO_A_0));
 
-        addParam(createParamCentered<RoundSmallBlackKnob>(
+        addParam(createParamCentered<Trimpot>(
             posicionador.posicion(layout::PORCENTAJE_COLUMNA_IZQ, layout::PORCENTAJE_PASO_A_1_Y),
             modulo, SecuModulo::PARAM_PASO_A_1));
 
-        addParam(createParamCentered<RoundSmallBlackKnob>(
+        addParam(createParamCentered<Trimpot>(
             posicionador.posicion(layout::PORCENTAJE_COLUMNA_IZQ, layout::PORCENTAJE_PASO_A_2_Y),
             modulo, SecuModulo::PARAM_PASO_A_2));
 
-        addParam(createParamCentered<RoundSmallBlackKnob>(
+        addParam(createParamCentered<Trimpot>(
             posicionador.posicion(layout::PORCENTAJE_COLUMNA_IZQ, layout::PORCENTAJE_PASO_A_3_Y),
             modulo, SecuModulo::PARAM_PASO_A_3));
 
@@ -166,19 +166,19 @@ struct SecuModuloWidget : ModuleWidget
             posicionador.posicion(layout::PORCENTAJE_COLUMNA_DER, layout::PORCENTAJE_ENTRADA_TRIGGER_B_Y),
             modulo, SecuModulo::ENTRADA_TRIGGER_B));
 
-        addParam(createParamCentered<RoundSmallBlackKnob>(
+        addParam(createParamCentered<Trimpot>(
             posicionador.posicion(layout::PORCENTAJE_COLUMNA_DER, layout::PORCENTAJE_PASO_B_0_Y),
             modulo, SecuModulo::PARAM_PASO_B_0));
 
-        addParam(createParamCentered<RoundSmallBlackKnob>(
+        addParam(createParamCentered<Trimpot>(
             posicionador.posicion(layout::PORCENTAJE_COLUMNA_DER, layout::PORCENTAJE_PASO_B_1_Y),
             modulo, SecuModulo::PARAM_PASO_B_1));
 
-        addParam(createParamCentered<RoundSmallBlackKnob>(
+        addParam(createParamCentered<Trimpot>(
             posicionador.posicion(layout::PORCENTAJE_COLUMNA_DER, layout::PORCENTAJE_PASO_B_2_Y),
             modulo, SecuModulo::PARAM_PASO_B_2));
 
-        addParam(createParamCentered<RoundSmallBlackKnob>(
+        addParam(createParamCentered<Trimpot>(
             posicionador.posicion(layout::PORCENTAJE_COLUMNA_DER, layout::PORCENTAJE_PASO_B_3_Y),
             modulo, SecuModulo::PARAM_PASO_B_3));
 
