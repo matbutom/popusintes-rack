@@ -147,11 +147,11 @@ struct CompaModuloWidget : ModuleWidget
             modulo, CompaModulo::SALIDA_COMPA_B));
 
         // luces
-        addChild(createLightCentered<LargeLight<GreenLight>>(
+        addChild(createLightCentered<MediumLight<GreenLight>>(
             posicionador.posicion(layout::PORCENTAJE_LUCES_A_X, layout::PORCENTAJE_LUCES_A_Y),
             modulo, CompaModulo::LUZ_SALIDA_A));
 
-        addChild(createLightCentered<LargeLight<GreenLight>>(
+        addChild(createLightCentered<MediumLight<GreenLight>>(
             posicionador.posicion(layout::PORCENTAJE_LUCES_B_X, layout::PORCENTAJE_LUCES_B_Y),
             modulo, CompaModulo::LUZ_SALIDA_B));
     }
