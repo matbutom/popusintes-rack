@@ -157,21 +157,21 @@ namespace layout
 
     // canal a: columna izquierda, arranca mas arriba
     constexpr float PORCENTAJE_FRECUENCIA_A_X = PORCENTAJE_COLUMNA_IZQ;
-    constexpr float PORCENTAJE_FRECUENCIA_A_Y = 0.15f;
+    constexpr float PORCENTAJE_FRECUENCIA_A_Y = 0.25f;
     constexpr float PORCENTAJE_ENTRADA_VOCT_A_X = PORCENTAJE_COLUMNA_IZQ;
     constexpr float PORCENTAJE_ENTRADA_VOCT_A_Y = PORCENTAJE_FRECUENCIA_A_Y + espaciado::DELTA_Y_BOTON_ENTRADA;
     constexpr float PORCENTAJE_PWM_A_X = PORCENTAJE_COLUMNA_IZQ;
-    constexpr float PORCENTAJE_PWM_A_Y = 0.35f;
+    constexpr float PORCENTAJE_PWM_A_Y = 0.40f;
     constexpr float PORCENTAJE_ENTRADA_PWM_A_X = PORCENTAJE_COLUMNA_IZQ;
     constexpr float PORCENTAJE_ENTRADA_PWM_A_Y = PORCENTAJE_PWM_A_Y + espaciado::DELTA_Y_BOTON_ENTRADA;
 
     // canal b: columna derecha, arranca mas abajo, para el efecto escalera
     constexpr float PORCENTAJE_FRECUENCIA_B_X = PORCENTAJE_COLUMNA_DER;
-    constexpr float PORCENTAJE_FRECUENCIA_B_Y = 0.55f;
+    constexpr float PORCENTAJE_FRECUENCIA_B_Y = 0.50f;
     constexpr float PORCENTAJE_ENTRADA_VOCT_B_X = PORCENTAJE_COLUMNA_DER;
     constexpr float PORCENTAJE_ENTRADA_VOCT_B_Y = PORCENTAJE_FRECUENCIA_B_Y + espaciado::DELTA_Y_BOTON_ENTRADA;
     constexpr float PORCENTAJE_PWM_B_X = PORCENTAJE_COLUMNA_DER;
-    constexpr float PORCENTAJE_PWM_B_Y = 0.75f;
+    constexpr float PORCENTAJE_PWM_B_Y = 0.65f;
     constexpr float PORCENTAJE_ENTRADA_PWM_B_X = PORCENTAJE_COLUMNA_DER;
     constexpr float PORCENTAJE_ENTRADA_PWM_B_Y = PORCENTAJE_PWM_B_Y + espaciado::DELTA_Y_BOTON_ENTRADA;
 
@@ -194,7 +194,7 @@ struct RectaModuloWidget : ModuleWidget
         Posicionador posicionador(dimensiones::RECTA_ANCHO, dimensiones::RECTA_ALTURA);
 
         // canal a: perillas, entradas
-        addParam(createParamCentered<RoundBlackKnob>(
+        addParam(createParamCentered<RoundSmallBlackKnob>(
             posicionador.posicion(layout::PORCENTAJE_FRECUENCIA_A_X, layout::PORCENTAJE_FRECUENCIA_A_Y),
             modulo, RectaModulo::PARAM_FRECUENCIA_A));
 
@@ -202,7 +202,7 @@ struct RectaModuloWidget : ModuleWidget
             posicionador.posicion(layout::PORCENTAJE_ENTRADA_VOCT_A_X, layout::PORCENTAJE_ENTRADA_VOCT_A_Y),
             modulo, RectaModulo::ENTRADA_VOCT_A));
 
-        addParam(createParamCentered<RoundBlackKnob>(
+        addParam(createParamCentered<RoundSmallBlackKnob>(
             posicionador.posicion(layout::PORCENTAJE_PWM_A_X, layout::PORCENTAJE_PWM_A_Y),
             modulo, RectaModulo::PARAM_PWM_A));
 
@@ -211,7 +211,7 @@ struct RectaModuloWidget : ModuleWidget
             modulo, RectaModulo::ENTRADA_PWM_A));
 
         // canal b: perillas, entradas
-        addParam(createParamCentered<RoundBlackKnob>(
+        addParam(createParamCentered<RoundSmallBlackKnob>(
             posicionador.posicion(layout::PORCENTAJE_FRECUENCIA_B_X, layout::PORCENTAJE_FRECUENCIA_B_Y),
             modulo, RectaModulo::PARAM_FRECUENCIA_B));
 
@@ -219,7 +219,7 @@ struct RectaModuloWidget : ModuleWidget
             posicionador.posicion(layout::PORCENTAJE_ENTRADA_VOCT_B_X, layout::PORCENTAJE_ENTRADA_VOCT_B_Y),
             modulo, RectaModulo::ENTRADA_VOCT_B));
 
-        addParam(createParamCentered<RoundBlackKnob>(
+        addParam(createParamCentered<RoundSmallBlackKnob>(
             posicionador.posicion(layout::PORCENTAJE_PWM_B_X, layout::PORCENTAJE_PWM_B_Y),
             modulo, RectaModulo::PARAM_PWM_B));
 
