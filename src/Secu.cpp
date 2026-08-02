@@ -107,14 +107,19 @@ namespace layout
     constexpr float PORCENTAJE_COLUMNA_IZQ = columnas::DOS_1;
     constexpr float PORCENTAJE_COLUMNA_DER = columnas::DOS_2;
 
-    // entrada de reloj, arriba de todo
-    constexpr float PORCENTAJE_ENTRADA_TRIGGER_Y = 0.12f;
+    // canal a: columna izquierda, arranca mas arriba
+    constexpr float PORCENTAJE_ENTRADA_TRIGGER_A_Y = 0.30f;
+    constexpr float PORCENTAJE_PASO_A_0_Y = 0.40f;
+    constexpr float PORCENTAJE_PASO_A_1_Y = PORCENTAJE_PASO_A_0_Y + espaciado::DELTA_Y_PERILLA_ATENUVERSOR;
+    constexpr float PORCENTAJE_PASO_A_2_Y = PORCENTAJE_PASO_A_1_Y + espaciado::DELTA_Y_PERILLA_ATENUVERSOR;
+    constexpr float PORCENTAJE_PASO_A_3_Y = PORCENTAJE_PASO_A_2_Y + espaciado::DELTA_Y_PERILLA_ATENUVERSOR;
 
-    // los 4 pasos, apilados en la misma columna, perillas chicas
-    constexpr float PORCENTAJE_PASO_0_Y = 0.24f;
-    constexpr float PORCENTAJE_PASO_1_Y = PORCENTAJE_PASO_0_Y + espaciado::DELTA_Y_PERILLA_ATENUVERSOR;
-    constexpr float PORCENTAJE_PASO_2_Y = PORCENTAJE_PASO_1_Y + espaciado::DELTA_Y_PERILLA_ATENUVERSOR;
-    constexpr float PORCENTAJE_PASO_3_Y = PORCENTAJE_PASO_2_Y + espaciado::DELTA_Y_PERILLA_ATENUVERSOR;
+    // canal b: columna derecha, arranca mas abajo, para el efecto escalera
+    constexpr float PORCENTAJE_ENTRADA_TRIGGER_B_Y = 0.50f;
+    constexpr float PORCENTAJE_PASO_B_0_Y = 0.60f;
+    constexpr float PORCENTAJE_PASO_B_1_Y = PORCENTAJE_PASO_B_0_Y + espaciado::DELTA_Y_PERILLA_ATENUVERSOR;
+    constexpr float PORCENTAJE_PASO_B_2_Y = PORCENTAJE_PASO_B_1_Y + espaciado::DELTA_Y_PERILLA_ATENUVERSOR;
+    constexpr float PORCENTAJE_PASO_B_3_Y = PORCENTAJE_PASO_B_2_Y + espaciado::DELTA_Y_PERILLA_ATENUVERSOR;
 
     // salida y luz, misma altura para los dos canales
     constexpr float PORCENTAJE_SALIDA_Y = 0.90f;
@@ -137,44 +142,44 @@ struct SecuModuloWidget : ModuleWidget
 
         // canal a: entrada de reloj y sus 4 pasos
         addInput(createInputCentered<PJ301MPort>(
-            posicionador.posicion(layout::PORCENTAJE_COLUMNA_IZQ, layout::PORCENTAJE_ENTRADA_TRIGGER_Y),
+            posicionador.posicion(layout::PORCENTAJE_COLUMNA_IZQ, layout::PORCENTAJE_ENTRADA_TRIGGER_A_Y),
             modulo, SecuModulo::ENTRADA_TRIGGER_A));
 
         addParam(createParamCentered<RoundSmallBlackKnob>(
-            posicionador.posicion(layout::PORCENTAJE_COLUMNA_IZQ, layout::PORCENTAJE_PASO_0_Y),
+            posicionador.posicion(layout::PORCENTAJE_COLUMNA_IZQ, layout::PORCENTAJE_PASO_A_0_Y),
             modulo, SecuModulo::PARAM_PASO_A_0));
 
         addParam(createParamCentered<RoundSmallBlackKnob>(
-            posicionador.posicion(layout::PORCENTAJE_COLUMNA_IZQ, layout::PORCENTAJE_PASO_1_Y),
+            posicionador.posicion(layout::PORCENTAJE_COLUMNA_IZQ, layout::PORCENTAJE_PASO_A_1_Y),
             modulo, SecuModulo::PARAM_PASO_A_1));
 
         addParam(createParamCentered<RoundSmallBlackKnob>(
-            posicionador.posicion(layout::PORCENTAJE_COLUMNA_IZQ, layout::PORCENTAJE_PASO_2_Y),
+            posicionador.posicion(layout::PORCENTAJE_COLUMNA_IZQ, layout::PORCENTAJE_PASO_A_2_Y),
             modulo, SecuModulo::PARAM_PASO_A_2));
 
         addParam(createParamCentered<RoundSmallBlackKnob>(
-            posicionador.posicion(layout::PORCENTAJE_COLUMNA_IZQ, layout::PORCENTAJE_PASO_3_Y),
+            posicionador.posicion(layout::PORCENTAJE_COLUMNA_IZQ, layout::PORCENTAJE_PASO_A_3_Y),
             modulo, SecuModulo::PARAM_PASO_A_3));
 
         // canal b: entrada de reloj y sus 4 pasos
         addInput(createInputCentered<PJ301MPort>(
-            posicionador.posicion(layout::PORCENTAJE_COLUMNA_DER, layout::PORCENTAJE_ENTRADA_TRIGGER_Y),
+            posicionador.posicion(layout::PORCENTAJE_COLUMNA_DER, layout::PORCENTAJE_ENTRADA_TRIGGER_B_Y),
             modulo, SecuModulo::ENTRADA_TRIGGER_B));
 
         addParam(createParamCentered<RoundSmallBlackKnob>(
-            posicionador.posicion(layout::PORCENTAJE_COLUMNA_DER, layout::PORCENTAJE_PASO_0_Y),
+            posicionador.posicion(layout::PORCENTAJE_COLUMNA_DER, layout::PORCENTAJE_PASO_B_0_Y),
             modulo, SecuModulo::PARAM_PASO_B_0));
 
         addParam(createParamCentered<RoundSmallBlackKnob>(
-            posicionador.posicion(layout::PORCENTAJE_COLUMNA_DER, layout::PORCENTAJE_PASO_1_Y),
+            posicionador.posicion(layout::PORCENTAJE_COLUMNA_DER, layout::PORCENTAJE_PASO_B_1_Y),
             modulo, SecuModulo::PARAM_PASO_B_1));
 
         addParam(createParamCentered<RoundSmallBlackKnob>(
-            posicionador.posicion(layout::PORCENTAJE_COLUMNA_DER, layout::PORCENTAJE_PASO_2_Y),
+            posicionador.posicion(layout::PORCENTAJE_COLUMNA_DER, layout::PORCENTAJE_PASO_B_2_Y),
             modulo, SecuModulo::PARAM_PASO_B_2));
 
         addParam(createParamCentered<RoundSmallBlackKnob>(
-            posicionador.posicion(layout::PORCENTAJE_COLUMNA_DER, layout::PORCENTAJE_PASO_3_Y),
+            posicionador.posicion(layout::PORCENTAJE_COLUMNA_DER, layout::PORCENTAJE_PASO_B_3_Y),
             modulo, SecuModulo::PARAM_PASO_B_3));
 
         // salidas y luces, una columna por canal
