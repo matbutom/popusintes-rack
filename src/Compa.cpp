@@ -83,13 +83,13 @@ namespace layout
 
     // coordenadas entradas canal a
     constexpr float PORCENTAJE_ENTRADA_A_1_X = PORCENTAJE_COLUMNA_IZQ;
-    constexpr float PORCENTAJE_ENTRADA_A_1_Y = 0.20f;
+    constexpr float PORCENTAJE_ENTRADA_A_1_Y = 0.40f;
     constexpr float PORCENTAJE_ENTRADA_A_2_X = PORCENTAJE_COLUMNA_IZQ;
     constexpr float PORCENTAJE_ENTRADA_A_2_Y = PORCENTAJE_ENTRADA_A_1_Y + espaciado::DELTA_Y_ENTRADA_ENTRADA;
 
     // coordenadas entradas canal b
     constexpr float PORCENTAJE_ENTRADA_B_1_X = PORCENTAJE_COLUMNA_DER;
-    constexpr float PORCENTAJE_ENTRADA_B_1_Y = 0.20f;
+    constexpr float PORCENTAJE_ENTRADA_B_1_Y = 0.60f;
     constexpr float PORCENTAJE_ENTRADA_B_2_X = PORCENTAJE_COLUMNA_DER;
     constexpr float PORCENTAJE_ENTRADA_B_2_Y = PORCENTAJE_ENTRADA_B_1_Y + espaciado::DELTA_Y_ENTRADA_ENTRADA;
 
