@@ -49,4 +49,4 @@ struct PaneModuloWidget : ModuleWidget
     }
 };
 
-Model *modeloPane = createModel<PaneModulo, PaneModuloWidget>("pane");
+Model *modeloPane = createModel<PaneModulo, PaneModuloWidget>("panel");
