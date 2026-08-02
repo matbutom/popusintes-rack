@@ -6,6 +6,7 @@
 using namespace rack;
 
 #include "comun/CanalRelo.hpp"
+#include "comun/Columnas.hpp"
 #include "comun/Dimensiones.hpp"
 #include "comun/Espaciado.hpp"
 #include "comun/Posicionador.hpp"

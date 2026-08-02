@@ -1,39 +1,5 @@
 #include "Popusintes.hpp"
 
-// define porcentajes columnas
-#define PORCENTAJE_COLUMNA_IZQ 0.30f
-#define PORCENTAJE_COLUMNA_DER 0.70f
-
-// define coordenadas ppm
-#define PORCENTAJE_PPM_X (PORCENTAJE_COLUMNA_IZQ)
-#define PORCENTAJE_PPM_Y 0.15f
-
-// define coordenadas resinc
-#define PORCENTAJE_BOTON_RESINC_X (PORCENTAJE_COLUMNA_IZQ)
-#define PORCENTAJE_BOTON_RESINC_Y 0.35f
-#define PORCENTAJE_ENTRADA_RESINC_X (PORCENTAJE_COLUMNA_IZQ)
-#define PORCENTAJE_ENTRADA_RESINC_Y (PORCENTAJE_BOTON_RESINC_Y + espaciado::DELTA_Y_BOTON_ENTRADA)
-
-// definir coordenadas desfase
-#define PORCENTAJE_DESFASE_B_X (PORCENTAJE_COLUMNA_DER)
-#define PORCENTAJE_DESFASE_B_Y 0.60f
-#define PORCENTAJE_DESFASE_CV_ATEN_X (PORCENTAJE_COLUMNA_DER)
-#define PORCENTAJE_DESFASE_CV_ATEN_Y (PORCENTAJE_DESFASE_B_Y + espaciado::DELTA_Y_PERILLA_ATENUVERSOR)
-#define PORCENTAJE_ENTRADA_DESFASE_B_X (PORCENTAJE_COLUMNA_DER)
-#define PORCENTAJE_ENTRADA_DESFASE_B_Y (PORCENTAJE_DESFASE_B_Y + 2.f * espaciado::DELTA_Y_PERILLA_ATENUVERSOR)
-
-// definir coordenadas salida y luz a
-#define PORCENTAJE_LUCES_A_X (PORCENTAJE_COLUMNA_IZQ)
-#define PORCENTAJE_LUCES_A_Y 0.85f
-#define PORCENTAJE_SALIDA_A_X (PORCENTAJE_COLUMNA_IZQ)
-#define PORCENTAJE_SALIDA_A_Y (PORCENTAJE_LUCES_A_Y + espaciado::DELTA_Y_SALIDA_LUZ)
-
-// definir coordenadas salida y luz b
-#define PORCENTAJE_LUCES_B_X (PORCENTAJE_COLUMNA_DER)
-#define PORCENTAJE_LUCES_B_Y 0.85f
-#define PORCENTAJE_SALIDA_B_X (PORCENTAJE_COLUMNA_DER)
-#define PORCENTAJE_SALIDA_B_Y (PORCENTAJE_LUCES_B_Y + espaciado::DELTA_Y_SALIDA_LUZ)
-
 // modulo
 struct ReloModulo : Module
 {
@@ -136,6 +102,42 @@ struct ReloModulo : Module
     }
 };
 
+namespace layout
+{
+    constexpr float PORCENTAJE_COLUMNA_IZQ = columnas::DOS_1;
+    constexpr float PORCENTAJE_COLUMNA_DER = columnas::DOS_2;
+
+    // coordenadas ppm
+    constexpr float PORCENTAJE_PPM_X = PORCENTAJE_COLUMNA_IZQ;
+    constexpr float PORCENTAJE_PPM_Y = 0.15f;
+
+    // coordenadas resinc
+    constexpr float PORCENTAJE_BOTON_RESINC_X = PORCENTAJE_COLUMNA_IZQ;
+    constexpr float PORCENTAJE_BOTON_RESINC_Y = 0.35f;
+    constexpr float PORCENTAJE_ENTRADA_RESINC_X = PORCENTAJE_COLUMNA_IZQ;
+    constexpr float PORCENTAJE_ENTRADA_RESINC_Y = PORCENTAJE_BOTON_RESINC_Y + espaciado::DELTA_Y_BOTON_ENTRADA;
+
+    // coordenadas desfase
+    constexpr float PORCENTAJE_DESFASE_B_X = PORCENTAJE_COLUMNA_DER;
+    constexpr float PORCENTAJE_DESFASE_B_Y = 0.60f;
+    constexpr float PORCENTAJE_DESFASE_CV_ATEN_X = PORCENTAJE_COLUMNA_DER;
+    constexpr float PORCENTAJE_DESFASE_CV_ATEN_Y = PORCENTAJE_DESFASE_B_Y + espaciado::DELTA_Y_PERILLA_ATENUVERSOR;
+    constexpr float PORCENTAJE_ENTRADA_DESFASE_B_X = PORCENTAJE_COLUMNA_DER;
+    constexpr float PORCENTAJE_ENTRADA_DESFASE_B_Y = PORCENTAJE_DESFASE_B_Y + 2.f * espaciado::DELTA_Y_PERILLA_ATENUVERSOR;
+
+    // coordenadas salida y luz a
+    constexpr float PORCENTAJE_LUCES_A_X = PORCENTAJE_COLUMNA_IZQ;
+    constexpr float PORCENTAJE_LUCES_A_Y = 0.85f;
+    constexpr float PORCENTAJE_SALIDA_A_X = PORCENTAJE_COLUMNA_IZQ;
+    constexpr float PORCENTAJE_SALIDA_A_Y = PORCENTAJE_LUCES_A_Y + espaciado::DELTA_Y_SALIDA_LUZ;
+
+    // coordenadas salida y luz b
+    constexpr float PORCENTAJE_LUCES_B_X = PORCENTAJE_COLUMNA_DER;
+    constexpr float PORCENTAJE_LUCES_B_Y = 0.85f;
+    constexpr float PORCENTAJE_SALIDA_B_X = PORCENTAJE_COLUMNA_DER;
+    constexpr float PORCENTAJE_SALIDA_B_Y = PORCENTAJE_LUCES_B_Y + espaciado::DELTA_Y_SALIDA_LUZ;
+}
+
 // widget
 struct ReloModuloWidget : ModuleWidget
 {
@@ -152,48 +154,48 @@ struct ReloModuloWidget : ModuleWidget
 
         // params
         addParam(createParamCentered<RoundBlackKnob>(
-            posicionador.posicion(PORCENTAJE_PPM_X, PORCENTAJE_PPM_Y),
+            posicionador.posicion(layout::PORCENTAJE_PPM_X, layout::PORCENTAJE_PPM_Y),
             modulo, ReloModulo::PARAM_PPM));
 
         addParam(createParamCentered<RoundSmallBlackKnob>(
-            posicionador.posicion(PORCENTAJE_DESFASE_B_X, PORCENTAJE_DESFASE_B_Y),
+            posicionador.posicion(layout::PORCENTAJE_DESFASE_B_X, layout::PORCENTAJE_DESFASE_B_Y),
             modulo, ReloModulo::PARAM_DESFASE_B));
 
         // atenuverter chico para la entrada CV de desfase
         addParam(createParamCentered<Trimpot>(
-            posicionador.posicion(PORCENTAJE_DESFASE_CV_ATEN_X, PORCENTAJE_DESFASE_CV_ATEN_Y),
+            posicionador.posicion(layout::PORCENTAJE_DESFASE_CV_ATEN_X, layout::PORCENTAJE_DESFASE_CV_ATEN_Y),
             modulo, ReloModulo::PARAM_DESFASE_CV_ATEN));
 
         // boton resinc
         addParam(createParamCentered<TL1105>(
-            posicionador.posicion(PORCENTAJE_BOTON_RESINC_X, PORCENTAJE_BOTON_RESINC_Y),
+            posicionador.posicion(layout::PORCENTAJE_BOTON_RESINC_X, layout::PORCENTAJE_BOTON_RESINC_Y),
             modulo, ReloModulo::PARAM_BOTON_RESINC));
 
         // entradas
         addInput(createInputCentered<PJ301MPort>(
-            posicionador.posicion(PORCENTAJE_ENTRADA_RESINC_X, PORCENTAJE_ENTRADA_RESINC_Y),
+            posicionador.posicion(layout::PORCENTAJE_ENTRADA_RESINC_X, layout::PORCENTAJE_ENTRADA_RESINC_Y),
             modulo, ReloModulo::ENTRADA_RESINC));
 
         addInput(createInputCentered<PJ301MPort>(
-            posicionador.posicion(PORCENTAJE_ENTRADA_DESFASE_B_X, PORCENTAJE_ENTRADA_DESFASE_B_Y),
+            posicionador.posicion(layout::PORCENTAJE_ENTRADA_DESFASE_B_X, layout::PORCENTAJE_ENTRADA_DESFASE_B_Y),
             modulo, ReloModulo::ENTRADA_DESFASE_B));
 
         //  salidas
         addOutput(createOutputCentered<PJ301MPort>(
-            posicionador.posicion(PORCENTAJE_SALIDA_A_X, PORCENTAJE_SALIDA_A_Y),
+            posicionador.posicion(layout::PORCENTAJE_SALIDA_A_X, layout::PORCENTAJE_SALIDA_A_Y),
             modulo, ReloModulo::SALIDA_PULSO_A));
 
         addOutput(createOutputCentered<PJ301MPort>(
-            posicionador.posicion(PORCENTAJE_SALIDA_B_X, PORCENTAJE_SALIDA_B_Y),
+            posicionador.posicion(layout::PORCENTAJE_SALIDA_B_X, layout::PORCENTAJE_SALIDA_B_Y),
             modulo, ReloModulo::SALIDA_PULSO_B));
 
         // luces
         addChild(createLightCentered<MediumLight<GreenLight>>(
-            posicionador.posicion(PORCENTAJE_LUCES_A_X, PORCENTAJE_LUCES_A_Y),
+            posicionador.posicion(layout::PORCENTAJE_LUCES_A_X, layout::PORCENTAJE_LUCES_A_Y),
             modulo, ReloModulo::LUZ_PULSO_A));
 
         addChild(createLightCentered<MediumLight<GreenLight>>(
-            posicionador.posicion(PORCENTAJE_LUCES_B_X, PORCENTAJE_LUCES_B_Y),
+            posicionador.posicion(layout::PORCENTAJE_LUCES_B_X, layout::PORCENTAJE_LUCES_B_Y),
             modulo, ReloModulo::LUZ_PULSO_B));
     }
 };
