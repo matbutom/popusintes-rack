@@ -15,5 +15,5 @@ namespace espaciado
     constexpr float DELTA_Y_SALIDA_LUZ = 0.05f;
 
     // entre dos entradas relacionadas de un mismo canal
-    constexpr float DELTA_Y_ENTRADA_ENTRADA = 0.15f;
+    constexpr float DELTA_Y_ENTRADA_ENTRADA = 0.08f;
 }
