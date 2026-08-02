@@ -7,6 +7,7 @@ using namespace rack;
 
 #include "comun/CanalEnvo.hpp"
 #include "comun/CanalRelo.hpp"
+#include "comun/CanalSecu.hpp"
 #include "comun/Columnas.hpp"
 #include "comun/Dimensiones.hpp"
 #include "comun/Espaciado.hpp"

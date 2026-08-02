@@ -235,7 +235,7 @@ struct RereloModuloWidget : ModuleWidget
         // tornillos
         agregarTornillos(this);
 
-        Posicionador posicionador(dimensiones::MODULO_ANCHO_10_HP, dimensiones::MODULO_ALTURA_3_U);
+        Posicionador posicionador(dimensiones::RERELO_ANCHO, dimensiones::RERELO_ALTURA);
 
         // params
 

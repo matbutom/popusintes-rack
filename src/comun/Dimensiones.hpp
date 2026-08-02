@@ -34,7 +34,7 @@ namespace dimensiones
     constexpr float RERELO_ANCHO = MODULO_ANCHO_08_HP;
     constexpr float RERELO_ALTURA = MODULO_ALTURA_3_U;
 
-    constexpr float SECU_ANCHO = MODULO_ANCHO_04_HP;
+    constexpr float SECU_ANCHO = MODULO_ANCHO_08_HP;
     constexpr float SECU_ALTURA = MODULO_ALTURA_3_U;
 
     constexpr float SUMA_ANCHO = MODULO_ANCHO_04_HP;
