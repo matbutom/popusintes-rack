@@ -2,13 +2,13 @@
 <!-- Created with Inkscape (http://www.inkscape.org/) -->
 
 <svg
-   width="25.4mm"
+   width="20.32mm"
    height="128.5mm"
-   viewBox="0 0 25.399999 128.5"
+   viewBox="0 0 20.319999 128.5"
    version="1.1"
    id="svg1"
    inkscape:version="1.4.4 (dcaf3e7, 2026-05-05)"
-   sodipodi:docname="PanelModule.svg"
+   sodipodi:docname="PaneModulo.svg"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns="http://www.w3.org/2000/svg"
@@ -23,9 +23,9 @@
      inkscape:pagecheckerboard="false"
      inkscape:deskcolor="#d1d1d1"
      inkscape:document-units="mm"
-     inkscape:zoom="2.0555095"
-     inkscape:cx="18.243652"
-     inkscape:cy="213.57235"
+     inkscape:zoom="11.28122"
+     inkscape:cx="69.230103"
+     inkscape:cy="281.70713"
      inkscape:window-width="1416"
      inkscape:window-height="1303"
      inkscape:window-x="79"
@@ -56,9 +56,9 @@
      id="layer1"
      style="display:inline">
     <rect
-       style="fill:#ff00ff;stroke-width:0.264583"
+       style="fill:#ff00ff;stroke-width:0.23665"
        id="rect19"
-       width="25.4"
+       width="20.319939"
        height="128.5"
        x="6.0125254e-05"
        y="0.00093796232" />
@@ -109,18 +109,4 @@
        d="M 6.6303175,120.29607 H 7.153134 c 0.6695721,0 1.0089442,-0.33937 1.0731498,-1.07315 0.036689,-0.44027 0.036689,-0.85302 0,-1.28411 -0.055033,-0.68792 -0.4219221,-1.02729 -1.1556998,-1.06398 l -0.1834444,-0.009 c -0.541161,-0.0275 -0.7979831,-0.25683 -0.7979831,-0.71544 0,-0.5595 0.2568221,-0.8255 0.7979831,-0.8255 0.4861277,0 0.7429499,0.25683 0.8071554,0.81633 h 0.5503332 c 0.00917,-0.3944 0,-0.81633 -0.018344,-1.30245 -0.036689,-0.73378 -0.376061,-1.07315 -1.0731498,-1.07315 H 6.6303175 c -0.6695721,0 -1.0181165,0.33937 -1.082322,1.07315 -0.045861,0.46778 -0.045861,0.90805 0,1.39417 0.064205,0.75213 0.4310943,1.12819 1.1465275,1.16488 l 0.1926166,0.009 c 0.5595055,0.0275 0.8163276,0.21096 0.8163276,0.57785 0,0.51364 -0.2568221,0.75212 -0.8163276,0.75212 -0.4861276,0 -0.7429498,-0.25682 -0.8163276,-0.80716 H 5.5204788 c 0,0.58703 0.00917,0.99978 0.027517,1.29329 0.045861,0.73378 0.3944055,1.07315 1.0823217,1.07315 z"
        id="path19" />
   </g>
-  <rect
-     style="fill:#ffff00;fill-rule:evenodd;stroke-width:0.289836"
-     id="rect1"
-     width="25.4"
-     height="5.2916665"
-     x="-1.7937978e-07"
-     y="-4.4408921e-16" />
-  <rect
-     style="fill:#ffff00;fill-rule:evenodd;stroke-width:0.294671"
-     id="rect1-8"
-     width="25.4"
-     height="5.4696784"
-     x="6.0580205e-05"
-     y="123.03126" />
 </svg>
