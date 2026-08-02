@@ -117,7 +117,7 @@ namespace layout
     constexpr float PORCENTAJE_ENTRADA_FORZAR_B_Y = PORCENTAJE_ENTRADA_PULSO_B_Y + espaciado::DELTA_Y_ENTRADA_ENTRADA;
 
     // salidas y luces, misma altura para los dos canales
-    constexpr float PORCENTAJE_SALIDA_Y = 0.85f;
+    constexpr float PORCENTAJE_SALIDA_Y = 0.90f;
     constexpr float PORCENTAJE_LUCES_Y = PORCENTAJE_SALIDA_Y - espaciado::DELTA_Y_SALIDA_LUZ;
 
     constexpr float PORCENTAJE_LUCES_A_X = PORCENTAJE_COLUMNA_IZQ;
