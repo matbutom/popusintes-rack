@@ -9,29 +9,6 @@
 // entrada cv para modular pwm
 // salida de audio y luz
 
-#define PORCENTAJE_COLUMNA_A 0.25f
-#define PORCENTAJE_COLUMNA_B 0.75f
-
-#define DELTA_Y_PERILLA_ENTRADA 0.10f
-
-#define DELTA_Y_SALIDA_LUZ 0.05f
-
-#define PORCENTAJE_FRECUENCIA_Y 0.12f
-#define PORCENTAJE_ENTRADA_VOCT_Y (PORCENTAJE_FRECUENCIA_Y + DELTA_Y_PERILLA_ENTRADA)
-
-#define PORCENTAJE_PWM_Y 0.40f
-#define PORCENTAJE_ENTRADA_PWM_Y (PORCENTAJE_PWM_Y + DELTA_Y_PERILLA_ENTRADA)
-
-#define PORCENTAJE_LUZ_Y 0.80f
-#define PORCENTAJE_SALIDA_Y (PORCENTAJE_LUZ_Y + DELTA_Y_SALIDA_LUZ)
-
-// rango de las perillas de frecuencia
-#define FRECUENCIA_OCTAVAS_MIN -4.0f
-#define FRECUENCIA_OCTAVAS_MAX 4.0f
-
-#define PWM_MIN 0.01f
-#define PWM_MAX 0.99f
-
 // modulo
 struct RectaModulo : Module
 {
@@ -66,6 +43,13 @@ struct RectaModulo : Module
         LUZ_SALIDA_B,
         NUM_LIGHTS,
     };
+
+    // rango de las perillas de frecuencia
+    static constexpr float FRECUENCIA_OCTAVAS_MIN = -4.0f;
+    static constexpr float FRECUENCIA_OCTAVAS_MAX = 4.0f;
+
+    static constexpr float PWM_MIN = 0.01f;
+    static constexpr float PWM_MAX = 0.99f;
 
     // fase acumulada
     float faseA = 0.0f;
@@ -166,6 +150,24 @@ struct RectaModulo : Module
     }
 };
 
+namespace layout
+{
+    constexpr float PORCENTAJE_COLUMNA_A = columnas::DOS_1;
+    constexpr float PORCENTAJE_COLUMNA_B = columnas::DOS_2;
+
+    constexpr float DELTA_Y_PERILLA_ENTRADA = 0.10f;
+    constexpr float DELTA_Y_SALIDA_LUZ = 0.05f;
+
+    constexpr float PORCENTAJE_FRECUENCIA_Y = 0.12f;
+    constexpr float PORCENTAJE_ENTRADA_VOCT_Y = PORCENTAJE_FRECUENCIA_Y + DELTA_Y_PERILLA_ENTRADA;
+
+    constexpr float PORCENTAJE_PWM_Y = 0.40f;
+    constexpr float PORCENTAJE_ENTRADA_PWM_Y = PORCENTAJE_PWM_Y + DELTA_Y_PERILLA_ENTRADA;
+
+    constexpr float PORCENTAJE_LUZ_Y = 0.80f;
+    constexpr float PORCENTAJE_SALIDA_Y = PORCENTAJE_LUZ_Y + DELTA_Y_SALIDA_LUZ;
+}
+
 // widget
 struct RectaModuloWidget : ModuleWidget
 {
@@ -181,56 +183,56 @@ struct RectaModuloWidget : ModuleWidget
 
         // canal a frecuencia
         addParam(createParamCentered<RoundBlackKnob>(
-            posicionador.posicion(PORCENTAJE_COLUMNA_A, PORCENTAJE_FRECUENCIA_Y),
+            posicionador.posicion(layout::PORCENTAJE_COLUMNA_A, layout::PORCENTAJE_FRECUENCIA_Y),
             modulo, RectaModulo::PARAM_FRECUENCIA_A));
 
         addInput(createInputCentered<PJ301MPort>(
-            posicionador.posicion(PORCENTAJE_COLUMNA_A, PORCENTAJE_ENTRADA_VOCT_Y),
+            posicionador.posicion(layout::PORCENTAJE_COLUMNA_A, layout::PORCENTAJE_ENTRADA_VOCT_Y),
             modulo, RectaModulo::ENTRADA_VOCT_A));
 
         // canal a pwm
         addParam(createParamCentered<RoundBlackKnob>(
-            posicionador.posicion(PORCENTAJE_COLUMNA_A, PORCENTAJE_PWM_Y),
+            posicionador.posicion(layout::PORCENTAJE_COLUMNA_A, layout::PORCENTAJE_PWM_Y),
             modulo, RectaModulo::PARAM_PWM_A));
 
         addInput(createInputCentered<PJ301MPort>(
-            posicionador.posicion(PORCENTAJE_COLUMNA_A, PORCENTAJE_ENTRADA_PWM_Y),
+            posicionador.posicion(layout::PORCENTAJE_COLUMNA_A, layout::PORCENTAJE_ENTRADA_PWM_Y),
             modulo, RectaModulo::ENTRADA_PWM_A));
 
         // canal b frecuencia
         addParam(createParamCentered<RoundBlackKnob>(
-            posicionador.posicion(PORCENTAJE_COLUMNA_B, PORCENTAJE_FRECUENCIA_Y),
+            posicionador.posicion(layout::PORCENTAJE_COLUMNA_B, layout::PORCENTAJE_FRECUENCIA_Y),
             modulo, RectaModulo::PARAM_FRECUENCIA_B));
 
         addInput(createInputCentered<PJ301MPort>(
-            posicionador.posicion(PORCENTAJE_COLUMNA_B, PORCENTAJE_ENTRADA_VOCT_Y),
+            posicionador.posicion(layout::PORCENTAJE_COLUMNA_B, layout::PORCENTAJE_ENTRADA_VOCT_Y),
             modulo, RectaModulo::ENTRADA_VOCT_B));
 
         // canal b pwm
         addParam(createParamCentered<RoundBlackKnob>(
-            posicionador.posicion(PORCENTAJE_COLUMNA_B, PORCENTAJE_PWM_Y),
+            posicionador.posicion(layout::PORCENTAJE_COLUMNA_B, layout::PORCENTAJE_PWM_Y),
             modulo, RectaModulo::PARAM_PWM_B));
 
         addInput(createInputCentered<PJ301MPort>(
-            posicionador.posicion(PORCENTAJE_COLUMNA_B, PORCENTAJE_ENTRADA_PWM_Y),
+            posicionador.posicion(layout::PORCENTAJE_COLUMNA_B, layout::PORCENTAJE_ENTRADA_PWM_Y),
             modulo, RectaModulo::ENTRADA_PWM_B));
 
         // salidas
         addOutput(createOutputCentered<PJ301MPort>(
-            posicionador.posicion(PORCENTAJE_COLUMNA_A, PORCENTAJE_SALIDA_Y),
+            posicionador.posicion(layout::PORCENTAJE_COLUMNA_A, layout::PORCENTAJE_SALIDA_Y),
             modulo, RectaModulo::SALIDA_RECTA_A));
 
         addOutput(createOutputCentered<PJ301MPort>(
-            posicionador.posicion(PORCENTAJE_COLUMNA_B, PORCENTAJE_SALIDA_Y),
+            posicionador.posicion(layout::PORCENTAJE_COLUMNA_B, layout::PORCENTAJE_SALIDA_Y),
             modulo, RectaModulo::SALIDA_RECTA_B));
 
         // luces
         addChild(createLightCentered<LargeLight<GreenLight>>(
-            posicionador.posicion(PORCENTAJE_COLUMNA_A, PORCENTAJE_LUZ_Y),
+            posicionador.posicion(layout::PORCENTAJE_COLUMNA_A, layout::PORCENTAJE_LUZ_Y),
             modulo, RectaModulo::LUZ_SALIDA_A));
 
         addChild(createLightCentered<LargeLight<GreenLight>>(
-            posicionador.posicion(PORCENTAJE_COLUMNA_B, PORCENTAJE_LUZ_Y),
+            posicionador.posicion(layout::PORCENTAJE_COLUMNA_B, layout::PORCENTAJE_LUZ_Y),
             modulo, RectaModulo::LUZ_SALIDA_B));
     }
 };
