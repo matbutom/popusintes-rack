@@ -5,6 +5,7 @@
 // para poder usarlo en las includes
 using namespace rack;
 
+#include "comun/CanalEnvo.hpp"
 #include "comun/CanalRelo.hpp"
 #include "comun/Columnas.hpp"
 #include "comun/Dimensiones.hpp"

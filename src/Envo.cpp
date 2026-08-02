@@ -5,8 +5,10 @@ struct EnvoModulo : Module
 {
     enum ParamIds
     {
-        PARAM_SUBIDA,
-        PARAM_BAJADA,
+        PARAM_SUBIDA_A,
+        PARAM_BAJADA_A,
+        PARAM_SUBIDA_B,
+        PARAM_BAJADA_B,
         NUM_PARAMS,
     };
 
@@ -14,33 +16,28 @@ struct EnvoModulo : Module
     {
         ENTRADA_PULSO_A,
         ENTRADA_PULSO_A_FORZAR,
+        ENTRADA_PULSO_B,
+        ENTRADA_PULSO_B_FORZAR,
         NUM_INPUTS,
     };
 
     enum OutputIds
     {
         SALIDA_ENVO_A,
+        SALIDA_ENVO_B,
         NUM_OUTPUTS,
     };
 
     enum LightsIds
     {
         LUZ_ENVO_A,
+        LUZ_ENVO_B,
         NUM_LIGHTS,
     };
 
-    enum EstadoEnvo
-    {
-        ESTADO_REPOSO,
-        ESTADO_SUBIDA,
-        ESTADO_BAJADA,
-        ESTADO_FORZAR
-    };
-
-    EstadoEnvo estado = ESTADO_REPOSO;
-    float salida = 0.0f;
-    dsp::SchmittTrigger detectorPulso;
-    dsp::SchmittTrigger detectorForzar;
+    // un CanalEnvo por canal: agrupa la maquina de estados de la envolvente
+    CanalEnvo canalA;
+    CanalEnvo canalB;
 
     EnvoModulo()
     {
@@ -48,96 +45,87 @@ struct EnvoModulo : Module
         config(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS);
 
         configParam(
-            PARAM_SUBIDA, tiempos::TIEMPO_MIN, tiempos::TIEMPO_MAX,
-            0.1f, "subida", " s");
+            PARAM_SUBIDA_A, tiempos::TIEMPO_MIN, tiempos::TIEMPO_MAX,
+            0.1f, "subida a", " s");
         configParam(
-            PARAM_BAJADA, tiempos::TIEMPO_MIN, tiempos::TIEMPO_MAX,
-            0.1f, "bajada"
-                  " s");
+            PARAM_BAJADA_A, tiempos::TIEMPO_MIN, tiempos::TIEMPO_MAX,
+            0.1f, "bajada a", " s");
 
-        configInput(ENTRADA_PULSO_A, "pulso");
-        configInput(ENTRADA_PULSO_A_FORZAR, "forzar");
-        configOutput(SALIDA_ENVO_A, "envolvente");
+        configParam(
+            PARAM_SUBIDA_B, tiempos::TIEMPO_MIN, tiempos::TIEMPO_MAX,
+            0.1f, "subida b", " s");
+        configParam(
+            PARAM_BAJADA_B, tiempos::TIEMPO_MIN, tiempos::TIEMPO_MAX,
+            0.1f, "bajada b", " s");
+
+        configInput(ENTRADA_PULSO_A, "pulso a");
+        configInput(ENTRADA_PULSO_A_FORZAR, "forzar a");
+        configInput(ENTRADA_PULSO_B, "pulso b");
+        configInput(ENTRADA_PULSO_B_FORZAR, "forzar b");
+
+        configOutput(SALIDA_ENVO_A, "envolvente a");
+        configOutput(SALIDA_ENVO_B, "envolvente b");
     }
 
     void process(const ProcessArgs &args) override
     {
-        // detectar subida de pulso (umbral de 1V)
-        bool detectado = detectorPulso.process(inputs[ENTRADA_PULSO_A].getVoltage(), 0.1f, 1.0f);
+        float tiempoSubidaA = params[PARAM_SUBIDA_A].getValue();
+        float tiempoBajadaA = params[PARAM_BAJADA_A].getValue();
 
-        // pulso normal solamente ocurre si esatado actual es reposo
-        if (detectado && estado == ESTADO_REPOSO)
-        {
-            estado = ESTADO_SUBIDA;
-        }
+        float salidaA = canalA.procesar(
+            args.sampleTime, tiempoSubidaA, tiempoBajadaA,
+            inputs[ENTRADA_PULSO_A].getVoltage(), inputs[ENTRADA_PULSO_A_FORZAR].getVoltage());
 
-        // detectar forzardo
-        bool forzadoDetectado = detectorForzar.process(
-            inputs[ENTRADA_PULSO_A_FORZAR].getVoltage(), 0.1f, 1.0f);
+        outputs[SALIDA_ENVO_A].setVoltage(salidaA);
+        lights[LUZ_ENVO_A].setBrightness(salidaA * 0.1f);
 
-        if (forzadoDetectado)
-        {
-            estado = ESTADO_FORZAR;
-        }
+        float tiempoSubidaB = params[PARAM_SUBIDA_B].getValue();
+        float tiempoBajadaB = params[PARAM_BAJADA_B].getValue();
 
-        float tiempoSubida = params[PARAM_SUBIDA].getValue();
-        float tiempoBajada = params[PARAM_BAJADA].getValue();
+        float salidaB = canalB.procesar(
+            args.sampleTime, tiempoSubidaB, tiempoBajadaB,
+            inputs[ENTRADA_PULSO_B].getVoltage(), inputs[ENTRADA_PULSO_B_FORZAR].getVoltage());
 
-        switch (estado)
-        {
-        case ESTADO_SUBIDA:
-        {
-            // incremento para llegar a 10V en tiempoSubida
-            float incremento = (10.0f / tiempoSubida) * args.sampleTime;
-            salida = salida + incremento;
-
-            // detectar si ya subimos, para empezar la bajada
-            if (salida >= 10.0f)
-            {
-                salida = 10.0f;
-                estado = ESTADO_BAJADA;
-            }
-            break;
-        }
-
-        case ESTADO_BAJADA:
-        {
-            // dencremento para llegar a 0V en tiempoBajada
-            float decremento = (10.0f / tiempoBajada) * args.sampleTime;
-            salida = salida - decremento;
-
-            if (salida <= 0.0f)
-            {
-                salida = 0.0f;
-                estado = ESTADO_REPOSO;
-            }
-            break;
-        }
-
-        case ESTADO_FORZAR:
-        {
-            // rampa rapida a 0V, luego subida
-            float decrementoRapido = (10.0f - tiempos::PULSO_MS) * args.sampleTime;
-            salida = salida - decrementoRapido;
-
-            if (salida <= 0.0f)
-            {
-                salida = 0.0f;
-                estado = ESTADO_SUBIDA;
-            }
-            break;
-        }
-
-        case ESTADO_REPOSO:
-        default:
-            break;
-        }
-
-        // emitir voltaje de salida
-        outputs[SALIDA_ENVO_A].setVoltage(salida);
-        lights[LUZ_ENVO_A].setBrightness(salida * 0.1f);
+        outputs[SALIDA_ENVO_B].setVoltage(salidaB);
+        lights[LUZ_ENVO_B].setBrightness(salidaB * 0.1f);
     }
 };
+
+namespace layout
+{
+    constexpr float PORCENTAJE_COLUMNA_IZQ = columnas::DOS_1;
+    constexpr float PORCENTAJE_COLUMNA_DER = columnas::DOS_2;
+
+    // canal a: columna izquierda, arranca mas arriba
+    constexpr float PORCENTAJE_SUBIDA_A_X = PORCENTAJE_COLUMNA_IZQ;
+    constexpr float PORCENTAJE_SUBIDA_A_Y = 0.15f;
+    constexpr float PORCENTAJE_BAJADA_A_X = PORCENTAJE_COLUMNA_IZQ;
+    constexpr float PORCENTAJE_BAJADA_A_Y = PORCENTAJE_SUBIDA_A_Y + espaciado::DELTA_Y_PERILLA_ATENUVERSOR;
+    constexpr float PORCENTAJE_ENTRADA_PULSO_A_X = PORCENTAJE_COLUMNA_IZQ;
+    constexpr float PORCENTAJE_ENTRADA_PULSO_A_Y = PORCENTAJE_BAJADA_A_Y + espaciado::DELTA_Y_BOTON_ENTRADA;
+    constexpr float PORCENTAJE_ENTRADA_FORZAR_A_X = PORCENTAJE_COLUMNA_IZQ;
+    constexpr float PORCENTAJE_ENTRADA_FORZAR_A_Y = PORCENTAJE_ENTRADA_PULSO_A_Y + espaciado::DELTA_Y_ENTRADA_ENTRADA;
+
+    // canal b: columna derecha, arranca mas abajo, para el efecto escalera
+    constexpr float PORCENTAJE_SUBIDA_B_X = PORCENTAJE_COLUMNA_DER;
+    constexpr float PORCENTAJE_SUBIDA_B_Y = 0.35f;
+    constexpr float PORCENTAJE_BAJADA_B_X = PORCENTAJE_COLUMNA_DER;
+    constexpr float PORCENTAJE_BAJADA_B_Y = PORCENTAJE_SUBIDA_B_Y + espaciado::DELTA_Y_PERILLA_ATENUVERSOR;
+    constexpr float PORCENTAJE_ENTRADA_PULSO_B_X = PORCENTAJE_COLUMNA_DER;
+    constexpr float PORCENTAJE_ENTRADA_PULSO_B_Y = PORCENTAJE_BAJADA_B_Y + espaciado::DELTA_Y_BOTON_ENTRADA;
+    constexpr float PORCENTAJE_ENTRADA_FORZAR_B_X = PORCENTAJE_COLUMNA_DER;
+    constexpr float PORCENTAJE_ENTRADA_FORZAR_B_Y = PORCENTAJE_ENTRADA_PULSO_B_Y + espaciado::DELTA_Y_ENTRADA_ENTRADA;
+
+    // salidas y luces, misma altura para los dos canales
+    constexpr float PORCENTAJE_LUCES_Y = 0.85f;
+    constexpr float PORCENTAJE_SALIDA_Y = PORCENTAJE_LUCES_Y + espaciado::DELTA_Y_SALIDA_LUZ;
+
+    constexpr float PORCENTAJE_LUCES_A_X = PORCENTAJE_COLUMNA_IZQ;
+    constexpr float PORCENTAJE_SALIDA_A_X = PORCENTAJE_COLUMNA_IZQ;
+
+    constexpr float PORCENTAJE_LUCES_B_X = PORCENTAJE_COLUMNA_DER;
+    constexpr float PORCENTAJE_SALIDA_B_X = PORCENTAJE_COLUMNA_DER;
+}
 
 // widget
 struct EnvoModuloWidget : ModuleWidget
@@ -151,23 +139,56 @@ struct EnvoModuloWidget : ModuleWidget
         // tornillos
         agregarTornillos(this);
 
-        // parametros
-        addParam(createParamCentered<RoundBlackKnob>(mm2px(Vec(6.35, 30)), modulo, EnvoModulo::PARAM_SUBIDA));
-        addParam(createParamCentered<RoundBlackKnob>(mm2px(Vec(19.05, 30)), modulo, EnvoModulo::PARAM_BAJADA));
+        Posicionador posicionador(dimensiones::ENVO_ANCHO, dimensiones::ENVO_ALTURA);
 
-        // entradas
+        // canal a: perillas, entradas
+        addParam(createParamCentered<RoundBlackKnob>(
+            posicionador.posicion(layout::PORCENTAJE_SUBIDA_A_X, layout::PORCENTAJE_SUBIDA_A_Y),
+            modulo, EnvoModulo::PARAM_SUBIDA_A));
+
+        addParam(createParamCentered<RoundBlackKnob>(
+            posicionador.posicion(layout::PORCENTAJE_BAJADA_A_X, layout::PORCENTAJE_BAJADA_A_Y),
+            modulo, EnvoModulo::PARAM_BAJADA_A));
+
         addInput(createInputCentered<PJ301MPort>(
-            mm2px(Vec(6.35, 60)), modulo,
-            EnvoModulo::ENTRADA_PULSO_A));
+            posicionador.posicion(layout::PORCENTAJE_ENTRADA_PULSO_A_X, layout::PORCENTAJE_ENTRADA_PULSO_A_Y),
+            modulo, EnvoModulo::ENTRADA_PULSO_A));
+
         addInput(createInputCentered<PJ301MPort>(
-            mm2px(Vec(19.05, 60)), modulo,
-            EnvoModulo::ENTRADA_PULSO_A_FORZAR));
+            posicionador.posicion(layout::PORCENTAJE_ENTRADA_FORZAR_A_X, layout::PORCENTAJE_ENTRADA_FORZAR_A_Y),
+            modulo, EnvoModulo::ENTRADA_PULSO_A_FORZAR));
 
-        // salida
-        addOutput(createOutputCentered<PJ301MPort>(mm2px(Vec(12.7, 100)), modulo, EnvoModulo::SALIDA_ENVO_A));
+        // canal b: perillas, entradas
+        addParam(createParamCentered<RoundBlackKnob>(
+            posicionador.posicion(layout::PORCENTAJE_SUBIDA_B_X, layout::PORCENTAJE_SUBIDA_B_Y),
+            modulo, EnvoModulo::PARAM_SUBIDA_B));
 
-        // luz
-        addChild(createLightCentered<SmallLight<GreenLight>>(mm2px(Vec(12.7, 90)), modulo, EnvoModulo::LUZ_ENVO_A));
+        addParam(createParamCentered<RoundBlackKnob>(
+            posicionador.posicion(layout::PORCENTAJE_BAJADA_B_X, layout::PORCENTAJE_BAJADA_B_Y),
+            modulo, EnvoModulo::PARAM_BAJADA_B));
+
+        addInput(createInputCentered<PJ301MPort>(
+            posicionador.posicion(layout::PORCENTAJE_ENTRADA_PULSO_B_X, layout::PORCENTAJE_ENTRADA_PULSO_B_Y),
+            modulo, EnvoModulo::ENTRADA_PULSO_B));
+
+        addInput(createInputCentered<PJ301MPort>(
+            posicionador.posicion(layout::PORCENTAJE_ENTRADA_FORZAR_B_X, layout::PORCENTAJE_ENTRADA_FORZAR_B_Y),
+            modulo, EnvoModulo::ENTRADA_PULSO_B_FORZAR));
+
+        // salidas y luces, una columna por canal
+        addOutput(createOutputCentered<PJ301MPort>(
+            posicionador.posicion(layout::PORCENTAJE_SALIDA_A_X, layout::PORCENTAJE_SALIDA_Y),
+            modulo, EnvoModulo::SALIDA_ENVO_A));
+        addChild(createLightCentered<SmallLight<GreenLight>>(
+            posicionador.posicion(layout::PORCENTAJE_LUCES_A_X, layout::PORCENTAJE_LUCES_Y),
+            modulo, EnvoModulo::LUZ_ENVO_A));
+
+        addOutput(createOutputCentered<PJ301MPort>(
+            posicionador.posicion(layout::PORCENTAJE_SALIDA_B_X, layout::PORCENTAJE_SALIDA_Y),
+            modulo, EnvoModulo::SALIDA_ENVO_B));
+        addChild(createLightCentered<SmallLight<GreenLight>>(
+            posicionador.posicion(layout::PORCENTAJE_LUCES_B_X, layout::PORCENTAJE_LUCES_Y),
+            modulo, EnvoModulo::LUZ_ENVO_B));
     }
 };
 
