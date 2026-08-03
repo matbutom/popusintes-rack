@@ -1,92 +1,39 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!-- Created with Inkscape (http://www.inkscape.org/) -->
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="svg1" xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" version="1.1" viewBox="0 0 57.7 364.3">
+  <!-- Generator: Adobe Illustrator 30.6.0, SVG Export Plug-In . SVG Version: 2.1.4 Build 109)  -->
+  <defs>
+    <style>
+      .st0 {
+        fill: #fe6e1f;
+      }
 
-<svg
-   width="20.32mm"
-   height="128.5mm"
-   viewBox="0 0 20.319999 128.5"
-   version="1.1"
-   id="svg1"
-   inkscape:version="1.4.4 (dcaf3e7, 2026-05-05)"
-   sodipodi:docname="EnvoModulo.svg"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:svg="http://www.w3.org/2000/svg">
-  <sodipodi:namedview
-     id="namedview1"
-     pagecolor="#ffffff"
-     bordercolor="#000000"
-     borderopacity="0.25"
-     inkscape:showpageshadow="2"
-     inkscape:pageopacity="0.0"
-     inkscape:pagecheckerboard="false"
-     inkscape:deskcolor="#d1d1d1"
-     inkscape:document-units="mm"
-     inkscape:zoom="5.5712548"
-     inkscape:cx="5.9232617"
-     inkscape:cy="100.69545"
-     inkscape:window-width="1416"
-     inkscape:window-height="921"
-     inkscape:window-x="36"
-     inkscape:window-y="30"
-     inkscape:window-maximized="0"
-     inkscape:current-layer="svg1"
-     showgrid="true">
-    <inkscape:grid
-       id="grid1"
-       units="mm"
-       originx="0"
-       originy="0"
-       spacingx="0.26458332"
-       spacingy="0.26458334"
-       empcolor="#0099e5"
-       empopacity="0.30196078"
-       color="#0099e5"
-       opacity="0.14901961"
-       empspacing="5"
-       enabled="true"
-       visible="true" />
-    <inkscape:grid
-       id="grid2"
-       units="mm"
-       originx="0"
-       originy="0"
-       spacingx="0.99999996"
-       spacingy="1"
-       empcolor="#0099e5"
-       empopacity="0.30196078"
-       color="#0099e5"
-       opacity="0.14901961"
-       empspacing="5"
-       enabled="true"
-       visible="true" />
+      .st1 {
+        isolation: isolate;
+      }
+
+      .st2 {
+        fill: #ff0;
+      }
+
+      .st3 {
+        fill: #028bec;
+      }
+    </style>
+  </defs>
+  <sodipodi:namedview id="namedview1" bordercolor="#000000" borderopacity="0.25" inkscape:current-layer="svg1" inkscape:cx="5.9232617" inkscape:cy="100.69545" inkscape:deskcolor="#d1d1d1" inkscape:document-units="mm" inkscape:pagecheckerboard="false" inkscape:pageopacity="0.0" inkscape:showpageshadow="2" inkscape:window-height="921" inkscape:window-maximized="0" inkscape:window-width="1416" inkscape:window-x="36" inkscape:window-y="30" inkscape:zoom="5.5712548" pagecolor="#ffffff" showgrid="true">
+    <inkscape:grid id="grid1" color="#0099e5" empcolor="#0099e5" empopacity="0.30196078" empspacing="5" enabled="true" opacity="0.14901961" originx="0" originy="0" spacingx="0.26458332" spacingy="0.26458334" units="mm" visible="true"/>
+    <inkscape:grid id="grid2" color="#0099e5" empcolor="#0099e5" empopacity="0.30196078" empspacing="5" enabled="true" opacity="0.14901961" originx="0" originy="0" spacingx="0.99999996" spacingy="1" units="mm" visible="true"/>
   </sodipodi:namedview>
-  <defs
-     id="defs1" />
-  <g
-     inkscape:label="Layer 1"
-     inkscape:groupmode="layer"
-     id="layer1"
-     style="display:inline">
-    <rect
-       style="fill:#ff00ff;stroke-width:0.23665"
-       id="rect19"
-       width="20.319939"
-       height="128.5"
-       x="6.0125254e-05"
-       y="0.00093796232" />
+  <g id="layer1" inkscape:groupmode="layer" inkscape:label="Layer 1">
+    <rect id="rect19" class="st2" width="57.6" height="364.3"/>
   </g>
-  <rect
-     style="fill:#ffff00;fill-rule:evenodd;stroke-width:0.459185"
-     id="rect1-8"
-     width="20.32"
-     height="16.602482"
-     x="-1.6653345e-16"
-     y="104.45583" />
-  <path
-     style="font-size:12.7px;font-family:Talagante;-inkscape-font-specification:'Talagante, Normal';fill:#ffff00;stroke-width:0.265"
-     d="m 1.7417092,24.317499 h 2.7558999 c 0.2032,0 0.3302,-0.1143 0.3302,-0.3302 v -1.5621 c 0,-0.2032 -0.127,-0.3302 -0.3302,-0.3302 H 2.1481092 v -0.7239 h 1.7652999 c 0.2032,0 0.3302,-0.127 0.3302,-0.3302 v -1.5494 c 0,-0.2032 -0.127,-0.3302 -0.3302,-0.3302 H 2.1481092 v -1.5113 h 2.2986999 c 0.2032,0 0.3302,-0.1143 0.3302,-0.3302 v -1.5621 c 0,-0.2032 -0.1143,-0.3302 -0.3302,-0.3302 H 1.7417092 c -0.2032,0 -0.3302,0.1143 -0.3302,0.3302 v 8.2296 c 0,0.2032 0.127,0.3302 0.3302,0.3302 z m 3.911595,-8.5598 v 8.5598 H 6.415304 l 0.0127,-6.6675 h 0.4064 l 0.7746997,6.3627 c 0.0254,0.2032 0.1397,0.3048 0.3429,0.3048 h 1.1683996 c 0.2032,0 0.3302,-0.1143 0.3302,-0.3302 v -8.5598 H 8.6886037 v 6.0833 c 0,0.1778 -0.0508,0.2667 -0.1778,0.2667 -0.127,0 -0.1778,-0.0889 -0.2032,-0.2667 l -0.762,-5.7785 c -0.0254,-0.2032 -0.1397,-0.3048 -0.3428997,-0.3048 H 5.9835042 c -0.2032,0 -0.3302,0.1143 -0.3302,0.3302 z m 5.6895958,8.5598 h 1.7145 c 0.2032,0 0.3302,-0.1143 0.3429,-0.3175 l 0.8001,-8.5725 h -0.762 l -0.5715,5.5245 c -0.0635,0.5588 -0.2667,0.8255 -0.6604,0.8255 -0.4064,0 -0.6096,-0.2667 -0.6731,-0.8255 l -0.5588,-5.5245 h -0.762 L 11,23.999999 c 0.0127,0.2032 0.1397,0.3175 0.3429,0.3175 z m 5.1054,0.0762 h 0.7239 c 0.8763,0 1.4478,-0.5588 1.4859,-1.4859 0.0381,-0.889 0.0508,-2.0066 0.0508,-3.0353 0,-1.0414 -0.0127,-2.1463 -0.0508,-3.0353 -0.0381,-0.9271 -0.6096,-1.4859 -1.4859,-1.4859 h -0.7239 c -0.8763,0 -1.4478,0.5588 -1.4859,1.4859 -0.0254,0.889 -0.0508,1.9939 -0.0508,3.0353 0,1.0287 0.0254,2.1463 0.0508,3.0353 0.0381,0.9271 0.6096,1.4859 1.4859,1.4859 z m 0.3683,-2.159 h -0.0127 c -0.7874,0 -1.1303,-0.3302 -1.1557,-1.0414 -0.0127,-0.4191 -0.0127,-0.9017 -0.0127,-1.3208 0,-0.4191 0,-0.9144 0.0127,-1.3208 0.0254,-0.7112 0.381,-1.0414 1.1557,-1.0414 h 0.0127 c 0.7747,0 1.1303,0.3302 1.1557,1.0414 0.0127,0.4064 0.0254,0.9017 0.0254,1.3208 0,0.4191 -0.0127,0.9017 -0.0254,1.3208 -0.0254,0.7112 -0.381,1.0414 -1.1557,1.0414 z"
-     id="text1"
-     aria-label="ENVO" />
+  <rect id="rect4" class="st3" y="297" width="57.7" height="52.5"/>
+  <g class="st1">
+    <g class="st1">
+      <path class="st0" d="M7.3,49.6v-21.9c0-.6.3-.9.9-.9h7.2c.6,0,.9.3.9.9v4.2c0,.6-.3.9-.9.9h-6.1v4h4.7c.5,0,.9.3.9.9v4.1c0,.5-.3.9-.9.9h-4.7v1.9h6.2c.5,0,.9.3.9.9v4.2c0,.6-.3.9-.9.9h-7.3c-.5,0-.9-.3-.9-.9Z"/>
+      <path class="st0" d="M18.5,26.8h3.2c.5,0,.8.3.9.8l2,15.4c0,.5.2.7.5.7s.5-.2.5-.7v-16.2h2v22.7c0,.6-.3.9-.9.9h-3.1c-.5,0-.8-.3-.9-.8l-2.1-16.9h-1.1v17.7h-2.1v-22.7c0-.6.3-.9.9-.9Z"/>
+      <path class="st0" d="M31,49.6l-2.1-22.8h2l1.5,14.7c.2,1.5.7,2.2,1.8,2.2s1.6-.7,1.8-2.2l1.5-14.7h2l-2.1,22.8c0,.5-.4.8-.9.8h-4.6c-.5,0-.9-.3-.9-.8Z"/>
+      <path class="st0" d="M40.6,46.7c0-2.4-.1-5.3-.1-8.1s0-5.7.1-8.1c.1-2.5,1.6-3.9,3.9-3.9h1.9c2.3,0,3.8,1.5,3.9,3.9.1,2.4.1,5.3.1,8.1s0,5.7-.1,8.1c-.1,2.5-1.6,3.9-3.9,3.9h-1.9c-2.3,0-3.8-1.5-3.9-3.9ZM48.6,42.1c0-1.1,0-2.4,0-3.5s0-2.4,0-3.5c0-1.9-1-2.8-3.1-2.8h0c-2.1,0-3,.9-3.1,2.8,0,1.1,0,2.4,0,3.5s0,2.4,0,3.5c0,1.9,1,2.8,3.1,2.8h0c2.1,0,3-.9,3.1-2.8Z"/>
+    </g>
+  </g>
 </svg>
