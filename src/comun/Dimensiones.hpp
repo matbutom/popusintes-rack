@@ -22,7 +22,7 @@ namespace dimensiones
     constexpr float ENVO_ANCHO = MODULO_ANCHO_04_HP;
     constexpr float ENVO_ALTURA = MODULO_ALTURA_3_U;
 
-    constexpr float PANE_ANCHO = MODULO_ANCHO_04_HP;
+    constexpr float PANE_ANCHO = MODULO_ANCHO_05_HP;
     constexpr float PANE_ALTURA = MODULO_ALTURA_3_U;
 
     constexpr float RECTA_ANCHO = MODULO_ANCHO_04_HP;
